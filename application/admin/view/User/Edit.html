@@ -1,0 +1,48 @@
+<form method="post" action="" class="form-horizontal" id="addform">
+    <div class="form-group">
+        <label for="LoginName" class="col-sm-2 control-label">登录名：</label>
+        <div class="col-sm-6">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="ion-at"></i>
+                </span>
+                <input type="text" id="LoginName" name="LoginName" class="form-control" placeholder="请输入登录名">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RealName" class="col-sm-2 control-label">真实姓名：</label>
+        <div class="col-sm-6">
+            <input type="text" id="RealName" name="RealName" class="form-control" placeholder="请输入真实姓名">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="UserType" class="col-sm-2 control-label">用户类型：</label>
+        <div class="col-sm-10">
+            {$userLevelHtml}
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            getInfo('{$id}');
+        });
+
+        //get info
+        function getInfo(id) {
+            $.ajax({
+                cache: true,
+                type: "GET",
+                url: "/api/User/" + id,
+                async: false,
+                error: function (request) {
+                    alert("连接错误");
+                },
+                success: function (data) {
+                    $("#LoginName").val(data.loginname);
+                    $("#RealName").val(data.realname);
+                    $("input[name='UserType'][value=" + data.usertype + "]").attr("checked", true);
+                }
+            });
+        }
+    </script>
+</form>

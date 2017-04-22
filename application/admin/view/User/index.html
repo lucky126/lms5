@@ -1,0 +1,252 @@
+{extend name="base" /}
+{block name="css"}
+{load href="/static/plugins/bootstrap-table/bootstrap-table.min.css,/static/plugins/x-editable/css/bootstrap-editable.css" /}
+{load href="/static/plugins/animate-css/animate.min.css" /}
+{/block}
+
+{block name="js"}
+{load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js" /}
+{load href="/static/plugins/bootbox/bootbox.min.js,/static/js/demo/ui-modals.js" /}
+{/block}
+
+{block name="title"}User{/block}
+{block name="main"}
+<div id="page-content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">用户列表</h3>
+                </div>
+
+                <!--Data Table-->
+                <!--===================================================-->
+                <div class="panel-body">
+                    <div class="pad-btm form-inline">
+                        <div class="row">
+                            <div class="col-sm-6 table-toolbar-left">
+                                <button class="btn btn-primary" id="add"><i
+                                        class="demo-pli-add icon-fw"></i>新增
+                                </button>
+                            </div>
+                            <div class="col-sm-6 table-toolbar-right">
+                                <div class="form-group">
+                                    <input type="text" autocomplete="off" class="form-control" placeholder="Search"
+                                           id="demo-input-search2">
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-default"><i class="demo-pli-download-from-cloud"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table data-toggle="table"
+                               data-url="/api/user"
+                               data-sort-name="loginname"
+                               data-page-list="[10, 20, 50]"
+                               data-page-size="10"
+                               data-pagination="true" data-show-pagination-switch="true" id="table">
+                            <thead>
+                            <tr>
+                                <th data-field="loginname" data-sortable="true">用户名</th>
+                                <th data-field="realname" data-sortable="true">用户姓名</th>
+                                <th data-field="UseTypeDesc" data-sortable="true">用户类型</th>
+                                <th data-field="registiontime" data-sortable="true" data-formatter="dateFormatter">注册时间
+                                </th>
+                                <th data-field="lastlogintime" data-sortable="true" data-formatter="dateFormatter">
+                                    最后登录时间
+                                </th>
+                                <th data-align="center" data-field="action" data-formatter="actionFormatter"
+                                    data-events="actionEvents">操作
+                                </th>
+
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!--===================================================-->
+                <!--End Data Table-->
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{/block}
+
+{block name="modal"}
+<script type="text/javascript">
+    $(function () {
+        $("#add").click(function () {
+            showInfo(true, null);
+        });
+    });
+
+    /*
+     调用bootbox提示框
+     @param isNew 是否新增
+     @param id
+     */
+    function showInfo(isNew, id) {
+        //如果是新增
+        var title = "新增用户";
+        var url = "/admin/User/Add";
+        //如果是修改
+        if (!isNew) {
+            title = "修改用户";
+            var url = "/admin/User/Edit?id=" + id;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+
+                bootbox.dialog({
+                    title: title,
+                    message: data,
+                    buttons: {
+                        success: {
+                            label: "保存",
+                            className: "btn-primary",
+                            callback: function () {
+                                saveInfo(isNew, id);
+                            }
+                        },
+                        cancel: {
+                            label: "取消",
+                            className: "btn-danger",
+                            callback: function () {
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /*
+     提交异步保存
+     @param isNew 是否新增
+     @param id
+     */
+    function saveInfo(isNew, id) {
+        //如果是新增
+        var method = "POST";
+        var url = "/api/User";
+        //如果是修改
+        if (!isNew) {
+            method = "PUT";
+            url += "/" + id;
+        }
+        //异步保存
+        $.ajax({
+            cache: true,
+            type: method,
+            url: url,
+            data: $('#addform').serialize(),
+            async: false,
+            error: function (event, xhr, options, exc) {
+                console.log(options);
+                alert("连接错误" + xhr);
+            },
+            success: function (data) {
+                completeMsg("保存成功");
+                $("#table").bootstrapTable("refresh");
+            }
+        });
+    }
+
+    //提示保存成功
+    function completeMsg(msg) {
+        $.niftyNoty({
+            type: 'purple',
+            icon: 'fa fa-check',
+            message: msg,
+            container: 'floating',
+            timer: 4000
+        });
+    }
+
+    //数据格式化
+    function dateFormatter(value, row) {
+        var icon = row.id % 2 === 0 ? 'fa-star' : 'fa-user';
+        return '<span class="text-muted"><i class="fa fa-clock-o"></i> ' + value + '</span>';
+    }
+
+    //bootstrap table操作
+    function actionFormatter(value, row, index) {
+        return [
+            '<a class="edit ml10" href="javascript:void(0)" title="编辑">',
+            '<i class="glyphicon glyphicon-edit"></i>',
+            '</a> ',
+            '<a class="remove ml10" href="javascript:void(0)" title="删除">',
+            '<i class="glyphicon glyphicon-remove"></i>',
+            '</a>'
+        ].join('');
+    }
+
+    //操作事件
+    window.actionEvents = {
+        'click .edit': function (e, value, row, index) {
+            showInfo(false, row.id);
+        },
+        'click .remove': function (e, value, row, index) {
+            showDeleteInfo(row.id);
+        }
+    };
+
+    //show delete dialog
+    function showDeleteInfo(id) {
+        bootbox.confirm("确认删除该条数据么?", function (result) {
+            if (result) {
+                var res = deleteInfo(id);
+                if (res == "success") {
+                    $.niftyNoty({
+                        type: 'success',
+                        icon: 'pli-like-2 icon-2x',
+                        message: '删除成功',
+                        container: 'floating',
+                        timer: 5000
+                    });
+                }
+                else {
+                    $.niftyNoty({
+                        type: 'danger',
+                        icon: 'pli-cross icon-2x',
+                        message: '删除失败',
+                        container: 'floating',
+                        timer: 5000
+                    });
+                }
+                $("#table").bootstrapTable("refresh");
+            }
+        });
+    }
+
+    //delete info
+    function deleteInfo(id) {
+        var returnVal = null;
+        //异步保存
+        $.ajax({
+            cache: true,
+            type: "DELETE",
+            url: "/api/User/" + id,
+            async: false,
+            error: function (request) {
+                alert("连接错误");
+            },
+            success: function (data) {
+                returnVal = data;
+            }
+        });
+
+        return returnVal;
+    }
+
+</script>
+{/block}
