@@ -22,16 +22,28 @@ class Rule extends base
      *
      * @return \think\Response
      */
-    public function index()
+    public function index($pid = 0)
     {
         //
-        $data = Db::name('AuthRule')->where("status", "<>", "0")->select();
+        $data = $this->getRule($pid);
+
+        return json($data);
+    }
+
+    /**
+     * @param $pid
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    private function getRule($pid)
+    {
+        //
+        $data = Db::name('AuthRule')->where("status", "<>", "0")->where("pid", "=", $pid)->select();
 
         //文字转换
         foreach ($data as $k => $v) {
             $data[$k]['isshowdesc'] = config('globalConst.YesOrNoDesc')[$v['isshow']];
         }
 
-        return json($data);
+        return $data;
     }
 }

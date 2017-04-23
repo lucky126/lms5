@@ -29,6 +29,9 @@
                                 <button class="btn btn-primary" id="add"><i
                                         class="demo-pli-add icon-fw"></i>新增
                                 </button>
+                                <button class="btn btn-info" id="back"><i
+                                        class="ion-arrow-left-c"></i>返回上级
+                                </button>
                             </div>
                             <div class="col-sm-6 table-toolbar-right">
                                 <div class="form-group">
@@ -88,12 +91,12 @@
      */
     function showInfo(isNew, id) {
         //如果是新增
-        var title = "新增用户";
-        var url = "/admin/User/Add";
+        var title = "新增权限";
+        var url = "/admin/Rule/Add";
         //如果是修改
         if (!isNew) {
-            title = "修改用户";
-            var url = "/admin/User/Edit?id=" + id;
+            title = "修改权限";
+            var url = "/admin/Rule/Edit?id=" + id;
         }
 
         $.ajax({
@@ -176,6 +179,9 @@
     //bootstrap table操作
     function actionFormatter(value, row, index) {
         return [
+            '<a class="sub ml10" href="javascript:void(0)" title="查看子权限">',
+            '<i class="glyphicon glyphicon-th"></i>',
+            '</a> ',
             '<a class="edit ml10" href="javascript:void(0)" title="编辑">',
             '<i class="glyphicon glyphicon-edit"></i>',
             '</a> ',
@@ -187,6 +193,9 @@
 
     //操作事件
     window.actionEvents = {
+        'click .sub': function (e, value, row, index) {
+            showlist(row.id, row.pid);
+        },
         'click .edit': function (e, value, row, index) {
             showInfo(false, row.id);
         },
@@ -194,6 +203,19 @@
             showDeleteInfo(row.id);
         }
     };
+
+    //show sub list
+    function showlist(id, pid) {
+        $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + id});
+        setBackBtn(pid);
+    }
+
+    //搞不明白如何调用
+    function setBackBtn(pid) {
+        $("#back").click(function () {
+            $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + pid});
+        });
+    }
 
     //show delete dialog
     function showDeleteInfo(id) {
