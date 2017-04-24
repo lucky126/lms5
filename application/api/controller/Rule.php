@@ -46,4 +46,77 @@ class Rule extends base
 
         return $data;
     }
+
+    /**
+     * 显示指定的权限资源
+     *
+     * @param  int $id
+     * @return \think\Response
+     */
+    public function read($id)
+    {
+        //
+        $data = Db::name('AuthRule')->where('id', $id)->find();
+
+        return json($data);
+    }
+
+    /**
+     * 保存新建的权限资源
+     *
+     * @param  \think\Request $request
+     * @return \think\Response
+     */
+    public function save()
+    {
+        //
+        if (Request::instance()->post()) {
+            $data = input('post.');
+
+            $userdata = [
+                'pid' => $data['pid'],
+                'name' => $data['name'],
+                'title' => $data['title'],
+                'icon' => $data['icon'],
+                'isshow' => $data['isshow'],
+            ];
+
+            $result = Db::name('AuthRule')->insert($userdata);
+            return json("success");
+        }
+    }
+
+    /**
+     * 保存更新的权限资源
+     *
+     * @param   $id
+     * @return \think\Response
+     */
+    public function update($id)
+    {
+        //
+        if (Request::instance()->put()) {
+            $data = input('put.');
+            //dump($data);
+
+            $result = Db::name('AuthRule')
+                ->where('id', $id)
+                ->update(['title' => $data['title'], 'name' => $data['name'], 'icon' => $data['icon'], 'isshow' => $data['isshow']]);
+
+            return json("success");
+        }
+    }
+
+    /**
+     * 删除指定权限资源
+     *
+     * @param  uuid $id
+     * @return \think\Response
+     */
+    public function delete($id)
+    {
+        //
+        Db::name('AuthRule')->where('id', $id)->delete();
+        return json("success");
+    }
 }

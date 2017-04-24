@@ -36,7 +36,8 @@ class Login
             return $returnModel;
         }
         //get id
-        $uid = $data['id'];
+        $uid = $data['uid'];
+        $id = $data['id'];
 
         //check password
         if ($data['pwd'] <> getEncPassword($password)) {
@@ -51,7 +52,7 @@ class Login
             'lastlogintime' => $data["currentlogintime"],
             'currentlogintime' => datetime()
         ];
-        $result = Db::name('user')->where(['id' => $uid])->update($userup);
+        $result = Db::name('user')->where(['id' => $id])->update($userup);
 
         //get token
         $token = getToken($uid);

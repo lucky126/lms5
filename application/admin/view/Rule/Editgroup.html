@@ -1,0 +1,29 @@
+<form method="post" action="" class="form-horizontal" id="addform">
+    <div class="form-group">
+        <label for="title" class="col-sm-2 control-label">角色名称：</label>
+        <div class="col-sm-6">
+            <input type="text" id="title" name="title" class="form-control" placeholder="请输入角色名称">
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            getInfo('{$id}');
+        });
+
+        //get info
+        function getInfo(id) {
+            $.ajax({
+                cache: true,
+                type: "GET",
+                url: "/api/group/" + id,
+                async: false,
+                error: function (request) {
+                    alert("连接错误");
+                },
+                success: function (data) {
+                    $("#title").val(data.title);
+                }
+            });
+        }
+    </script>
+</form>

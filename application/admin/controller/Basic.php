@@ -36,14 +36,14 @@ class Basic extends Controller
         $this->uid = Cookie::get('uid');
 
         $this->assign("uid",$this->uid);
-        /*
+
         $auth=new \think\Auth();
         $request = Request::instance();
         $m=$request->module();
         $c=$request->controller();
         $a=$request->action();
         $rule_name=$m.'/'.$c.'/'.$a;
-
+/*
         $result=$auth->check($rule_name,session('user')['id']);
         if(!$result){
             $this->error('您没有权限访问');

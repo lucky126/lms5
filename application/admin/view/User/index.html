@@ -193,10 +193,10 @@
     //操作事件
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
-            showInfo(false, row.id);
+            showInfo(false, row.uid);
         },
         'click .remove': function (e, value, row, index) {
-            showDeleteInfo(row.id);
+            showDeleteInfo(row.uid);
         }
     };
 

@@ -17,6 +17,7 @@ Route::rule('api/logout', 'api/login/logout', "POST");
 
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');
+Route::resource('api/group', 'api/Group');
 
 return [
     '__pattern__' => [

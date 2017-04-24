@@ -9,7 +9,7 @@
 {load href="/static/plugins/bootbox/bootbox.min.js,/static/js/demo/ui-modals.js" /}
 {/block}
 
-{block name="title"}权限列表{/block}
+{block name="title"}角色列表{/block}
 {block name="main"}
 <div id="page-content">
 
@@ -17,7 +17,7 @@
         <div class="col-xs-12">
             <div class="panel">
                 <div class="panel-heading">
-                    <h3 class="panel-title">权限列表</h3>
+                    <h3 class="panel-title">角色列表</h3>
                 </div>
 
                 <!--Data Table-->
@@ -28,9 +28,6 @@
                             <div class="col-sm-6 table-toolbar-left">
                                 <button class="btn btn-primary" id="add"><i
                                         class="demo-pli-add icon-fw"></i>新增
-                                </button>
-                                <button class="btn btn-info" id="back"><i
-                                        class="ion-arrow-left-c"></i>返回上级
                                 </button>
                             </div>
                             <div class="col-sm-6 table-toolbar-right">
@@ -47,16 +44,14 @@
                     </div>
                     <div class="table-responsive">
                         <table data-toggle="table"
-                               data-url="/api/rule"
+                               data-url="/api/group"
                                data-sort-name="loginname"
                                data-page-list="[10, 20, 50]"
                                data-page-size="10"
                                data-pagination="true" data-show-pagination-switch="true" id="table">
                             <thead>
                             <tr>
-                                <th data-field="title" data-sortable="true">规则名称</th>
-                                <th data-field="name" data-sortable="true">规则标识</th>
-                                <th data-field="isshowdesc" data-sortable="true">是否显示</th>
+                                <th data-field="title" data-sortable="true">角色名称</th>
                                 <th data-align="center" data-field="action" data-formatter="actionFormatter"
                                     data-events="actionEvents">操作
                                 </th>
@@ -78,33 +73,12 @@
 
 {block name="modal"}
 <script type="text/javascript">
-    var pidList = new Array();
-    var newPid = 0;
 
     $(function () {
         $("#add").click(function () {
-            showInfo(true, newPid);
+            showInfo(true, null);
         });
-
-        $("#back").click(function () {
-            var backpid = pidList.pop();
-            newPid = backpid;
-            $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + backpid});
-            checkButtonShow();
-        });
-
-        checkButtonShow();
     });
-
-    function checkButtonShow() {
-        if (newPid == 0) {
-            $("#add").hide();
-            $("#back").hide();
-        } else {
-            $("#add").show();
-            $("#back").show();
-        }
-    }
 
     /*
      调用bootbox提示框
@@ -113,12 +87,12 @@
      */
     function showInfo(isNew, id) {
         //如果是新增
-        var title = "新增权限";
-        var url = "/admin/Rule/Add?pid= " + id;
+        var title = "新增角色";
+        var url = "/admin/Rule/Addgroup";
         //如果是修改
         if (!isNew) {
-            title = "修改权限";
-            var url = "/admin/Rule/Edit?id=" + id;
+            title = "修改角色";
+            var url = "/admin/Rule/Editgroup?id=" + id;
         }
 
         $.ajax({
@@ -157,7 +131,7 @@
     function saveInfo(isNew, id) {
         //如果是新增
         var method = "POST";
-        var url = "/api/Rule";
+        var url = "/api/Group";
         //如果是修改
         if (!isNew) {
             method = "PUT";
@@ -201,38 +175,30 @@
     //bootstrap table操作
     function actionFormatter(value, row, index) {
         return [
-            '<a class="sub ml10" href="javascript:void(0)" title="查看子权限">',
-            '<i class="glyphicon glyphicon-th"></i>',
-            '</a> ',
             '<a class="edit ml10" href="javascript:void(0)" title="编辑">',
             '<i class="glyphicon glyphicon-edit"></i>',
             '</a> ',
             '<a class="remove ml10" href="javascript:void(0)" title="删除">',
             '<i class="glyphicon glyphicon-remove"></i>',
-            '</a>'
+            '</a>',
+            '<a class="rule ml10" href="javascript:void(0)" title="分配权限">',
+            '<i class="glyphicon glyphicon-cog"></i>',
+            '</a> ',
         ].join('');
     }
 
     //操作事件
     window.actionEvents = {
-        'click .sub': function (e, value, row, index) {
-            showlist(row.id, row.pid);
-        },
         'click .edit': function (e, value, row, index) {
             showInfo(false, row.id);
         },
         'click .remove': function (e, value, row, index) {
             showDeleteInfo(row.id);
-        }
+        },
+        'click .rule': function (e, value, row, index) {
+            showRule(row.id);
+        },
     };
-
-    //show sub list
-    function showlist(id, pid) {
-        $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + id});
-        newPid = id;
-        pidList.push(pid);
-        checkButtonShow();
-    }
 
     //show delete dialog
     function showDeleteInfo(id) {
@@ -269,7 +235,7 @@
         $.ajax({
             cache: true,
             type: "DELETE",
-            url: "/api/Rule/" + id,
+            url: "/api/Group/" + id,
             async: false,
             error: function (request) {
                 alert("连接错误");

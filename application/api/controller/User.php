@@ -42,7 +42,7 @@ class User extends base
             $data = input('post.');
 
             $userdata = [
-                'id' => getGuid(),
+                'uid' => getGuid(),
                 'loginname' => $data['LoginName'],
                 'realname' => $data['RealName'],
                 'pwd' => getEncPassword($data['Password']),
@@ -60,13 +60,13 @@ class User extends base
     /**
      * 显示指定的用户资源
      *
-     * @param  int $id
+     * @param  uuid $id
      * @return \think\Response
      */
     public function read($id)
     {
         //
-        $data = Db::name('user')->where('id', $id)->find();
+        $data = Db::name('user')->where('uid', $id)->find();
 
         return json($data);
     }
@@ -74,7 +74,7 @@ class User extends base
     /**
      * 保存更新的用户资源
      *
-     * @param  int $id
+     * @param   $id
      * @return \think\Response
      */
     public function update($id)
@@ -85,7 +85,7 @@ class User extends base
             //dump($data);
 
             $result = Db::name('user')
-                ->where('id', $id)
+                ->where('uid', $id)
                 ->update(['loginname' => $data['LoginName'], 'realname' => $data['RealName'], 'usertype' => $data['UserType']]);
 
             return json("success");
@@ -95,13 +95,13 @@ class User extends base
     /**
      * 删除指定用户资源
      *
-     * @param  int $id
+     * @param  uuid $id
      * @return \think\Response
      */
     public function delete($id)
     {
         //
-        Db::name('user')->delete($id);
+        Db::name('user')->where('uid', $id)->delete();
         return json("success");
     }
 }
