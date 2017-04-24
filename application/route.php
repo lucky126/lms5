@@ -15,6 +15,7 @@ Route::rule('admin/main', 'admin/Index/index');
 Route::rule('api/login', 'api/login/index', "POST");
 Route::rule('api/logout', 'api/login/logout', "POST");
 
+Route::rule('api/user/:id/profile', 'api/User/profile');
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');
 Route::resource('api/group', 'api/Group');

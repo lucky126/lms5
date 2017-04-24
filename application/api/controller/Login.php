@@ -59,6 +59,7 @@ class Login
         //set cookie
         Cookie::set('token', $token, 3600);
         Cookie::set('uid', $uid, 3600);
+        Cookie::set('id', $id, 3600);
 
         //return data
         return json($returnModel);

@@ -43,10 +43,11 @@ class Basic extends Controller
         $c=$request->controller();
         $a=$request->action();
         $rule_name=$m.'/'.$c.'/'.$a;
-/*
-        $result=$auth->check($rule_name,session('user')['id']);
+
+        $result=$auth->check($rule_name,Cookie::get('id'));
+
         if(!$result){
             $this->error('您没有权限访问');
-        }*/
+        }
     }
 }

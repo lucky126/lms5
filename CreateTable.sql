@@ -120,9 +120,9 @@ VALUES ('22', '1', 'User', '用户权限管理', '1', '1', '', 'fa fa-user-md', 
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('23', '22', 'Admin/User/index', '后台用户管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('24', '22', 'Admin/Pages/index', '页面管理', '1', '1', '', '', '1');
+VALUES ('24', '22', 'Admin/Rule/index', '页面管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('25', '22', 'Admin/Pages/UserType', '用户类型权限', '1', '1', '', '', '1');
+VALUES ('25', '22', 'Admin/Rule/Group', '角色管理', '1', '1', '', '', '1');
 
 -- ----------------------------
 -- Table structure for lms_auth_group_access
