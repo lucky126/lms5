@@ -78,9 +78,16 @@
 
 {block name="modal"}
 <script type="text/javascript">
+    var pidList = new Array();
+
     $(function () {
         $("#add").click(function () {
             showInfo(true, null);
+        });
+
+        $("#back").click(function () {
+            var backpid = pidList.pop();
+            $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + backpid});
         });
     });
 
@@ -207,14 +214,7 @@
     //show sub list
     function showlist(id, pid) {
         $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + id});
-        setBackBtn(pid);
-    }
-
-    //搞不明白如何调用
-    function setBackBtn(pid) {
-        $("#back").click(function () {
-            $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + pid});
-        });
+        pidList.push(pid);
     }
 
     //show delete dialog
