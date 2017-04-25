@@ -53,16 +53,17 @@ class Basic extends Controller
             $this->error('您没有权限访问');
         }
         //make menu
-        $menu = $this::getMenu($this->uid);
+        $menu = $this::getMenu($this->uid, $rule_name);
         $this->assign("menu", $menu);
     }
 
     /**
      * 得到用户菜单
      * @param $id
+     * @param $url
      * @return array
      */
-    public function getMenu($id)
+    public function getMenu($id, $url)
     {
         //get user info
         $user = Db::name('user')->where('uid', $id)->find();
@@ -74,7 +75,7 @@ class Basic extends Controller
 
         $rule = DB::name('AuthRule')->where($map)->field('id,pid,name,title,icon')->select();
 
-        $data = $this::channelLevel($rule);
+        $data = $this::channelLevel($rule, $url);
 
         return $data;
     }
@@ -82,13 +83,14 @@ class Basic extends Controller
     /**
      *
      * @param $data
+     * @param $path
      * @param int $pid
      * @param string $fieldPri
      * @param string $fieldPid
      * @param int $level
      * @return array
      */
-    static public function channelLevel($data, $pid = 0, $fieldPri = 'id', $fieldPid = 'pid', $level = 1)
+    static public function channelLevel($data, $path = '', $pid = 0, $fieldPri = 'id', $level = 1)
     {
         if (empty($data)) {
             return array();
@@ -96,13 +98,26 @@ class Basic extends Controller
         // dump($data);
         $arr = array();
         foreach ($data as $v) {
-            if ($v[$fieldPid] == $pid) {
+            if ($v["pid"] == $pid) {
+                $selected = 0;
+                if (strtolower($path) == strtolower($v["name"])) {
+                    $selected = 1;
+                }
                 $arr[$v[$fieldPri]] = $v;
                 $arr[$v[$fieldPri]]['_level'] = $level;
-                $arr[$v[$fieldPri]]["_data"] = self::channelLevel($data, $v[$fieldPri], $fieldPri, $fieldPid, $level + 1);
+                $arr[$v[$fieldPri]]['_selected'] = $selected;
+                $arr[$v[$fieldPri]]["_data"] = self::channelLevel($data, $path, $v[$fieldPri], $fieldPri, $level + 1);
+
+                foreach ($arr[$v[$fieldPri]]["_data"] as $child) {
+                    if($child["_selected"] == 1){
+                        $arr[$v[$fieldPri]]['_selected'] = 1;
+                        break;
+                    }
+                }
             }
         }
-        // dump($arr);
+
+
         return $arr;
     }
 }
