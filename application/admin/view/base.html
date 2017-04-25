@@ -216,6 +216,11 @@
      * get user info
      */
     $(function () {
+        getUserInfo();
+    });
+
+    function getUserInfo()
+    {
         $.ajax({
             cache: true,
             type: "GET",
@@ -231,7 +236,7 @@
                 $("#usrImg").attr("src", "/static/img/profile-photos/" + data.avator);
             }
         });
-    });
+    }
 </script>
 </body>
 </html>

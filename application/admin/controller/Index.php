@@ -1,4 +1,5 @@
 <?php
+
 namespace app\admin\controller;
 
 /**
@@ -60,5 +61,4 @@ class Index extends Basic
     {
         return $this->fetch();
     }
-
 }

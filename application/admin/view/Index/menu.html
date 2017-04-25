@@ -1,25 +1,31 @@
 <ul id="mainnav-menu" class="list-group">
+    {volist name="menu" id="root"}
 
     <!--Category name-->
-    <li class="list-header">管理平台</li>
+    <li class="list-header">{$root.title}</li>
 
-    <!--Menu list item-->
-    <li>
-        <a href="#">
-            <i class="demo-psi-home"></i>
-            <span class="menu-title">
-                <strong>系统管理</strong>
-            </span>
-            <i class="arrow"></i>
-        </a>
+    {volist name="root._data" id="parent"}
+        <!--Menu list item-->
+        <li>
+            <a href="#">
+                <i class="{$parent.icon}"></i>
+                <span class="menu-title">
+                    <strong>{$parent.title}</strong>
+                </span>
+                <i class="arrow"></i>
+            </a>
 
-        <!--Submenu-->
-        <ul class="collapse">
-            <li><a href="{:Url('admin/Rule/index','','')}">权限列表</a></li>
-            <li><a href="{:Url('admin/Rule/group','','')}">角色列表</a></li>
+            <!--Submenu-->
+            <ul class="collapse">
+                {volist name="parent._data" id="sub"}
+                    <li><a href="/{$sub.name}">{$sub.title}</a></li>
+                {/volist}
 
-        </ul>
-    </li>
+            </ul>
+        </li>
+    {/volist}
+
+    {/volist}
 
     <!--Menu list item-->
     <li>
@@ -34,8 +40,6 @@
         <!--Submenu-->
         <ul class="collapse">
             <li><a href="{:Url('admin/User/index','','')}">用户列表</a></li>
-            <li><a href="layouts-aside-right-side.html">新增用户</a></li>
-
         </ul>
     </li>
 

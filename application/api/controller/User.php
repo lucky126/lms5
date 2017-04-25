@@ -104,22 +104,4 @@ class User extends base
         Db::name('user')->where('uid', $id)->delete();
         return json("success");
     }
-
-
-    /**
-     *
-     *
-     * @param  uuid $id
-     * @return \think\Response
-     */
-    public function profile($id)
-    {
-        //get user info
-        $user = Db::name('user')->where('uid', $id)->find();
-        $groupaccess = DB::name('AuthGroupAccess')->where('uid', $user['id'])->find();
-        $group = DB::name('AuthGroup')->where('id', $groupaccess['group_id'])->find();
-        $rule = DB::name('AuthRule')->where('id', 'in', $group['rules'])->select();
-
-        return json($rule);
-    }
 }
