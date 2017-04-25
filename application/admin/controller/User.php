@@ -2,8 +2,6 @@
 
 namespace app\admin\controller;
 
-use think\Controller;
-
 /**
  * 用户控制器
  * @package app\admin\controller
