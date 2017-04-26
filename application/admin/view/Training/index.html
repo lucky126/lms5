@@ -1,12 +1,13 @@
 {extend name="base" /}
 {block name="css"}
 {load href="/static/plugins/bootstrap-table/bootstrap-table.min.css,/static/plugins/x-editable/css/bootstrap-editable.css" /}
-{load href="/static/plugins/animate-css/animate.min.css" /}
+{load href="/static/plugins/animate-css/animate.min.css,/static/plugins/daterangepicker/daterangepicker.css" /}
 {/block}
 
 {block name="js"}
 {load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js" /}
 {load href="/static/plugins/bootbox/bootbox.min.js,/static/js/demo/ui-modals.js" /}
+{load href="/static/js/moment.min.js,/static/plugins/daterangepicker/daterangepicker.js" /}
 {/block}
 
 {block name="title"}User{/block}
@@ -79,6 +80,11 @@
 {/block}
 
 {block name="modal"}
+<style>
+    .modal-dialog {
+        width: 80%;
+    }
+</style>
 <script type="text/javascript">
     $(function () {
         $("#add").click(function () {
@@ -94,11 +100,11 @@
     function showInfo(isNew, id) {
         //如果是新增
         var title = "新增培训班";
-        var url = "/admin/Traning/Add";
+        var url = "/admin/Training/Add";
         //如果是修改
         if (!isNew) {
             title = "修改培训班";
-            var url = "/admin/Traning/Edit?id=" + id;
+            var url = "/admin/Training/Edit?id=" + id;
         }
 
         $.ajax({

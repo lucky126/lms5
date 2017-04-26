@@ -38,7 +38,7 @@ CREATE TABLE `lms_auth_group` (
   COMMENT = '用户组表';
 
 INSERT INTO `lms_auth_group` (`id`, `title`, `status`, `rules`)
-VALUES ('1', '超级管理员', '1', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31');
+VALUES ('1', '超级管理员', '1', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33');
 
 -- ----------------------------
 -- Table structure for lms_auth_rule
@@ -80,9 +80,15 @@ VALUES ('2', '1', 'System', '系统管理', '1', '1', '', 'fa fa-cloud', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('3', '2', 'Admin/System/index', '系统管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+
 VALUES ('4', '1', 'Training', '培训计划管理', '1', '1', '', 'fa fa-group', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('5', '4', 'Admin/Training/index', '培训计划管理', '1', '1', '', '', '1');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('32', '4', 'Admin/Training/Add', '添加培训计划', '1', '1', '', '', '0');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('33', '4', 'Admin/Training/Edit', '修改培训计划', '1', '1', '', '', '0');
+
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('6', '1', 'Course', '课程管理', '1', '1', '', 'fa fa-book', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)

@@ -19,5 +19,23 @@ class Training extends Basic
         return $this->fetch();
     }
 
+    /**
+     * 培训班新增页
+     * @return mixed
+     */
+    public function Add()
+    {
+        return $this->fetch();
+    }
 
+    /**
+     * 培训班编辑页
+     * @param $id
+     * @return mixed
+     */
+    public function Edit($id)
+    {
+        $this->assign("id", $id);
+        return $this->fetch();
+    }
 }
