@@ -15,7 +15,7 @@
     <div class="form-group">
         <label for="StartTime" class="col-sm-3 control-label">培训计划起止时间：</label>
         <div class="col-sm-6">
-            <input type="text" id="StartTime" name="StartTime" class="form-control" placeholder="请输入登录密码">
+            <input type="text" id="StartTime" name="StartTime" class="form-control" placeholder="请输入培训计划起止时间">
         </div>
     </div>
     <div class="form-group">
@@ -38,10 +38,7 @@
         $('#RegistrationStartTime').daterangepicker({
             "timePicker": true,
             "timePicker24Hour": true,
-            "autoApply": true,
-            "showCustomRangeLabel": false,
-            "opens": "left",
-            "drops": "up"
+
         }, function(start, end, label) {
             console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
         });
