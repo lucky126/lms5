@@ -6,7 +6,7 @@
 
 {block name="js"}
 {load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js" /}
-{load href="/static/plugins/bootbox/bootbox.min.js,/static/js/demo/ui-modals.js" /}
+{load href="/static/plugins/bootbox/bootbox.min.js" /}
 {/block}
 
 {block name="title"}权限列表{/block}
@@ -181,23 +181,6 @@
         });
     }
 
-    //提示保存成功
-    function completeMsg(msg) {
-        $.niftyNoty({
-            type: 'purple',
-            icon: 'fa fa-check',
-            message: msg,
-            container: 'floating',
-            timer: 4000
-        });
-    }
-
-    //数据格式化
-    function dateFormatter(value, row) {
-        var icon = row.id % 2 === 0 ? 'fa-star' : 'fa-user';
-        return '<span class="text-muted"><i class="fa fa-clock-o"></i> ' + value + '</span>';
-    }
-
     //bootstrap table操作
     function actionFormatter(value, row, index) {
         return [
@@ -222,7 +205,7 @@
             showInfo(false, row.id);
         },
         'click .remove': function (e, value, row, index) {
-            showDeleteInfo(row.id);
+            showDeleteInfo("确认删除该条数据么", "/api/Rule/", row.id);
         }
     };
 
@@ -232,54 +215,6 @@
         newPid = id;
         pidList.push(pid);
         checkButtonShow();
-    }
-
-    //show delete dialog
-    function showDeleteInfo(id) {
-        bootbox.confirm("确认删除该条数据么?", function (result) {
-            if (result) {
-                var res = deleteInfo(id);
-                if (res == "success") {
-                    $.niftyNoty({
-                        type: 'success',
-                        icon: 'pli-like-2 icon-2x',
-                        message: '删除成功',
-                        container: 'floating',
-                        timer: 5000
-                    });
-                }
-                else {
-                    $.niftyNoty({
-                        type: 'danger',
-                        icon: 'pli-cross icon-2x',
-                        message: '删除失败',
-                        container: 'floating',
-                        timer: 5000
-                    });
-                }
-                $("#table").bootstrapTable("refresh");
-            }
-        });
-    }
-
-    //delete info
-    function deleteInfo(id) {
-        var returnVal = null;
-        //异步保存
-        $.ajax({
-            cache: true,
-            type: "DELETE",
-            url: "/api/Rule/" + id,
-            async: false,
-            error: function (request) {
-                alert("连接错误");
-            },
-            success: function (data) {
-                returnVal = data;
-            }
-        });
-
-        return returnVal;
     }
 
 </script>
