@@ -1,12 +1,12 @@
 {extend name="base" /}
 {block name="css"}
 {load href="/static/plugins/bootstrap-table/bootstrap-table.min.css,/static/plugins/x-editable/css/bootstrap-editable.css" /}
-{load href="/static/plugins/animate-css/animate.min.css" /}
+{load href="/static/plugins/animate-css/animate.min.css,/static/plugins/bootstrap-validator/bootstrapValidator.min.css" /}
 {/block}
 
 {block name="js"}
 {load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js,/static/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
-{load href="/static/plugins/bootbox/bootbox.min.js" /}
+{load href="/static/plugins/bootbox/bootbox.min.js,/static/plugins/bootstrap-validator/bootstrapValidator.min.js" /}
 {/block}
 
 {block name="title"}角色列表{/block}
@@ -78,6 +78,7 @@
         $("#add").click(function () {
             showAddInfo();
         });
+
     });
 
     /**
@@ -86,6 +87,7 @@
     function showAddInfo() {
         var title = "新增角色";
         var url = "/admin/Rule/Addgroup";
+
         showEditPage(url, title, saveAddInfo, null);
     }
 
@@ -108,6 +110,11 @@
         var method = "POST";
         var url = "/api/Group";
 
+        $('#addform').data('bootstrapValidator').validate();
+        if (!$('#addform').data('bootstrapValidator').isValid()) {
+            return false;
+        }
+
         saveInfo(method, url, $('#addform').serialize());
     }
 
@@ -119,6 +126,11 @@
         //如果是新增
         var method = "PUT";
         var url = "/api/Group/" + id;
+
+        $('#addform').data('bootstrapValidator').validate();
+        if (!$('#addform').data('bootstrapValidator').isValid()) {
+            return false;
+        }
 
         saveInfo(method, url, $('#addform').serialize());
     }

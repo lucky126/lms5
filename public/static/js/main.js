@@ -1,7 +1,15 @@
 /**
  * Created by lucky on 2017/4/27.
  */
+//设置bootstrap table为中文
 $('#table').bootstrapTable({locale:'zh-CN'});
+
+//设置bootstrap validator FEEDBACK 样式
+var faIcon = {
+    valid: 'fa fa-check-circle fa-lg text-success',
+    invalid: 'fa fa-times-circle fa-lg',
+    validating: 'fa fa-refresh'
+}
 
 /**
  * 操作成功提示

@@ -2,7 +2,30 @@
     <div class="form-group">
         <label for="title" class="col-sm-2 control-label">角色名称：</label>
         <div class="col-sm-6">
-            <input type="text" id="title" name="title" class="form-control" placeholder="请输入角色名称">
+            <input type="text" id="title" name="title" class="form-control required" placeholder="请输入角色名称" data-bv-notempty data-bv-notempty-message="请输入角色名称">
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    $("#addform").bootstrapValidator({
+        message: 'This value is not valid',
+        //反馈图标
+        feedbackIcons:faIcon,
+        fields: {
+            title:{
+                message:'角色名称无效',
+                validators:{
+                    notEmpty:{
+                        message:'角色名称不能为空'
+                    },
+                    StringLength:{
+                        min:5,
+                        max:30,
+                        message:'角色名称长度大于6位并且小于30位'
+                    }
+                }
+            }
+
+        }
+    });
+</script>
