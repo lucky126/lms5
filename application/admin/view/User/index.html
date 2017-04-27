@@ -82,83 +82,51 @@
 <script type="text/javascript">
     $(function () {
         $("#add").click(function () {
-            showInfo(true, null);
+            showAddInfo();
         });
     });
 
-    /*
-     调用bootbox提示框
-     @param isNew 是否新增
-     @param id
+    /**
+     * 显示新增用户
      */
-    function showInfo(isNew, id) {
-        //如果是新增
+    function showAddInfo() {
         var title = "新增用户";
         var url = "/admin/User/Add";
-        //如果是修改
-        if (!isNew) {
-            title = "修改用户";
-            var url = "/admin/User/Edit?id=" + id;
-        }
-
-        $.ajax({
-            type: "GET",
-            url: url,
-            success: function (data) {
-
-                bootbox.dialog({
-                    title: title,
-                    message: data,
-                    buttons: {
-                        success: {
-                            label: "保存",
-                            className: "btn-primary",
-                            callback: function () {
-                                saveInfo(isNew, id);
-                            }
-                        },
-                        cancel: {
-                            label: "取消",
-                            className: "btn-danger",
-                            callback: function () {
-                            }
-                        }
-                    }
-                });
-            }
-        });
+        showEditPage(url, title, saveAddInfo, null);
     }
 
-    /*
-     提交异步保存
-     @param isNew 是否新增
-     @param id
+    /**
+     * 显示编辑用户
+     * @param id
      */
-    function saveInfo(isNew, id) {
+    function showEditInfo(id) {
+        var title = "修改用户";
+        var url = "/admin/User/Edit?id=" + id;
+        showEditPage(url, title, saveEditInfo, id);
+    }
+
+    /**
+     * 保存新增用户
+     * @param id
+     */
+    function saveAddInfo(id) {
         //如果是新增
         var method = "POST";
         var url = "/api/User";
-        //如果是修改
-        if (!isNew) {
-            method = "PUT";
-            url += "/" + id;
-        }
-        //异步保存
-        $.ajax({
-            cache: true,
-            type: method,
-            url: url,
-            data: $('#addform').serialize(),
-            async: false,
-            error: function (event, xhr, options, exc) {
-                console.log(options);
-                alert("连接错误" + xhr);
-            },
-            success: function (data) {
-                completeMsg("保存成功");
-                $("#table").bootstrapTable("refresh");
-            }
-        });
+
+        saveInfo(method, url, $('#addform').serialize());
+    }
+
+    /**
+     * 保存编辑用户
+     * @param id
+     */
+    function saveEditInfo(id) {
+        //如果是新增
+        var method = "PUT";
+        var url = "/api/User/" + id;
+
+        saveInfo(method, url, $('#addform').serialize());
     }
 
     //bootstrap table操作
@@ -176,10 +144,10 @@
     //操作事件
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
-            showInfo(false, row.uid);
+            showEditInfo(row.uid);
         },
         'click .remove': function (e, value, row, index) {
-            showDeleteInfo("确认删除该条数据么","/api/User/", row.uid);
+            showDeleteInfo("确认删除该条数据么", "/api/User/", row.uid);
         }
     };
 

@@ -72,13 +72,17 @@ class Rule extends base
         //
         if (Request::instance()->post()) {
             $data = input('post.');
+            $isshow = 0;
+            if (input('?isshow')) {
+                $isshow = 1;
+            }
 
             $userdata = [
                 'pid' => $data['pid'],
                 'name' => $data['name'],
                 'title' => $data['title'],
                 'icon' => $data['icon'],
-                'isshow' => $data['isshow'],
+                'isshow' => $isshow,
             ];
 
             $result = Db::name('AuthRule')->insert($userdata);
@@ -98,11 +102,19 @@ class Rule extends base
         if (Request::instance()->put()) {
             $data = input('put.');
             //dump($data);
+            $isshow = 0;
+            if (input('?isshow')) {
+                $isshow = 1;
+            }
+            //dump($isshow);
 
             $result = Db::name('AuthRule')
                 ->where('id', $id)
-                ->update(['title' => $data['title'], 'name' => $data['name'], 'icon' => $data['icon'], 'isshow' => $data['isshow']]);
-
+                ->update(['title' => $data['title'],
+                    'name' => $data['name'],
+                    'icon' => $data['icon'],
+                    'isshow' => $isshow]);
+            //echo Db::getLastSql();
             return json("success");
         }
     }

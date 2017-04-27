@@ -83,20 +83,23 @@
 
     $(function () {
         $("#add").click(function () {
-            showInfo(true, newPid);
+            showAddInfo(newPid);
         });
 
         $("#back").click(function () {
             var backpid = pidList.pop();
             newPid = backpid;
             $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + backpid});
-            checkButtonShow();
+            setButtonShow();
         });
 
-        checkButtonShow();
+        setButtonShow();
     });
 
-    function checkButtonShow() {
+    /**
+     * 设置新增和返回按钮显示状态
+     */
+    function setButtonShow() {
         if (newPid == 0) {
             $("#add").hide();
             $("#back").hide();
@@ -106,79 +109,47 @@
         }
     }
 
-    /*
-     调用bootbox提示框
-     @param isNew 是否新增
-     @param id
+    /**
+     * 显示新增权限
      */
-    function showInfo(isNew, id) {
-        //如果是新增
+    function showAddInfo(id) {
         var title = "新增权限";
-        var url = "/admin/Rule/Add?pid= " + id;
-        //如果是修改
-        if (!isNew) {
-            title = "修改权限";
-            var url = "/admin/Rule/Edit?id=" + id;
-        }
-
-        $.ajax({
-            type: "GET",
-            url: url,
-            success: function (data) {
-
-                bootbox.dialog({
-                    title: title,
-                    message: data,
-                    buttons: {
-                        success: {
-                            label: "保存",
-                            className: "btn-primary",
-                            callback: function () {
-                                saveInfo(isNew, id);
-                            }
-                        },
-                        cancel: {
-                            label: "取消",
-                            className: "btn-danger",
-                            callback: function () {
-                            }
-                        }
-                    }
-                });
-            }
-        });
+        var url = "/admin/Rule/Add?pid=" + id;
+        showEditPage(url, title, saveAddInfo, id);
     }
 
-    /*
-     提交异步保存
-     @param isNew 是否新增
-     @param id
+    /**
+     * 显示编辑权限
+     * @param id
      */
-    function saveInfo(isNew, id) {
+    function showEditInfo(id) {
+        var title = "修改权限";
+        var url = "/admin/Rule/Edit?id=" + id;
+        showEditPage(url, title, saveEditInfo, id);
+    }
+
+    /**
+     * 保存新增权限
+     * @param id
+     */
+    function saveAddInfo(id) {
         //如果是新增
         var method = "POST";
         var url = "/api/Rule";
-        //如果是修改
-        if (!isNew) {
-            method = "PUT";
-            url += "/" + id;
-        }
-        //异步保存
-        $.ajax({
-            cache: true,
-            type: method,
-            url: url,
-            data: $('#addform').serialize(),
-            async: false,
-            error: function (event, xhr, options, exc) {
-                console.log(options);
-                alert("连接错误" + xhr);
-            },
-            success: function (data) {
-                completeMsg("保存成功");
-                $("#table").bootstrapTable("refresh");
-            }
-        });
+
+        saveInfo(method, url, $('#addform').serialize());
+    }
+
+    /**
+     * 保存编辑权限
+     * @param id
+     */
+    function saveEditInfo(id) {
+        //如果是新增
+        var method = "PUT";
+        var url = "/api/Rule/" + id;
+
+        saveInfo(method, url, $('#addform').serialize());
     }
 
     //bootstrap table操作
@@ -199,22 +170,26 @@
     //操作事件
     window.actionEvents = {
         'click .sub': function (e, value, row, index) {
-            showlist(row.id, row.pid);
+            showSubList(row.id, row.pid);
         },
         'click .edit': function (e, value, row, index) {
-            showInfo(false, row.id);
+            showEditInfo(row.id);
         },
         'click .remove': function (e, value, row, index) {
             showDeleteInfo("确认删除该条数据么", "/api/Rule/", row.id);
         }
     };
 
-    //show sub list
-    function showlist(id, pid) {
+    /**
+     * 显示子权限列表
+     * @param id
+     * @param pid
+     */
+    function showSubList(id, pid) {
         $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + id});
         newPid = id;
         pidList.push(pid);
-        checkButtonShow();
+        setButtonShow();
     }
 
 </script>

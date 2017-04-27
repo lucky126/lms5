@@ -76,104 +76,72 @@
 
     $(function () {
         $("#add").click(function () {
-            showInfo(true, null);
+            showAddInfo();
         });
     });
 
-    /*
-     调用bootbox提示框
-     @param isNew 是否新增
-     @param id
+    /**
+     * 显示新增角色
      */
-    function showInfo(isNew, id) {
-        //如果是新增
+    function showAddInfo() {
         var title = "新增角色";
         var url = "/admin/Rule/Addgroup";
-        //如果是修改
-        if (!isNew) {
-            title = "修改角色";
-            var url = "/admin/Rule/Editgroup?id=" + id;
-        }
-
-        $.ajax({
-            type: "GET",
-            url: url,
-            success: function (data) {
-
-                bootbox.dialog({
-                    title: title,
-                    message: data,
-                    buttons: {
-                        success: {
-                            label: "保存",
-                            className: "btn-primary",
-                            callback: function () {
-                                saveInfo(isNew, id);
-                            }
-                        },
-                        cancel: {
-                            label: "取消",
-                            className: "btn-danger",
-                            callback: function () {
-                            }
-                        }
-                    }
-                });
-            }
-        });
+        showEditPage(url, title, saveAddInfo, null);
     }
 
-    /*
-     提交异步保存
-     @param isNew 是否新增
-     @param id
+    /**
+     * 显示编辑角色
+     * @param id
      */
-    function saveInfo(isNew, id) {
+    function showEditInfo(id) {
+        var title = "修改角色";
+        var url = "/admin/Rule/Editgroup?id=" + id;
+        showEditPage(url, title, saveEditInfo, id);
+    }
+
+    /**
+     * 保存新增角色
+     * @param id
+     */
+    function saveAddInfo(id) {
         //如果是新增
         var method = "POST";
         var url = "/api/Group";
-        //如果是修改
-        if (!isNew) {
-            method = "PUT";
-            url += "/" + id;
-        }
-        //异步保存
-        $.ajax({
-            cache: true,
-            type: method,
-            url: url,
-            data: $('#addform').serialize(),
-            async: false,
-            error: function (event, xhr, options, exc) {
-                console.log(options);
-                alert("连接错误" + xhr);
-            },
-            success: function (data) {
-                completeMsg("保存成功");
-                $("#table").bootstrapTable("refresh");
-            }
-        });
+
+        saveInfo(method, url, $('#addform').serialize());
+    }
+
+    /**
+     * 保存编辑角色
+     * @param id
+     */
+    function saveEditInfo(id) {
+        //如果是新增
+        var method = "PUT";
+        var url = "/api/Group/" + id;
+
+        saveInfo(method, url, $('#addform').serialize());
     }
 
     //bootstrap table操作
     function actionFormatter(value, row, index) {
         return [
+            '<a class="rule ml10" href="javascript:void(0)" title="分配权限">',
+            '<i class="glyphicon glyphicon-cog"></i>',
+            '</a> ',
             '<a class="edit ml10" href="javascript:void(0)" title="编辑">',
             '<i class="glyphicon glyphicon-edit"></i>',
             '</a> ',
             '<a class="remove ml10" href="javascript:void(0)" title="删除">',
             '<i class="glyphicon glyphicon-remove"></i>',
             '</a>',
-            '<a class="rule ml10" href="javascript:void(0)" title="分配权限">',
-            '<i class="glyphicon glyphicon-cog"></i>',
-            '</a> ',
         ].join('');
     }
 
     //操作事件
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
-            showInfo(false, row.id);
+            showEditInfo(row.id);
         },
         'click .remove': function (e, value, row, index) {
             showDeleteInfo("确认删除该条数据么", "/api/Group/", row.id);
