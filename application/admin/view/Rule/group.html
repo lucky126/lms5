@@ -110,7 +110,7 @@
         var title = "编辑角色权限";
         var url = "/admin/Rule/Grouprule?id=" + id;
 
-        showEditPage(url, title, saveRuleInfo, null);
+        showEditPage(url, title, saveRuleInfo, id, false);
     }
 
     /**
@@ -145,8 +145,20 @@
         //如果是新增
         var method = "PUT";
         var url = "/api/Group/" + id + "/Rule";
-
-        saveInfo(method, url, $('#addform').serialize());
+        //get object
+        var $tree = $('#tree');
+        //get treeview checked node list
+        var checkList = $tree.treeview('getChecked', 0);
+        //make a array
+        var checkArr = new Array();
+        //push the id to the array
+        for (var key in checkList) {
+            checkArr.push(checkList[key]['id']);
+        }
+        //make a object to submit the list ,and transfer the list to string
+        var submitData = {rules: checkArr.toString()};
+        //save
+        saveInfo(method, url, submitData);
     }
 
     //bootstrap table操作

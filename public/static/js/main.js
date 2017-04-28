@@ -53,8 +53,7 @@ function dateFormatter(value, row) {
 /**
  * 验证函数
  */
-function ValidateAddInfo()
-{
+function ValidateAddInfo() {
     $('#addform').data('bootstrapValidator').validate();
     if (!$('#addform').data('bootstrapValidator').isValid()) {
         return false;
@@ -71,6 +70,17 @@ function ValidateAddInfo()
  * @param id 操作数据ID，用于编辑保存用
  */
 function showEditPage(url, title, func, id) {
+    return showEditPage(url, title, func, id, true);
+}
+/**
+ * 显示新增或者编辑页面
+ * @param url 调用新增或者编辑的html页面
+ * @param title 操作框标题
+ * @param func 保存操作返回函数
+ * @param id 操作数据ID，用于编辑保存用
+ * @param isValid 是否启用验证
+ */
+function showEditPage(url, title, func, id, isValid) {
     $.ajax({
         type: "GET",
         url: url,
@@ -84,9 +94,12 @@ function showEditPage(url, title, func, id) {
                         label: "保存",
                         className: "btn-primary",
                         callback: function () {
-                            var validResult = ValidateAddInfo();
-                            if(validResult == false)
-                                return false;
+                            if (isValid) {
+                                var validResult = ValidateAddInfo();
+                                if (validResult == false)
+                                    return false;
+                            }
+
                             func(id);
                         }
                     },
@@ -120,10 +133,10 @@ function saveInfo(method, url, data) {
             alert("连接错误");
         },
         success: function (data) {
-            if(data.code == 0) {
+            if (data.code == 0) {
                 completeMsg("保存成功");
                 $("#table").bootstrapTable("refresh");
-            }else{
+            } else {
                 errorMsg(data.msg);
             }
         }

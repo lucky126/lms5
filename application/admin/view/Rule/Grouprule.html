@@ -1,4 +1,4 @@
-<form method="post" action="" class="form-horizontal" id="addform">
+<form method="post" action="" class="form-horizontal" id="otherform">
     <div class="form-group">
         <label class="col-sm-2 control-label">角色名称：</label>
         <div class="col-sm-6">
@@ -9,6 +9,7 @@
         <label class="col-sm-2 control-label">角色权限：</label>
         <div class="col-sm-6">
             <div id="tree"></div>
+            <input type="hidden" id="rules" name="rules">
         </div>
     </div>
 </form>
@@ -34,12 +35,12 @@
     }
 
     //get tree
-    function getTree() {
+    function getTree(id) {
         var ret;
         $.ajax({
             cache: true,
             type: "GET",
-            url: "/api/group/1/rule",
+            url: "/api/group/" + id + "/rule",
             async: false,
             error: function (request) {
                 alert("连接错误");
@@ -53,36 +54,36 @@
     }
 
     $('#tree').treeview({
-        data: getTree(),
+        data: getTree('{$id}'),
         showCheckbox: true,
-        onNodeChecked: function(event, node) { //选中节点
+        onNodeChecked: function (event, node) { //选中节点
             var selectNodes = getNodeIdArr(node);//获取所有子节点
-            if(selectNodes){ //子节点不为空，则选中所有子节点
-                $('#tree').treeview('checkNode', [ selectNodes,{ silent: true }]);
+            if (selectNodes) { //子节点不为空，则选中所有子节点
+                $('#tree').treeview('checkNode', [selectNodes, {silent: true}]);
             }
         },
         onNodeUnchecked: function (event, node) { //取消选中节点
             var selectNodes = getNodeIdArr(node);//获取所有子节点
-            if(selectNodes){ //子节点不为空，则取消选中所有子节点
-                $('#tree').treeview('uncheckNode', [ selectNodes,{ silent: true }]);
+            if (selectNodes) { //子节点不为空，则取消选中所有子节点
+                $('#tree').treeview('uncheckNode', [selectNodes, {silent: true}]);
             }
         }
     });
 
     //递归获取所有的结点id
-    function getNodeIdArr( node ){
+    function getNodeIdArr(node) {
         var ts = [];
-        if(node.nodes){
-            for(x in node.nodes){
+        if (node.nodes) {
+            for (x in node.nodes) {
                 ts.push(node.nodes[x].nodeId)
-                if(node.nodes[x].nodes){
+                if (node.nodes[x].nodes) {
                     var getNodeDieDai = getNodeIdArr(node.nodes[x]);
-                    for(j in getNodeDieDai){
+                    for (j in getNodeDieDai) {
                         ts.push(getNodeDieDai[j]);
                     }
                 }
             }
-        }else{
+        } else {
             ts.push(node.nodeId);
         }
         return ts;

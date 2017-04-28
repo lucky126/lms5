@@ -128,24 +128,49 @@ class Group extends base
     }
 
     /**
+     * 获得角色权限树
      * @param $id
      * @return \think\response\Json
      */
     public function GetRule($id)
     {
-        $rule = DB::name('AuthRule')->field('id,pid,name,title')->select();
-        //return json($rule);
-        $data = $this::channelLevel($rule);
+        //get rule list
+        $ruleList = DB::name('AuthRule')->field('id,pid,name,title')->select();
+        //get group's rule ids
+        $groupAccess = Db::name('AuthGroup')->where('id', '=', $id)->find();
+        $groupRule = $groupAccess['rules'];
+
+        $data = $this::channelLevel($ruleList, $groupRule, 0);
         return json($data);
     }
 
     /**
-     *
+     * 获得角色权限树
+     * @param $id
+     * @return \think\response\Json
+     */
+    public function SaveRule($id)
+    {
+        if (Request::instance()->put()) {
+            $data = input('put.');
+            //dump($data['rules']);
+            //dump($id);
+            $result = Db::name('AuthGroup')
+                ->where('id', $id)
+                ->update(['rules' => $data['rules']]);
+
+            return json(base::getResult(0, "", null));
+        }
+    }
+
+    /**
+     * 内部递归获取树的函数
      * @param $data
+     * @param $groupRule
      * @param int $pid
      * @return array
      */
-    static private function channelLevel($data, $pid = 0)
+    static private function channelLevel($data, $groupRule, $pid = 0)
     {
         if (empty($data)) {
             return array();
@@ -156,7 +181,12 @@ class Group extends base
             if ($v["pid"] == $pid) {
                 $tmp["text"] = $v["title"];
                 $tmp["id"] = $v["id"];
-                $tmp["nodes"] = self::channelLevel($data, $v["id"]);
+                $tmp['state']["checked"] = false;
+
+                if (stripos(',' . $groupRule . ',', ',' . $v["id"] . ',') !== false) {
+                    $tmp['state']["checked"] = true;
+                }
+                $tmp["nodes"] = self::channelLevel($data, $groupRule, $v["id"]);
                 array_push($arr, $tmp);
             }
         }
