@@ -104,11 +104,16 @@ class Basic extends Controller
      */
     public function getMenu($url, $isAdmin)
     {
-        $groupaccess = DB::name('AuthGroupAccess')->where('uid', Cookie::get('id'))->find();
-        $group = DB::name('AuthGroup')->where('id', $groupaccess['group_id'])->find();
+        //$groupaccess = DB::name('AuthGroupAccess')->where('uid', Cookie::get('id'))->find();
+        //$group = DB::name('AuthGroup')->where('id', $groupaccess['group_id'])->find();
+
+        $data = Db::view('AuthGroupAccess', 'uid')
+            ->view('AuthGroup', 'rules', 'AuthGroup.id=AuthGroupAccess.group_id')
+            ->where('uid', '=', Cookie::get('id'))
+            ->find();
 
         if (!$isAdmin)
-            $map['id'] = ['in', $group['rules']];
+            $map['id'] = ['in', $data['rules']];
 
         $map['isshow'] = ['=', '1'];
 
