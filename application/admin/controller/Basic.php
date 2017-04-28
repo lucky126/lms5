@@ -38,39 +38,78 @@ class Basic extends Controller
         $this->uid = Cookie::get('uid');
         //set uid
         $this->assign("uid", $this->uid);
+        //get currrent url
+        $url = $this::getUrl();
+        //check admin
+        $isAdmin = $this::checkAdmin();
+        //check auth
+        if (!$isAdmin && !$this::checkAuth($url)) {
+            $this->error('您没有权限访问');
+        }
+        //make menu
+        $menu = $this::getMenu($url, $isAdmin);
+        $this->assign("menu", $menu);
+    }
 
-        //make auth
-        $auth = new \think\Auth();
+    /**
+     * 判断是否是管理员
+     */
+    private function checkAdmin()
+    {
+        $user = DB::name('User')->where('id', Cookie::get('id'))->find();
+
+        $isAdmin = false;
+        if ($user['usertype'] == 0) {
+            $isAdmin = true;
+        }
+
+        return $isAdmin;
+    }
+
+    /**
+     * 得到当前访问路径
+     * @return string
+     */
+    protected function getUrl()
+    {
         $request = Request::instance();
         //get url
         $m = $request->module();
         $c = $request->controller();
         $a = $request->action();
         $rule_name = $m . '/' . $c . '/' . $a;
+
+        return $rule_name;
+    }
+
+    /**
+     * 判断权限
+     * @param $url
+     * @return bool
+     */
+    protected function checkAuth($url)
+    {
+        //make auth
+        $auth = new \think\Auth();
+
         //check auth
-        $result = $auth->check($rule_name, Cookie::get('id'));
-        if (!$result) {
-            $this->error('您没有权限访问');
-        }
-        //make menu
-        $menu = $this::getMenu($this->uid, $rule_name);
-        $this->assign("menu", $menu);
+        $result = $auth->check($url, Cookie::get('id'));
+        return $result;
     }
 
     /**
      * 得到用户菜单
-     * @param $id
      * @param $url
      * @return array
      */
-    public function getMenu($id, $url)
+    public function getMenu($url, $isAdmin)
     {
-        //get user info
-        $user = Db::name('user')->where('uid', $id)->find();
-        $groupaccess = DB::name('AuthGroupAccess')->where('uid', $user['id'])->find();
+        $groupaccess = DB::name('AuthGroupAccess')->where('uid', Cookie::get('id'))->find();
         $group = DB::name('AuthGroup')->where('id', $groupaccess['group_id'])->find();
 
-        $map['id'] = ['in', $group['rules']];
+        if (!$isAdmin)
+            $map['id'] = ['in', $group['rules']];
+
         $map['isshow'] = ['=', '1'];
 
         $rule = DB::name('AuthRule')->where($map)->field('id,pid,name,title,icon')->select();
@@ -109,7 +148,7 @@ class Basic extends Controller
                 $arr[$v[$fieldPri]]["_data"] = self::channelLevel($data, $path, $v[$fieldPri], $fieldPri, $level + 1);
 
                 foreach ($arr[$v[$fieldPri]]["_data"] as $child) {
-                    if($child["_selected"] == 1){
+                    if ($child["_selected"] == 1) {
                         $arr[$v[$fieldPri]]['_selected'] = 1;
                         break;
                     }
