@@ -98,6 +98,7 @@
     function showEditInfo(id) {
         var title = "修改角色";
         var url = "/admin/Rule/Editgroup?id=" + id;
+
         showEditPage(url, title, saveEditInfo, id);
     }
 
@@ -110,11 +111,6 @@
         var method = "POST";
         var url = "/api/Group";
 
-        $('#addform').data('bootstrapValidator').validate();
-        if (!$('#addform').data('bootstrapValidator').isValid()) {
-            return false;
-        }
-
         saveInfo(method, url, $('#addform').serialize());
     }
 
@@ -126,11 +122,6 @@
         //如果是新增
         var method = "PUT";
         var url = "/api/Group/" + id;
-
-        $('#addform').data('bootstrapValidator').validate();
-        if (!$('#addform').data('bootstrapValidator').isValid()) {
-            return false;
-        }
 
         saveInfo(method, url, $('#addform').serialize());
     }

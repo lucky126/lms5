@@ -2,7 +2,7 @@
  * Created by lucky on 2017/4/27.
  */
 //设置bootstrap table为中文
-$('#table').bootstrapTable({locale:'zh-CN'});
+$('#table').bootstrapTable({locale: 'zh-CN'});
 
 //设置bootstrap validator FEEDBACK 样式
 var faIcon = {
@@ -51,6 +51,19 @@ function dateFormatter(value, row) {
 }
 
 /**
+ * 验证函数
+ */
+function ValidateAddInfo()
+{
+    $('#addform').data('bootstrapValidator').validate();
+    if (!$('#addform').data('bootstrapValidator').isValid()) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * 显示新增或者编辑页面
  * @param url 调用新增或者编辑的html页面
  * @param title 操作框标题
@@ -71,6 +84,9 @@ function showEditPage(url, title, func, id) {
                         label: "保存",
                         className: "btn-primary",
                         callback: function () {
+                            var validResult = ValidateAddInfo();
+                            if(validResult == false)
+                                return false;
                             func(id);
                         }
                     },
