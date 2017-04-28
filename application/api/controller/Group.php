@@ -126,4 +126,41 @@ class Group extends base
         Db::name('AuthGroup')->where('id', $id)->delete();
         return json(base::getResult(0, "", null));
     }
+
+    /**
+     * @param $id
+     * @return \think\response\Json
+     */
+    public function GetRule($id)
+    {
+        $rule = DB::name('AuthRule')->field('id,pid,name,title')->select();
+        //return json($rule);
+        $data = $this::channelLevel($rule);
+        return json($data);
+    }
+
+    /**
+     *
+     * @param $data
+     * @param int $pid
+     * @return array
+     */
+    static private function channelLevel($data, $pid = 0)
+    {
+        if (empty($data)) {
+            return array();
+        }
+        // dump($data);
+        $arr = array();
+        foreach ($data as $v) {
+            if ($v["pid"] == $pid) {
+                $tmp["text"] = $v["title"];
+                $tmp["id"] = $v["id"];
+                $tmp["nodes"] = self::channelLevel($data, $v["id"]);
+                array_push($arr, $tmp);
+            }
+        }
+
+        return $arr;
+    }
 }
