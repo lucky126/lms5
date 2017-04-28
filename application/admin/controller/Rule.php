@@ -73,4 +73,15 @@ class Rule extends Basic
         return $this->fetch();
     }
 
+    /**
+     * 角色权限编辑页
+     * @param $id
+     * @return mixed
+     */
+    public function Grouprule($id)
+    {
+        $this->assign("id", $id);
+        return $this->fetch();
+    }
+
 }

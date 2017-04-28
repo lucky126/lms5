@@ -6,7 +6,7 @@
 
 {block name="js"}
 {load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js,/static/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
-{load href="/static/plugins/bootbox/bootbox.min.js,/static/plugins/bootstrap-validator/bootstrapValidator.min.js" /}
+{load href="/static/plugins/bootbox/bootbox.min.js,/static/plugins/bootstrap-validator/bootstrapValidator.min.js,/static/plugins/bootstrap-treeview/js/bootstrap-treeview.js" /}
 {/block}
 
 {block name="title"}角色列表{/block}
@@ -103,6 +103,17 @@
     }
 
     /**
+     * 显示编辑角色权限
+     * @param id
+     */
+    function showRuleInfo(id) {
+        var title = "编辑角色权限";
+        var url = "/admin/Rule/Grouprule?id=" + id;
+
+        showEditPage(url, title, saveRuleInfo, null);
+    }
+
+    /**
      * 保存新增角色
      * @param id
      */
@@ -122,6 +133,18 @@
         //如果是新增
         var method = "PUT";
         var url = "/api/Group/" + id;
+
+        saveInfo(method, url, $('#addform').serialize());
+    }
+
+    /**
+     * 保存角色权限
+     * @param id
+     */
+    function saveRuleInfo(id) {
+        //如果是新增
+        var method = "PUT";
+        var url = "/api/Group/" + id + "/Rule";
 
         saveInfo(method, url, $('#addform').serialize());
     }
@@ -150,7 +173,7 @@
             showDeleteInfo("确认删除该条数据么", "/api/Group/", row.id);
         },
         'click .rule': function (e, value, row, index) {
-            showRule(row.id);
+            showRuleInfo(row.id);
         },
     };
 
