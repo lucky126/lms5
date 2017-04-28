@@ -145,7 +145,7 @@ class Group extends base
     }
 
     /**
-     * 获得角色权限树
+     * 保存角色权限树
      * @param $id
      * @return \think\response\Json
      */
