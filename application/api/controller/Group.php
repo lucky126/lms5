@@ -56,13 +56,26 @@ class Group extends base
         if (Request::instance()->post()) {
             $data = input('post.');
 
+            //validate
+            $valid = $this->validate(
+                [
+                    'title' => $data['title'],
+                ],
+                [
+                    'title' => 'require|max:25',
+                ]);
+            if (true !== $valid) {
+                // 验证失败 输出错误信息
+                return json(base::getResult(-101, $valid, null));
+            }
+
             $userdata = [
                 'title' => $data['title'],
                 'rules' => '',
             ];
 
             $result = Db::name('AuthGroup')->insert($userdata);
-            return json("success");
+            return json(base::getResult(0, "", null));
         }
     }
 
@@ -79,11 +92,25 @@ class Group extends base
             $data = input('put.');
             //dump($data);
 
+            //validate
+            $valid = $this->validate(
+                [
+                    'title' => $data['title'],
+                ],
+                [
+                    'title' => 'require|max:25',
+                ]);
+            if (true !== $valid) {
+                // 验证失败 输出错误信息
+                return json(base::getResult(-101, $valid, null));
+            }
+
+
             $result = Db::name('AuthGroup')
                 ->where('id', $id)
                 ->update(['title' => $data['title']]);
 
-            return json("success");
+            return json(base::getResult(0, "", null));
         }
     }
 
@@ -97,6 +124,6 @@ class Group extends base
     {
         //
         Db::name('AuthGroup')->where('id', $id)->delete();
-        return json("success");
+        return json(base::getResult(0, "", null));
     }
 }

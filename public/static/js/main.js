@@ -120,8 +120,12 @@ function saveInfo(method, url, data) {
             alert("连接错误");
         },
         success: function (data) {
-            completeMsg("保存成功");
-            $("#table").bootstrapTable("refresh");
+            if(data.code == 0) {
+                completeMsg("保存成功");
+                $("#table").bootstrapTable("refresh");
+            }else{
+                errorMsg(data.msg);
+            }
         }
     });
 }
@@ -136,11 +140,11 @@ function showDeleteInfo(msg, url, id) {
     bootbox.confirm(msg, function (result) {
         if (result) {
             var res = deleteInfo(url, id);
-            if (res == "success") {
+            if (res.code == 0) {
                 completeMsg("删除成功");
             }
             else {
-                errorMsg("删除失败");
+                errorMsg("删除失败，" + res.msg);
             }
             $("#table").bootstrapTable("refresh");
         }

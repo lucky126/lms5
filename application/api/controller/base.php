@@ -26,7 +26,7 @@ class base extends Controller
      * @param $data
      * @return array
      */
-    private function getResult($code, $msg, $data)
+    protected function getResult($code, $msg, $data)
     {
         $result = array(
             'code' => $code,
