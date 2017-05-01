@@ -26,3 +26,28 @@
     </div>
 
 </form>
+<script type="text/javascript">
+    $("#addform").bootstrapValidator({
+        message: 'This value is not valid',
+        //反馈图标
+        feedbackIcons: faIcon,
+        fields: {
+            title: {
+                message: '规则名称无效',
+                validators: {
+                    notEmpty: {
+                        message: '规则名称不能为空'
+                    }
+                }
+            },
+            name: {
+                message: '规则标识无效',
+                validators: {
+                    notEmpty: {
+                        message: '规则标识不能为空'
+                    }
+                }
+            }
+        }
+    });
+</script>

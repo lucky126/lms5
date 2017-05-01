@@ -68,6 +68,9 @@ class Group extends base
                 ],
                 [
                     'title' => 'require|max:25',
+                ],
+                [
+                    'title.require'  =>  '角色名称不能为空',
                 ]);
             if (true !== $valid) {
                 // 验证失败 输出错误信息
@@ -104,6 +107,9 @@ class Group extends base
                 ],
                 [
                     'title' => 'require|max:25',
+                ],
+                [
+                    'title.require'  =>  '角色名称不能为空',
                 ]);
             if (true !== $valid) {
                 // 验证失败 输出错误信息

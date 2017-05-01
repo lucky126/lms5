@@ -77,6 +77,14 @@ class Rule extends base
                 $isshow = 1;
             }
 
+            //validate
+            $result = $this->validate($data,'Rule');
+
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                return json(base::getResult(-101, $result, null));
+            }
+
             $userdata = [
                 'pid' => $data['pid'],
                 'name' => $data['name'],
@@ -86,7 +94,7 @@ class Rule extends base
             ];
 
             $result = Db::name('AuthRule')->insert($userdata);
-            return json("success");
+            return json(base::getResult(0, "", null));
         }
     }
 
@@ -108,6 +116,14 @@ class Rule extends base
             }
             //dump($isshow);
 
+            //validate
+            $result = $this->validate($data,'Rule.edit');
+
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                return json(base::getResult(-101, $result, null));
+            }
+
             $result = Db::name('AuthRule')
                 ->where('id', $id)
                 ->update(['title' => $data['title'],
@@ -115,7 +131,7 @@ class Rule extends base
                     'icon' => $data['icon'],
                     'isshow' => $isshow]);
             //echo Db::getLastSql();
-            return json("success");
+            return json(base::getResult(0, "", null));
         }
     }
 
@@ -129,6 +145,6 @@ class Rule extends base
     {
         //
         Db::name('AuthRule')->where('id', $id)->delete();
-        return json("success");
+        return json(base::getResult(0, "", null));
     }
 }
