@@ -70,7 +70,7 @@ function ValidateAddInfo() {
  * @param id 操作数据ID，用于编辑保存用
  */
 function showEditPage(url, title, func, id) {
-    return showEditPage(url, title, func, id, true);
+    return showEditPageDefault(url, title, func, id, true);
 }
 /**
  * 显示新增或者编辑页面
@@ -80,7 +80,7 @@ function showEditPage(url, title, func, id) {
  * @param id 操作数据ID，用于编辑保存用
  * @param isValid 是否启用验证
  */
-function showEditPage(url, title, func, id, isValid) {
+function showEditPageDefault(url, title, func, id, isValid) {
     $.ajax({
         type: "GET",
         url: url,
