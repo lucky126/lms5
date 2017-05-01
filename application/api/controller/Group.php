@@ -27,6 +27,11 @@ class Group extends base
         //
         $data = Db::name('AuthGroup')->where("status", "<>", "0")->select();
 
+        //文字转换
+        foreach ($data as $k => $v) {
+            $data[$k]['isset'] = strlen($v['rules']) == 0 ? '否' : '是';
+        }
+
         return json($data);
     }
 
@@ -153,11 +158,15 @@ class Group extends base
     {
         if (Request::instance()->put()) {
             $data = input('put.');
-            //dump($data['rules']);
-            //dump($id);
+            $rule = $data['rules'];
+
+            if (stripos(',' . $rule . ',', ',1,') === false) {
+                $rule = '1,' . $rule;
+            }
+
             $result = Db::name('AuthGroup')
                 ->where('id', $id)
-                ->update(['rules' => $data['rules']]);
+                ->update(['rules' => $rule]);
 
             return json(base::getResult(0, "", null));
         }

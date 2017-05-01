@@ -154,17 +154,15 @@
 
     //bootstrap table操作
     function actionFormatter(value, row, index) {
-        return [
-            '<a class="sub ml10" href="javascript:void(0)" title="查看子权限">',
-            '<i class="glyphicon glyphicon-th"></i>',
-            '</a> ',
-            '<a class="edit ml10" href="javascript:void(0)" title="编辑">',
-            '<i class="glyphicon glyphicon-edit"></i>',
-            '</a> ',
-            '<a class="remove ml10" href="javascript:void(0)" title="删除">',
-            '<i class="glyphicon glyphicon-remove"></i>',
-            '</a>'
-        ].join('');
+        var sub = '<a class="sub ml10" href="javascript:void(0)" title="查看子权限"><i class="glyphicon glyphicon-th"></i></a> ';
+        var edit = '<a class="edit ml10" href="javascript:void(0)" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>';
+        var del = '<a class="remove ml10" href="javascript:void(0)" title="删除"><i class="glyphicon glyphicon-remove"></i></a>';
+
+        if (row.pid == 0) {
+            return sub;
+        } else {
+            return sub + edit + del;
+        }
     }
 
     //操作事件
