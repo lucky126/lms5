@@ -2,13 +2,17 @@
     <div class="form-group">
         <label for="title" class="col-sm-2 control-label">角色名称：</label>
         <div class="col-sm-6">
-            <input type="text" id="title" name="title" class="form-control" placeholder="请输入角色名称">
+            <input type="text" id="title" name="title" class="form-control" placeholder="请输入角色名称" onblur="validField()">
         </div>
     </div>
     <script type="text/javascript">
         $(function () {
             getInfo('{$id}');
         });
+
+        function validField(){
+            $('#addform').data('bootstrapValidator').validate("title");
+        }
 
         //get info
         function getInfo(id) {
@@ -41,7 +45,6 @@
                         remote: {
                             url: '/api/group/{$id}/unique',//验证地址
                             message: '角色名称已存在',//提示消息
-                            delay: 2000,
                             type: 'POST'
                         },
                         stringLength: {

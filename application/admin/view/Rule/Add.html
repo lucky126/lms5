@@ -3,14 +3,14 @@
     <div class="form-group">
         <label for="title" class="col-sm-2 control-label">规则名称：</label>
         <div class="col-sm-6">
-            <input type="text" id="title" name="title" class="form-control" placeholder="请输入规则名称">
+            <input type="text" id="title" name="title" class="form-control" placeholder="请输入规则名称" onblur="validField()">
             <input type="hidden" id="pid" name="pid" value="{$pid}">
         </div>
     </div>
     <div class="form-group">
         <label for="name" class="col-sm-2 control-label">规则标识：</label>
         <div class="col-sm-6">
-            <input type="text" id="name" name="name" class="form-control" placeholder="请输入规则标识">
+            <input type="text" id="name" name="name" class="form-control" placeholder="请输入规则标识"  onblur="validField()">
         </div>
     </div>
     <div class="form-group">
@@ -27,6 +27,11 @@
 
 </form>
 <script type="text/javascript">
+    function validField(){
+        $('#addform').data('bootstrapValidator').validate("title");
+        $('#addform').data('bootstrapValidator').validate("name");
+    }
+
     $("#addform").bootstrapValidator({
         message: 'This value is not valid',
         //反馈图标
@@ -37,6 +42,18 @@
                 validators: {
                     notEmpty: {
                         message: '规则名称不能为空'
+                    },
+                    threshold: 2,
+                    remote: {
+                        url: '/api/rule/0/unique',//验证地址
+                        message: '角色名称已存在',//提示消息
+                        delay :  2000,
+                        type: 'POST'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 50,
+                        message: '规则名称长度必须在2到50之间'
                     }
                 }
             },
@@ -45,6 +62,13 @@
                 validators: {
                     notEmpty: {
                         message: '规则标识不能为空'
+                    },
+                    threshold: 2,
+                    remote: {
+                        url: '/api/rule/0/unique',//验证地址
+                        message: '规则标识已存在',//提示消息
+                        delay :  2000,
+                        type: 'POST'
                     }
                 }
             }

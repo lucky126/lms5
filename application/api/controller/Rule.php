@@ -151,4 +151,37 @@ class Rule extends base
         Db::name('AuthRule')->where('id', $id)->delete();
         return json(base::getResult(0, "", null));
     }
+
+    /**
+     * 验证角色名称唯一性
+     *
+     * @param $id 角色id
+     * @return bool
+     */
+    public function Unique($id)
+    {
+        //must post
+        if (request()->isPost()) {
+            $result = array(
+                'valid' => false
+            );
+
+            $data = input('post.');
+
+            if(input('?post.title'))
+                $map['title'] = $data['title'];
+            if(input('?post.name'))
+                $map['name'] = $data['name'];
+
+            if ($id != 0) {
+                $map['id'] = ['neq', $id];
+            }
+            if (Db::name('AuthRule')->where($map)->find() != null) {
+                return json($result);
+            }
+
+            $result['valid'] = true;
+            return json($result);
+        }
+    }
 }
