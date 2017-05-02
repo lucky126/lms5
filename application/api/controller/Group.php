@@ -58,11 +58,11 @@ class Group extends base
     public function save()
     {
         //must post
-        if (Request::instance()->post()) {
+        if (request()->isPost()) {
             $data = input('post.');
 
             //validate
-            $result = $this->validate($data,'Group');
+            $result = $this->validate($data, 'Group');
             if (true !== $result) {
                 // 验证失败 输出错误信息
                 return json(base::getResult(-101, $result, null));
@@ -90,12 +90,13 @@ class Group extends base
     public function update($id)
     {
         //must put
-        if (Request::instance()->put()) {
+        if (request()->isPut()) {
             $data = input('put.');
+            $data['id'] = $id;
             //dump($data);
 
             //validate
-            $result = $this->validate($data,'Group');
+            $result = $this->validate($data, 'Group.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
                 return json(base::getResult(-101, $result, null));

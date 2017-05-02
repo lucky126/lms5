@@ -25,6 +25,6 @@ class Rule extends Validate
     ];
 
     protected $scene = [
-        'edit'  =>  ['name','age'],
+        'edit'  =>  ['name','title'],
     ];
 }

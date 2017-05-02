@@ -15,19 +15,16 @@ use think\Db;
 class Group extends Validate
 {
     protected $rule =   [
-        'title'  => 'require|max:20|checkName',
+        'title'  => 'require|max:20|unique:AuthGroup',
     ];
 
     protected $message  =   [
         'title.require' => '角色名称不能为空',
+        'title.unique' => '角色名称已经存在',
         'title.max'     => '角色名称最多不能超过20个字符',
     ];
 
-    // 自定义验证规则
-    protected function checkName($value,$rule,$data)
-    {
-        $data = Db::name('AuthGroup')->where('title', $value)->find();
-
-        return $data == null ? true : '角色名称已经存在';
-    }
+    protected $scene = [
+        'edit' => ['title'=>'require|unique:AuthGroup,title^id'],
+    ];
 }
