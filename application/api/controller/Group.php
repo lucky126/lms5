@@ -24,7 +24,7 @@ class Group extends base
      */
     public function index()
     {
-        //
+        //get data
         $data = Db::name('AuthGroup')->where("status", "<>", "0")->select();
 
         //文字转换
@@ -43,7 +43,7 @@ class Group extends base
      */
     public function read($id)
     {
-        //
+        //find data
         $data = Db::name('AuthGroup')->where('id', $id)->find();
 
         return json($data);
@@ -57,32 +57,26 @@ class Group extends base
      */
     public function save()
     {
-        //
+        //must post
         if (Request::instance()->post()) {
             $data = input('post.');
 
             //validate
-            $valid = $this->validate(
-                [
-                    'title' => $data['title'],
-                ],
-                [
-                    'title' => 'require|max:25',
-                ],
-                [
-                    'title.require'  =>  '角色名称不能为空',
-                ]);
-            if (true !== $valid) {
+            $result = $this->validate($data,'Group');
+            if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $valid, null));
+                return json(base::getResult(-101, $result, null));
             }
 
+            //make data
             $userdata = [
                 'title' => $data['title'],
                 'rules' => '',
             ];
 
+            //insert
             $result = Db::name('AuthGroup')->insert($userdata);
+
             return json(base::getResult(0, "", null));
         }
     }
@@ -95,28 +89,19 @@ class Group extends base
      */
     public function update($id)
     {
-        //
+        //must put
         if (Request::instance()->put()) {
             $data = input('put.');
             //dump($data);
 
             //validate
-            $valid = $this->validate(
-                [
-                    'title' => $data['title'],
-                ],
-                [
-                    'title' => 'require|max:25',
-                ],
-                [
-                    'title.require'  =>  '角色名称不能为空',
-                ]);
-            if (true !== $valid) {
+            $result = $this->validate($data,'Group');
+            if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $valid, null));
+                return json(base::getResult(-101, $result, null));
             }
 
-
+            //update
             $result = Db::name('AuthGroup')
                 ->where('id', $id)
                 ->update(['title' => $data['title']]);
@@ -133,7 +118,7 @@ class Group extends base
      */
     public function delete($id)
     {
-        //
+        //delete
         Db::name('AuthGroup')->where('id', $id)->delete();
         return json(base::getResult(0, "", null));
     }
