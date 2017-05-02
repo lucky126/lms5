@@ -38,7 +38,7 @@ class Group extends base
     /**
      * 显示指定的角色资源
      *
-     * @param  int $id
+     * @param  int $id 角色id
      * @return \think\Response
      */
     public function read($id)
@@ -84,7 +84,7 @@ class Group extends base
     /**
      * 保存更新的角色资源
      *
-     * @param   $id
+     * @param   $id 角色id
      * @return \think\Response
      */
     public function update($id)
@@ -114,7 +114,7 @@ class Group extends base
     /**
      * 删除指定角色资源
      *
-     * @param  uuid $id
+     * @param  uuid $id 角色id
      * @return \think\Response
      */
     public function delete($id)
@@ -126,7 +126,8 @@ class Group extends base
 
     /**
      * 验证角色名称唯一性
-     * @param $id
+     *
+     * @param $id 角色id
      * @return bool
      */
     public function Unique($id)
@@ -153,7 +154,8 @@ class Group extends base
 
     /**
      * 获得角色权限树
-     * @param $id
+     *
+     * @param $id 角色id
      * @return \think\response\Json
      */
     public function GetRule($id)
@@ -170,7 +172,8 @@ class Group extends base
 
     /**
      * 保存角色权限树
-     * @param $id
+     *
+     * @param $id 角色id
      * @return \think\response\Json
      */
     public function SaveRule($id)
@@ -193,9 +196,9 @@ class Group extends base
 
     /**
      * 内部递归获取树的函数
-     * @param $data
-     * @param $groupRule
-     * @param int $pid
+     * @param $data 列表数据
+     * @param $groupRule 角色权限列表
+     * @param int $pid 父权限id
      * @return array
      */
     static private function channelLevel($data, $groupRule, $pid = 0)

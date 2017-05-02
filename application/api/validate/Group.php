@@ -8,10 +8,12 @@
 
 namespace app\api\validate;
 
-
 use think\Validate;
-use think\Db;
 
+/**
+ * 角色验证类
+ * @package app\api\validate
+ */
 class Group extends Validate
 {
     protected $rule =   [

@@ -31,7 +31,9 @@ class Rule extends base
     }
 
     /**
-     * @param $pid
+     * 获取指定父节点下的权限
+     *
+     * @param $pid 父权限id
      * @return false|\PDOStatement|string|\think\Collection
      */
     private function getRule($pid)
@@ -50,7 +52,7 @@ class Rule extends base
     /**
      * 显示指定的权限资源
      *
-     * @param  int $id
+     * @param  int $id 权限id
      * @return \think\Response
      */
     public function read($id)
@@ -101,7 +103,7 @@ class Rule extends base
     /**
      * 保存更新的权限资源
      *
-     * @param   $id
+     * @param   $id 权限id
      * @return \think\Response
      */
     public function update($id)
@@ -109,7 +111,9 @@ class Rule extends base
         //
         if (Request::instance()->put()) {
             $data = input('put.');
-            //dump($data);
+            //set id
+            $data['id'] = $id;
+            //set isshow
             $isshow = 0;
             if (input('?isshow')) {
                 $isshow = 1;
@@ -130,7 +134,7 @@ class Rule extends base
                     'name' => $data['name'],
                     'icon' => $data['icon'],
                     'isshow' => $isshow]);
-            //echo Db::getLastSql();
+
             return json(base::getResult(0, "", null));
         }
     }
@@ -138,7 +142,7 @@ class Rule extends base
     /**
      * 删除指定权限资源
      *
-     * @param  uuid $id
+     * @param  uuid $id 权限id
      * @return \think\Response
      */
     public function delete($id)
