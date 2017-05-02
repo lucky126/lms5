@@ -17,6 +17,7 @@ Route::rule('api/logout', 'api/login/logout', "POST");
 
 Route::rule('api/group/:id/rule', 'api/Group/GetRule', "GET");
 Route::rule('api/group/:id/rule', 'api/Group/SaveRule', "PUT");
+Route::rule('api/group/:id/unique', 'api/Group/Unique', "POST");
 
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');

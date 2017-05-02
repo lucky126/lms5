@@ -29,13 +29,25 @@
         $("#addform").bootstrapValidator({
             message: 'This value is not valid',
             //反馈图标
-            feedbackIcons:faIcon,
+            feedbackIcons: faIcon,
             fields: {
-                title:{
-                    message:'角色名称无效',
-                    validators:{
-                        notEmpty:{
-                            message:'角色名称不能为空'
+                title: {
+                    message: '角色名称无效',
+                    validators: {
+                        notEmpty: {
+                            message: '角色名称不能为空'
+                        },
+                        threshold: 2,
+                        remote: {
+                            url: '/api/group/{$id}/unique',//验证地址
+                            message: '角色名称已存在',//提示消息
+                            delay: 2000,
+                            type: 'POST'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 20,
+                            message: '角色名称长度必须在2到20之间'
                         }
                     }
                 }

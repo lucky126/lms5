@@ -125,6 +125,33 @@ class Group extends base
     }
 
     /**
+     * 验证角色名称唯一性
+     * @param $id
+     * @return bool
+     */
+    public function Unique($id)
+    {
+        //must post
+        if (request()->isPost()) {
+            $result = array(
+                'valid' => false
+            );
+
+            $data = input('post.');
+            $map['title'] = $data['title'];
+            if ($id != 0) {
+                $map['id'] = ['neq', $id];
+            }
+            if (Db::name('AuthGroup')->where($map)->find() != null) {
+                return json($result);
+            }
+
+            $result['valid'] = true;
+            return json($result);
+        }
+    }
+
+    /**
      * 获得角色权限树
      * @param $id
      * @return \think\response\Json
