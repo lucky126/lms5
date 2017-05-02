@@ -37,9 +37,16 @@ class User extends base
      */
     public function save()
     {
-        //
-        if (Request::instance()->post()) {
+        //must post
+        if (request()->isPost()) {
             $data = input('post.');
+
+            //validate
+            $result = $this->validate($data, 'User');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                return json(base::getResult(-101, $result, null));
+            }
 
             $userdata = [
                 'uid' => getGuid(),
@@ -53,7 +60,7 @@ class User extends base
             ];
 
             $result = Db::name('user')->insert($userdata);
-            return json("success");
+            return json(base::getResult(0, "", null));
         }
     }
 
@@ -79,16 +86,24 @@ class User extends base
      */
     public function update($id)
     {
-        //
-        if (Request::instance()->put()) {
+        //must put
+        if (request()->isPut()) {
             $data = input('put.');
+            $data['id'] = $id;
             //dump($data);
+
+            //validate
+            $result = $this->validate($data, 'User.edit');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                return json(base::getResult(-101, $result, null));
+            }
 
             $result = Db::name('user')
                 ->where('uid', $id)
-                ->update(['loginname' => $data['LoginName'], 'realname' => $data['RealName'], 'usertype' => $data['UserType']]);
+                ->update(['realname' => $data['RealName'], 'usertype' => $data['UserType']]);
 
-            return json("success");
+            return json(base::getResult(0, "", null));
         }
     }
 
@@ -102,6 +117,34 @@ class User extends base
     {
         //
         Db::name('user')->where('uid', $id)->delete();
-        return json("success");
+        return json(base::getResult(0, "", null));
+    }
+
+    /**
+     * 验证登录名唯一性
+     *
+     * @param $id 用户id
+     * @return bool
+     */
+    public function Unique($id)
+    {
+        //must post
+        if (request()->isPost()) {
+            $result = array(
+                'valid' => false
+            );
+
+            $data = input('post.');
+            $map['loginname'] = $data['LoginName'];
+            if ($id != 0) {
+                $map['id'] = ['neq', $id];
+            }
+            if (Db::name('user')->where($map)->find() != null) {
+                return json($result);
+            }
+
+            $result['valid'] = true;
+            return json($result);
+        }
     }
 }

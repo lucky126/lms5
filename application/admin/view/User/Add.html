@@ -6,7 +6,8 @@
                 <span class="input-group-addon">
                     <i class="ion-at"></i>
                 </span>
-                <input type="text" id="LoginName" name="LoginName" class="form-control" placeholder="请输入登录名">
+                <input type="text" id="LoginName" name="LoginName" class="form-control" placeholder="请输入登录名"
+                       onblur="validField()">
             </div>
         </div>
     </div>
@@ -35,3 +36,77 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    function validField() {
+        $('#addform').data('bootstrapValidator').validate("LoginName");
+    }
+
+    $("#addform").bootstrapValidator({
+        message: 'This value is not valid',
+        //反馈图标
+        feedbackIcons: faIcon,
+        fields: {
+            LoginName: {
+                message: '登录名无效',
+                validators: {
+                    notEmpty: {
+                        message: '请填写登录名'
+                    },
+                    threshold: 2,
+                    remote: {
+                        url: '/api/user/0/unique',//验证地址
+                        message: '登录名已存在',//提示消息
+                        delay: 2000,
+                        type: 'POST'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 50,
+                        message: '登录名长度必须在2到50之间'
+                    },
+                    regexp:{
+                        regexp:/^[a-zA-Z0-9_]+$/,
+                        message:'用户名只能由字母、数字和下划线'
+                    }
+                }
+            },
+            RealName: {
+                message: '真实姓名无效',
+                validators: {
+                    notEmpty: {
+                        message: '请填写真实姓名'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 50,
+                        message: '真实姓名长度必须在2到50之间'
+                    }
+                }
+            },
+            Password: {
+                message: '登录密码无效',
+                validators: {
+                    notEmpty: {
+                        message: '请填写登录密码'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 50,
+                        message: '登录密码长度必须在6到50之间'
+                    }
+                }
+            },
+            ConfirmPwd: {
+                validators: {
+                    notEmpty: {
+                        message: '请填写确认密码'
+                    },
+                    identical: {
+                        field: 'Password',
+                        message: '确认密码与登录密码不一致'
+                    },
+                }
+            },
+        }
+    });
+</script>

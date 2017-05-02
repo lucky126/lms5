@@ -6,7 +6,8 @@
                 <span class="input-group-addon">
                     <i class="ion-at"></i>
                 </span>
-                <input type="text" id="LoginName" name="LoginName" class="form-control" placeholder="请输入登录名">
+                <input type="text" id="LoginName" name="LoginName" class="form-control" placeholder="请输入登录名"
+                       readonly>
             </div>
         </div>
     </div>
@@ -44,5 +45,26 @@
                 }
             });
         }
+
+        $("#addform").bootstrapValidator({
+            message: 'This value is not valid',
+            //反馈图标
+            feedbackIcons: faIcon,
+            fields: {
+                RealName: {
+                    message: '真实姓名无效',
+                    validators: {
+                        notEmpty: {
+                            message: '真实姓名不能为空'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 50,
+                            message: '真实姓名长度必须在2到50之间'
+                        }
+                    }
+                }
+            }
+        });
     </script>
 </form>

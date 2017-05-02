@@ -20,6 +20,7 @@ Route::rule('api/group/:id/rule', 'api/Group/SaveRule', "PUT");
 
 Route::rule('api/group/:id/unique', 'api/Group/Unique', "POST");
 Route::rule('api/rule/:id/unique', 'api/Rule/Unique', "POST");
+Route::rule('api/user/:id/unique', 'api/User/Unique', "POST");
 
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');

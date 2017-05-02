@@ -26,7 +26,7 @@ class Rule extends Validate
         'pid.require'   => 'pid不能为空',
         'name.require'  => '规则标识不能为空',
         'name.unique'   => '规则标识已经存在',
-        'title.max'     => '规则名称长度必须在2到50个字符',
+        'title.length'  => '规则名称长度必须在2到50个字符',
         'title.require' => '规则名称不能为空',
         'title.unique'  => '规则名称已经存在',
     ];
