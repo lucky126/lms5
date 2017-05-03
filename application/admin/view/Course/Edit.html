@@ -1,0 +1,110 @@
+<form method="post" action="" class="form-horizontal" id="addform">
+    <div class="form-group">
+        <label for="coursename" class="col-sm-2 control-label">课程名称：</label>
+        <div class="col-sm-6">
+            <input type="text" id="coursename" name="coursename" class="form-control" placeholder="请输入课程名称" onblur="validField()">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="typeid" class="col-sm-2 control-label">课程类别：</label>
+        <div class="col-sm-4">
+            <input type="text" id="typeid" name="typeid" class="form-control" placeholder="请输入课程类别">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="coursehours" class="col-sm-2 control-label">课程学时：</label>
+        <div class="col-sm-2">
+            <input type="text" id="coursehours" name="coursehours" class="form-control" placeholder="请输入课程学时">
+        </div>
+        <label  class="col-sm-2 control-label text-left">分钟</label>
+    </div>
+    <div class="form-group">
+        <label for="coursefee" class="col-sm-2 control-label">选课费：</label>
+        <div class="col-sm-2">
+            <input type="text" id="coursefee" name="coursefee" class="form-control" placeholder="请输入选课费">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="isopenselection" class="col-sm-2 control-label">开放选课：</label>
+        <div class="col-sm-2">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="isscormcourse" class="col-sm-2 control-label">SCORM课程：</label>
+        <div class="col-sm-2">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="courseurl" class="col-sm-2 control-label">课程地址：</label>
+        <div class="col-sm-6">
+            <input type="text" id="courseurl" name="courseurl" class="form-control" placeholder="请输入课程地址">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="democourseurl" class="col-sm-2 control-label">试听课程地址：</label>
+        <div class="col-sm-6">
+            <input type="text" id="democourseurl" name="democourseurl" class="form-control" placeholder="请输入试听课程地址">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="coursedescription" class="col-sm-2 control-label">课程介绍：</label>
+        <div class="col-sm-6">
+            <input type="text" id="coursedescription" name="coursedescription" class="form-control"
+                   placeholder="请输入课程介绍">
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            getInfo('{$id}');
+        });
+
+        function validField(){
+            $('#addform').data('bootstrapValidator').validate("coursename");
+        }
+
+        //get info
+        function getInfo(id) {
+            $.ajax({
+                cache: true,
+                type: "GET",
+                url: "/api/course/" + id,
+                async: false,
+                error: function () {
+                    alert("连接错误");
+                },
+                success: function (data) {
+                    $("#coursename").val(data.coursename);
+                }
+            });
+        }
+
+        $("#addform").bootstrapValidator({
+            message: 'This value is not valid',
+            //反馈图标
+            feedbackIcons: faIcon,
+            fields: {
+                coursename: {
+                    message: '课程名称无效',
+                    validators: {
+                        notEmpty: {
+                            message: '课程名称不能为空'
+                        },
+                        threshold: 2,
+                        remote: {
+                            url: '/api/system/{$id}/unique',//验证地址
+                            message: '课程名称已存在',//提示消息
+                            type: 'POST'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 20,
+                            message: '课程名称长度必须在2到20之间'
+                        }
+                    }
+                }
+
+            }
+        });
+    </script>
+</form>
