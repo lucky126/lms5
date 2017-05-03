@@ -1,0 +1,148 @@
+{extend name="base" /}
+{block name="css"}
+{load href="/static/plugins/bootstrap-table/bootstrap-table.min.css,/static/plugins/x-editable/css/bootstrap-editable.css" /}
+{load href="/static/plugins/animate-css/animate.min.css,/static/plugins/bootstrap-validator/bootstrapValidator.min.css" /}
+{/block}
+
+{block name="js"}
+{load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js,/static/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{load href="/static/plugins/bootbox/bootbox.min.js,/static/plugins/bootstrap-validator/bootstrapValidator.min.js,/static/plugins/bootstrap-treeview/js/bootstrap-treeview.js" /}
+{/block}
+
+{block name="title"}系统列表{/block}
+{block name="main"}
+<div id="page-content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">系统列表</h3>
+                </div>
+
+                <!--Data Table-->
+                <!--===================================================-->
+                <div class="panel-body">
+                    <div class="pad-btm form-inline">
+                        <div class="row">
+                            <div class="col-sm-6 table-toolbar-left">
+                                <button class="btn btn-primary" id="add"><i
+                                        class="demo-pli-add icon-fw"></i>新增
+                                </button>
+                            </div>
+                            <div class="col-sm-6 table-toolbar-right">
+                                <div class="form-group">
+                                    <input type="text" autocomplete="off" class="form-control" placeholder="Search"
+                                           id="demo-input-search2">
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-default"><i class="demo-pli-download-from-cloud"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table data-toggle="table"
+                               data-url="/api/system"
+                               data-sort-name="loginname"
+                               data-page-list="[10, 20, 50]"
+                               data-page-size="10"
+                               data-pagination="true" data-show-pagination-switch="true" id="table">
+                            <thead>
+                            <tr>
+                                <th data-field="systemname" data-sortable="true">系统名称</th>
+                                <th data-align="center" data-field="action" data-formatter="actionFormatter"
+                                    data-events="actionEvents">操作
+                                </th>
+
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!--===================================================-->
+                <!--End Data Table-->
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{/block}
+
+{block name="modal"}
+<script type="text/javascript">
+
+    $(function () {
+        $("#add").click(function () {
+            showAddInfo();
+        });
+
+    });
+
+    /**
+     * 显示新增系统
+     */
+    function showAddInfo() {
+        var title = "新增系统";
+        var url = "/admin/System/Add";
+
+        showEditPage(url, title, saveAddInfo, null);
+    }
+
+    /**
+     * 显示编辑系统
+     * @param id
+     */
+    function showEditInfo(id) {
+        var title = "修改系统";
+        var url = "/admin/System/Edit?id=" + id;
+
+        showEditPage(url, title, saveEditInfo, id);
+    }
+
+    /**
+     * 保存新增系统
+     * @param id
+     */
+    function saveAddInfo(id) {
+        //如果是新增
+        var method = "POST";
+        var url = "/api/System";
+
+        saveInfo(method, url, $('#addform').serialize());
+    }
+
+    /**
+     * 保存编辑系统
+     * @param id
+     */
+    function saveEditInfo(id) {
+        //如果是新增
+        var method = "PUT";
+        var url = "/api/System/" + id;
+
+        saveInfo(method, url, $('#addform').serialize());
+    }
+
+    //bootstrap table操作
+    function actionFormatter(value, row, index) {
+        var edit = '<a class="edit ml10" href="javascript:void(0)" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>';
+        var del = '<a class="remove ml10" href="javascript:void(0)" title="删除"><i class="glyphicon glyphicon-remove"></i></a>';
+
+        return edit + del;
+    }
+
+    //操作事件
+    window.actionEvents = {
+        'click .edit': function (e, value, row, index) {
+            showEditInfo(row.id);
+        },
+        'click .remove': function (e, value, row, index) {
+            showDeleteInfo("确认删除该条数据么", "/api/System/", row.id);
+        },
+    };
+
+</script>
+{/block}

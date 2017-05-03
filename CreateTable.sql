@@ -7,8 +7,6 @@ CREATE TABLE `lms_system` (
   COMMENT '系统ID',
   systemname     NATIONAL VARCHAR(50) NOT NULL
   COMMENT '系统名称',
-  systemidentity VARCHAR(50)          NOT NULL
-  COMMENT '系统标识',
   memo           TEXT COMMENT '备注',
   addtime        DATETIME             NOT NULL
   COMMENT '添加时间',

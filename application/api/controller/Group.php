@@ -28,9 +28,24 @@ class Group extends base
         $map['status'] = ['<>', '0'];
         $data = Db::name('AuthGroup')->where($map)->select();
 
+        //get user group relation
+        $userGroup = Db::name('AuthGroupAccess')
+            ->field('group_id,count(uid) AS cnt')
+            ->group('group_id')
+            ->select();
+
+        //dump($userGroup);
+
         //文字转换
         foreach ($data as $k => $v) {
             $data[$k]['isset'] = strlen($v['rules']) == 0 ? '否' : '是';
+            $data[$k]['hasUse'] = 0;
+            foreach ($userGroup as $ku => $vu) {
+                if ($userGroup[$ku]['group_id'] == $v['id']) {
+                    $data[$k]['hasUse'] = $vu['cnt'];
+                }
+            }
+            $data[$k]['hasUseDesc'] = $data[$k]['hasUse'] == 0 ? '否' : '是';
         }
 
         return json($data);
@@ -83,9 +98,8 @@ class Group extends base
             }
 
             return json(base::getResult(0, "", null));
-        }
-
-        return json(base::getResult(-100, "", null));
+        } else
+            return json(base::getResult(-100, "", null));
     }
 
     /**
@@ -110,18 +124,14 @@ class Group extends base
             }
 
             //update
-            $result = Db::name('AuthGroup')
+            Db::name('AuthGroup')
                 ->where('id', $id)
                 ->update(['title' => $data['title']]);
 
-            if ($result <= 0) {
-                return json(base::getResult(-100, "", null));
-            }
 
             return json(base::getResult(0, "", null));
-        }
-
-        return json(base::getResult(-100, "", null));
+        } else
+            return json(base::getResult(-100, "", null));
     }
 
     /**
@@ -132,6 +142,11 @@ class Group extends base
      */
     public function delete($id)
     {
+        //get user group relation
+        $userGroup = Db::name('AuthGroupAccess')->where('group_id', $id)->select();
+        if (count($userGroup) > 0) {
+            return json(base::getResult(-201, "存在关联用户", null));
+        }
         //delete
         Db::name('AuthGroup')->where('id', $id)->delete();
         return json(base::getResult(0, "", null));
@@ -210,9 +225,8 @@ class Group extends base
             }
 
             return json(base::getResult(0, "", null));
-        }
-
-        return json(base::getResult(-100, "", null));
+        } else
+            return json(base::getResult(-100, "", null));
     }
 
     /**

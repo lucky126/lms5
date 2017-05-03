@@ -53,6 +53,7 @@
                             <tr>
                                 <th data-field="title" data-sortable="true">角色名称</th>
                                 <th data-field="isset" data-sortable="true">是否设置权限</th>
+                                <th data-field="hasUseDesc" data-sortable="true">是否关联用户</th>
                                 <th data-align="center" data-field="action" data-formatter="actionFormatter"
                                     data-events="actionEvents">操作
                                 </th>
@@ -164,17 +165,15 @@
 
     //bootstrap table操作
     function actionFormatter(value, row, index) {
-        return [
-            '<a class="rule ml10" href="javascript:void(0)" title="分配权限">',
-            '<i class="glyphicon glyphicon-cog"></i>',
-            '</a> ',
-            '<a class="edit ml10" href="javascript:void(0)" title="编辑">',
-            '<i class="glyphicon glyphicon-edit"></i>',
-            '</a> ',
-            '<a class="remove ml10" href="javascript:void(0)" title="删除">',
-            '<i class="glyphicon glyphicon-remove"></i>',
-            '</a>',
-        ].join('');
+        var sub = '<a class="rule ml10" href="javascript:void(0)" title="分配权限"><i class="glyphicon glyphicon-cog"></i></a> ';
+        var edit = '<a class="edit ml10" href="javascript:void(0)" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>';
+        var del = '<a class="remove ml10" href="javascript:void(0)" title="删除"><i class="glyphicon glyphicon-remove"></i></a>';
+
+        if (row.hasUse != 0) {
+            return sub + edit;
+        } else {
+            return sub + edit + del;
+        }
     }
 
     //操作事件
