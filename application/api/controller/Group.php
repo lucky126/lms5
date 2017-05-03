@@ -25,7 +25,8 @@ class Group extends base
     public function index()
     {
         //get data
-        $data = Db::name('AuthGroup')->where("status", "<>", "0")->select();
+        $map['status'] = ['<>', '0'];
+        $data = Db::name('AuthGroup')->where($map)->select();
 
         //文字转换
         foreach ($data as $k => $v) {
@@ -77,14 +78,20 @@ class Group extends base
             //insert
             $result = Db::name('AuthGroup')->insert($userdata);
 
+            if ($result <= 0) {
+                return json(base::getResult(-100, "", null));
+            }
+
             return json(base::getResult(0, "", null));
         }
+
+        return json(base::getResult(-100, "", null));
     }
 
     /**
      * 保存更新的角色资源
      *
-     * @param   $id 角色id
+     * @param   $id
      * @return \think\Response
      */
     public function update($id)
@@ -107,14 +114,20 @@ class Group extends base
                 ->where('id', $id)
                 ->update(['title' => $data['title']]);
 
+            if ($result <= 0) {
+                return json(base::getResult(-100, "", null));
+            }
+
             return json(base::getResult(0, "", null));
         }
+
+        return json(base::getResult(-100, "", null));
     }
 
     /**
      * 删除指定角色资源
      *
-     * @param  uuid $id 角色id
+     * @param  $id
      * @return \think\Response
      */
     public function delete($id)
@@ -127,7 +140,7 @@ class Group extends base
     /**
      * 验证角色名称唯一性
      *
-     * @param $id 角色id
+     * @param string $id 角色id
      * @return bool
      */
     public function Unique($id)
@@ -150,12 +163,14 @@ class Group extends base
             $result['valid'] = true;
             return json($result);
         }
+
+        return json(base::getResult(-100, "", null));
     }
 
     /**
      * 获得角色权限树
      *
-     * @param $id 角色id
+     * @param string $id 角色id
      * @return \think\response\Json
      */
     public function GetRule($id)
@@ -173,7 +188,7 @@ class Group extends base
     /**
      * 保存角色权限树
      *
-     * @param $id 角色id
+     * @param string $id 角色id
      * @return \think\response\Json
      */
     public function SaveRule($id)
@@ -190,14 +205,20 @@ class Group extends base
                 ->where('id', $id)
                 ->update(['rules' => $rule]);
 
+            if ($result <= 0) {
+                return json(base::getResult(-100, "", null));
+            }
+
             return json(base::getResult(0, "", null));
         }
+
+        return json(base::getResult(-100, "", null));
     }
 
     /**
      * 内部递归获取树的函数
-     * @param $data 列表数据
-     * @param $groupRule 角色权限列表
+     * @param array $data 列表数据
+     * @param string $groupRule 角色权限列表
      * @param int $pid 父权限id
      * @return array
      */
