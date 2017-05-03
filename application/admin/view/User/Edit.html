@@ -23,8 +23,17 @@
             {$userLevelHtml}
         </div>
     </div>
+    <div class="form-group">
+        <label for="UserGroup" class="col-sm-2 control-label">所属角色：</label>
+        <div class="col-sm-6">
+            <select class="form-control" id="UserGroup" name="UserGroup">
+                <option value=''>请选择</option>
+            </select>
+        </div>
+    </div>
     <script type="text/javascript">
         $(function () {
+            getGroup();
             getInfo('{$id}');
         });
 
@@ -42,6 +51,24 @@
                     $("#LoginName").val(data.loginname);
                     $("#RealName").val(data.realname);
                     $("input[name='UserType'][value=" + data.usertype + "]").attr("checked", true);
+                    $("#UserGroup").val(data.usergroup);
+                }
+            });
+        }
+
+        function getGroup() {
+            $.ajax({
+                cache: true,
+                type: "GET",
+                url: "/api/Group",
+                async: false,
+                error: function (request) {
+                    alert("连接错误");
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#UserGroup").append("<option value='" + item.id + "'>" + item.title + "</option>");
+                    });
                 }
             });
         }

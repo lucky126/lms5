@@ -48,6 +48,7 @@ class User extends base
                 return json(base::getResult(-101, $result, null));
             }
 
+            //make user data
             $userdata = [
                 'uid' => getGuid(),
                 'loginname' => $data['LoginName'],
@@ -58,8 +59,19 @@ class User extends base
                 'addtime' => datetime(),
                 'systemid' => 1,
             ];
-
+            //insert data
             $result = Db::name('user')->insert($userdata);
+            //get user id
+            $userId = Db::name('user')->getLastInsID();
+
+            //make user group info
+            $group = [
+                'uid' => $userId,
+                'group_id' => $data['UserGroup'],
+            ];
+            //insert user group info
+            $result = Db::name("AuthGroupAccess")->insert($group);
+
             return json(base::getResult(0, "", null));
         }
     }
@@ -72,9 +84,13 @@ class User extends base
      */
     public function read($id)
     {
-        //
+        //get user info
         $data = Db::name('user')->where('uid', $id)->find();
-
+        //get user group info
+        $group = Db::name("AuthGroupAccess")->where('uid', $data['id'])->find();
+        //set user group info into user info
+        $data['usergroup'] = $group == null ? "" : $group['group_id'];
+        //return data
         return json($data);
     }
 
@@ -99,9 +115,17 @@ class User extends base
                 return json(base::getResult(-101, $result, null));
             }
 
+            //update user info
             $result = Db::name('user')
                 ->where('uid', $id)
                 ->update(['realname' => $data['RealName'], 'usertype' => $data['UserType']]);
+            //get user id
+            $user = Db::name('user')->where('uid', $id)->find();
+            $user_id = $user['id'];
+            //update user group info
+            $result = Db::name("AuthGroupAccess")
+                ->where('uid', $user_id)
+                ->update(['group_id' => $data['UserGroup']]);
 
             return json(base::getResult(0, "", null));
         }
