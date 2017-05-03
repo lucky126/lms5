@@ -2,84 +2,40 @@
 
 namespace app\admin\controller;
 
-use think\Controller;
-use think\Request;
-
-class activationcode extends Controller
+/**
+ * 激活码控制器
+ * @package app\admin\controller
+ */
+class activationcode extends Basic
 {
     /**
-     * 显示资源列表
+     * 激活码列表
      *
      * @return \think\Response
      */
     public function index()
     {
         //
+        return $this->fetch();
     }
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
+     * 激活码新增页
+     * @return mixed
      */
-    public function create()
+    public function Add()
     {
-        //
+        return $this->fetch();
     }
 
     /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request  $request
-     * @return \think\Response
+     * 激活码编辑页
+     * @param $id
+     * @return mixed
      */
-    public function save(Request $request)
+    public function Edit($id)
     {
-        //
-    }
-
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
-    }
-
-    /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * 删除指定资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function delete($id)
-    {
-        //
+        $this->assign("id", $id);
+        return $this->fetch();
     }
 }

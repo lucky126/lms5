@@ -2,9 +2,6 @@
 
 namespace app\admin\controller;
 
-use think\Controller;
-use think\Request;
-
 /**
  * 系统控制器
  * @package app\admin\controller
