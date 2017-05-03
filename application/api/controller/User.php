@@ -139,7 +139,13 @@ class User extends base
      */
     public function delete($id)
     {
-        //
+        //get user id
+        $user = Db::name('user')->where('uid', $id)->find();
+        $user_id = $user['id'];
+        //delete user group info
+        Db::name('AuthGroupAccess')->where('uid', $id)->delete();
+
+        //delete user info
         Db::name('user')->where('uid', $id)->delete();
         return json(base::getResult(0, "", null));
     }

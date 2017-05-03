@@ -20,6 +20,7 @@ class User extends Validate
         'LoginName'  => 'require|length:2,50|unique:User',
         'RealName'   => 'require|length:2,50',
         'Password'   => 'require',
+        'UserGroup'  => 'require',
     ];
 
     protected $message  =   [
@@ -29,9 +30,10 @@ class User extends Validate
         'RealName.require'   => '真实姓名不能为空',
         'RealName.length'    => '真实姓名长度必须在2到50个字符',
         'Password.require'   => '密码不能为空',
+        'UserGroup.require'  => '用户角色不能为空',
     ];
 
     protected $scene = [
-        'edit'  =>  ['realname'],
+        'edit'  =>  ['realname','UserGroup'],
     ];
 }

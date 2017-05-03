@@ -90,6 +90,14 @@
                             message: '真实姓名长度必须在2到50之间'
                         }
                     }
+                },
+                UserGroup: {
+                    message: '用户角色无效',
+                    validators: {
+                        notEmpty: {
+                            message: '请填写用户角色'
+                        }
+                    }
                 }
             }
         });
