@@ -30,4 +30,184 @@ class Course extends base
 
         return json($data);
     }
+
+    /**
+     * 保存新建的课程资源
+     *
+     * @param  \think\Request $request
+     * @return \think\Response
+     */
+    public function save()
+    {
+        //must post
+        if (request()->isPost()) {
+            $data = input('post.');
+
+            //validate
+            $result = $this->validate($data, 'Course');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                return json(base::getResult(-101, $result, null));
+            }
+
+            $isopenselection = 0;
+            if (input('?isopenselection')) {
+                $isopenselection = 1;
+            }
+
+            $isscormcourse = 0;
+            if (input('?isscormcourse')) {
+                $isscormcourse = 1;
+            }
+
+            //make user data
+            $userdata = [
+                'systemid' => 1,
+                'coursecode' => $data['coursecode'],
+                'coursename' => $data['coursename'],
+                'typeid' => $data['typeid'],
+                'courseurl' => $data['courseurl'],
+                'democourseurl' => $data['democourseurl'],
+                'coursehours' => $data['coursehours'],
+                'coursefee' => $data['coursefee'],
+                'isscormcourse' => $isscormcourse,
+                'isopenselection' => $isopenselection,
+                'coursedescription' => $data['coursedescription'],
+                'isrecommand' => 0,
+                'addtime' => datetime(),
+            ];
+            //insert data
+            $result = Db::name('Course')->insert($userdata);
+            //get course id
+            $cid = Db::name('Course')->getLastInsID();
+
+            //make user group info
+            $coursesetting = [
+                'id' => $cid,
+                'isbulletin' => 0,
+                'isresource' => 0,
+                'isqa' => 0,
+                'isevaluator' => 0,
+                'istest' => 0,
+                'ishomework' => 0,
+            ];
+            //insert course setting info
+            $result = Db::name("coursesetting")->insert($coursesetting);
+
+            return json(base::getResult(0, "", null));
+        }
+    }
+
+    /**
+     * 显示指定的课程资源
+     *
+     * @param  int $id 课程id
+     * @return \think\Response
+     */
+    public function read($id)
+    {
+        //get user info
+        $data = Db::name('Course')->where('id', $id)->find();
+
+        //return data
+        return json($data);
+    }
+
+    /**
+     * 保存更新的课程资源
+     *
+     * @param int $id 课程id
+     * @return \think\Response
+     */
+    public function update($id)
+    {
+        //must put
+        if (request()->isPut()) {
+            $data = input('put.');
+            $data['id'] = $id;
+            //dump($data);
+
+            //validate
+            $result = $this->validate($data, 'Course.edit');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                return json(base::getResult(-101, $result, null));
+            }
+
+            $isopenselection = 0;
+            if (input('?isopenselection')) {
+                $isopenselection = 1;
+            }
+
+            $isscormcourse = 0;
+            if (input('?isscormcourse')) {
+                $isscormcourse = 1;
+            }
+
+            //update course info
+            $result = Db::name('Course')
+                ->where('id', $id)
+                ->update([
+                    'coursename' => $data['coursename'],
+                    'typeid' => $data['typeid'],
+                    'courseurl' => $data['courseurl'],
+                    'democourseurl' => $data['democourseurl'],
+                    'coursehours' => $data['coursehours'],
+                    'coursefee' => $data['coursefee'],
+                    'isscormcourse' => $isscormcourse,
+                    'isopenselection' => $isopenselection,
+                    'coursedescription' => $data['coursedescription']
+                ]);
+
+            return json(base::getResult(0, "", null));
+        }
+    }
+
+    /**
+     * 删除指定课程资源
+     *
+     * @param  int $id 课程id
+     * @return \think\Response
+     */
+    public function delete($id)
+    {
+        //delete course setting info
+        Db::name("coursesetting")->where('id', $id)->delete();
+        //delete course info
+        Db::name('Course')->where('id', $id)->delete();
+        return json(base::getResult(0, "", null));
+    }
+
+    /**
+     * 验证唯一性
+     *
+     * @param int $id 课程id
+     * @return bool
+     */
+    public function Unique($id)
+    {
+        //must post
+        if (request()->isPost()) {
+            $result = array(
+                'valid' => false
+            );
+
+            $data = input('post.');
+
+            if (input('?post.coursename'))
+                $map['coursename'] = $data['coursename'];
+            if (input('?post.coursecode'))
+                $map['coursecode'] = $data['coursecode'];
+
+            if ($id != 0) {
+                $map['id'] = ['neq', $id];
+            }
+            if (Db::name('Course')->where($map)->find() != null) {
+                return json($result);
+            }
+
+            $result['valid'] = true;
+            return json($result);
+        }
+    }
 }

@@ -22,12 +22,14 @@ Route::rule('api/group/:id/unique', 'api/Group/Unique', "POST");
 Route::rule('api/rule/:id/unique', 'api/Rule/Unique', "POST");
 Route::rule('api/user/:id/unique', 'api/User/Unique', "POST");
 Route::rule('api/system/:id/unique', 'api/System/Unique', "POST");
+Route::rule('api/course/:id/unique', 'api/Course/Unique', "POST");
 
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');
 Route::resource('api/group', 'api/Group');
 Route::resource('api/system', 'api/System');
 Route::resource('api/training', 'api/Training');
+Route::resource('api/course', 'api/Course');
 
 return [
     '__pattern__' => [

@@ -19,20 +19,21 @@
         <label  class="col-sm-2 control-label text-left">分钟</label>
     </div>
     <div class="form-group">
-        <label for="coursefee" class="col-sm-2 control-label">选课费：</label>
+        <label for="coursefee" class="col-sm-2 control-label">课程学费：</label>
         <div class="col-sm-2">
-            <input type="text" id="coursefee" name="coursefee" class="form-control" placeholder="请输入选课费">
+            <input type="text" id="coursefee" name="coursefee" class="form-control" placeholder="请输入课程学费">
         </div>
     </div>
     <div class="form-group">
         <label for="isopenselection" class="col-sm-2 control-label">开放选课：</label>
         <div class="col-sm-2">
+            <input type="checkbox" id="isopenselection" name="isopenselection" class="magic-checkbox"><label for="isopenselection" class="control-label">是</label>
         </div>
     </div>
     <div class="form-group">
         <label for="isscormcourse" class="col-sm-2 control-label">SCORM课程：</label>
         <div class="col-sm-2">
-
+            <input type="checkbox" id="isscormcourse" name="isscormcourse" class="magic-checkbox"><label for="isscormcourse" class="control-label">是</label>
         </div>
     </div>
     <div class="form-group">
@@ -50,8 +51,7 @@
     <div class="form-group">
         <label for="coursedescription" class="col-sm-2 control-label">课程介绍：</label>
         <div class="col-sm-6">
-            <input type="text" id="coursedescription" name="coursedescription" class="form-control"
-                   placeholder="请输入课程介绍">
+            <textarea id="coursedescription" name="coursedescription" rows="9" class="form-control" placeholder="请输入课程介绍"></textarea>
         </div>
     </div>
     <script type="text/javascript">
@@ -75,6 +75,17 @@
                 },
                 success: function (data) {
                     $("#coursename").val(data.coursename);
+                    $("#typeid").val(data.typeid);
+                    $("#coursehours").val(data.coursehours);
+                    $("#coursefee").val(data.coursefee);
+                    $("#courseurl").val(data.courseurl);
+                    $("#democourseurl").val(data.democourseurl);
+                    $("#coursedescription").val(data.coursedescription);
+                    if (data.isopenselection == 1) {
+                        $("#isopenselection").attr("checked", true);
+                    }if (data.isscormcourse == 1) {
+                        $("#isscormcourse").attr("checked", true);
+                    }
                 }
             });
         }
@@ -92,14 +103,53 @@
                         },
                         threshold: 2,
                         remote: {
-                            url: '/api/system/{$id}/unique',//验证地址
+                            url: '/api/course/{$id}/unique',//验证地址
                             message: '课程名称已存在',//提示消息
                             type: 'POST'
                         },
                         stringLength: {
                             min: 2,
-                            max: 20,
-                            message: '课程名称长度必须在2到20之间'
+                            max: 50,
+                            message: '课程名称长度必须在2到50之间'
+                        }
+                    }
+                },
+                coursehours: {
+                    message: '课程学时无效',
+                    validators: {
+                        notEmpty: {
+                            message: '课程学时不能为空'
+                        },
+                        between: {
+                            min:1,
+                            max:999,
+                            message: '课程学时必须介于1和999之间'
+                        }
+                    }
+                },
+                coursefee: {
+                    message: '课程学费无效',
+                    validators: {
+                        notEmpty: {
+                            message: '课程学费不能为空'
+                        },
+                        between: {
+                            min:1,
+                            max:999,
+                            message: '课程学费必须介于1和999之间'
+                        }
+                    }
+                },
+                courseurl: {
+                    message: '课程地址无效',
+                    validators: {
+                        notEmpty: {
+                            message: '课程地址不能为空'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 500,
+                            message: '课程地址长度必须在2到500之间'
                         }
                     }
                 }
