@@ -2,7 +2,6 @@
 
 namespace app\api\controller;
 
-use think\Request;
 use think\Db;
 
 /**
@@ -79,7 +78,7 @@ class User extends base
     /**
      * 显示指定的用户资源
      *
-     * @param  uuid $id
+     * @param  string $id 用户uid
      * @return \think\Response
      */
     public function read($id)
@@ -97,7 +96,7 @@ class User extends base
     /**
      * 保存更新的用户资源
      *
-     * @param   $id
+     * @param  string $id 用户uid
      * @return \think\Response
      */
     public function update($id)
@@ -134,7 +133,7 @@ class User extends base
     /**
      * 删除指定用户资源
      *
-     * @param  uuid $id
+     * @param  string $id 用户uid
      * @return \think\Response
      */
     public function delete($id)
@@ -143,7 +142,7 @@ class User extends base
         $user = Db::name('user')->where('uid', $id)->find();
         $user_id = $user['id'];
         //delete user group info
-        Db::name('AuthGroupAccess')->where('uid', $id)->delete();
+        Db::name('AuthGroupAccess')->where('uid', $user_id)->delete();
 
         //delete user info
         Db::name('user')->where('uid', $id)->delete();
@@ -153,7 +152,7 @@ class User extends base
     /**
      * 验证登录名唯一性
      *
-     * @param $id 用户id
+     * @param $id
      * @return bool
      */
     public function Unique($id)
@@ -166,9 +165,7 @@ class User extends base
 
             $data = input('post.');
             $map['loginname'] = $data['LoginName'];
-            if ($id != 0) {
-                $map['id'] = ['neq', $id];
-            }
+
             if (Db::name('user')->where($map)->find() != null) {
                 return json($result);
             }

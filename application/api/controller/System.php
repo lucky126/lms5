@@ -84,7 +84,7 @@ class System extends base
     /**
      * 保存更新的系统资源
      *
-     * @param   $id
+     * @param   int $id 系统id
      * @return \think\Response
      */
     public function update($id)
@@ -116,7 +116,7 @@ class System extends base
     /**
      * 删除指定系统资源
      *
-     * @param  $id
+     * @param  int $id 系统id
      * @return \think\Response
      */
     public function delete($id)

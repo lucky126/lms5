@@ -33,7 +33,7 @@ class Rule extends base
     /**
      * 获取指定父节点下的权限
      *
-     * @param $pid 父权限id
+     * @param int $pid 父权限id
      * @return false|\PDOStatement|string|\think\Collection
      */
     private function getRule($pid)
@@ -103,7 +103,7 @@ class Rule extends base
     /**
      * 保存更新的权限资源
      *
-     * @param   $id 权限id
+     * @param  int $id 权限id
      * @return \think\Response
      */
     public function update($id)
@@ -142,7 +142,7 @@ class Rule extends base
     /**
      * 删除指定权限资源
      *
-     * @param  uuid $id 权限id
+     * @param  int $id 权限id
      * @return \think\Response
      */
     public function delete($id)
@@ -155,7 +155,7 @@ class Rule extends base
     /**
      * 验证角色名称唯一性
      *
-     * @param $id 角色id
+     * @param int $id 角色id
      * @return bool
      */
     public function Unique($id)

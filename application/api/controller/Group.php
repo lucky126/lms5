@@ -105,7 +105,7 @@ class Group extends base
     /**
      * 保存更新的角色资源
      *
-     * @param   $id
+     * @param  int $id 角色id
      * @return \think\Response
      */
     public function update($id)
@@ -137,7 +137,7 @@ class Group extends base
     /**
      * 删除指定角色资源
      *
-     * @param  $id
+     * @param  int $id 角色id
      * @return \think\Response
      */
     public function delete($id)
@@ -155,7 +155,7 @@ class Group extends base
     /**
      * 验证角色名称唯一性
      *
-     * @param string $id 角色id
+     * @param int $id 角色id
      * @return bool
      */
     public function Unique($id)
@@ -185,7 +185,7 @@ class Group extends base
     /**
      * 获得角色权限树
      *
-     * @param string $id 角色id
+     * @param int $id 角色id
      * @return \think\response\Json
      */
     public function GetRule($id)
@@ -203,7 +203,7 @@ class Group extends base
     /**
      * 保存角色权限树
      *
-     * @param string $id 角色id
+     * @param int $id 角色id
      * @return \think\response\Json
      */
     public function SaveRule($id)
