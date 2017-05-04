@@ -1,57 +1,123 @@
 <form method="post" action="" class="form-horizontal" id="addform">
-    <div class="form-group">
-        <label for="coursename" class="col-sm-2 control-label">课程名称：</label>
-        <div class="col-sm-6">
-            <input type="text" id="coursename" name="coursename" class="form-control" placeholder="请输入课程名称" onblur="validField()">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="typeid" class="col-sm-2 control-label">课程类别：</label>
-        <div class="col-sm-4">
-            <input type="text" id="typeid" name="typeid" class="form-control" placeholder="请输入课程类别">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="coursehours" class="col-sm-2 control-label">课程学时：</label>
-        <div class="col-sm-2">
-            <input type="text" id="coursehours" name="coursehours" class="form-control" placeholder="请输入课程学时">
-        </div>
-        <label  class="col-sm-2 control-label text-left">分钟</label>
-    </div>
-    <div class="form-group">
-        <label for="coursefee" class="col-sm-2 control-label">课程学费：</label>
-        <div class="col-sm-2">
-            <input type="text" id="coursefee" name="coursefee" class="form-control" placeholder="请输入课程学费">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="isopenselection" class="col-sm-2 control-label">开放选课：</label>
-        <div class="col-sm-2">
-            <input type="checkbox" id="isopenselection" name="isopenselection" class="magic-checkbox"><label for="isopenselection" class="control-label">是</label>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="isscormcourse" class="col-sm-2 control-label">SCORM课程：</label>
-        <div class="col-sm-2">
-            <input type="checkbox" id="isscormcourse" name="isscormcourse" class="magic-checkbox"><label for="isscormcourse" class="control-label">是</label>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="courseurl" class="col-sm-2 control-label">课程地址：</label>
-        <div class="col-sm-6">
-            <input type="text" id="courseurl" name="courseurl" class="form-control" placeholder="请输入课程地址">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="democourseurl" class="col-sm-2 control-label">试听课程地址：</label>
-        <div class="col-sm-6">
-            <input type="text" id="democourseurl" name="democourseurl" class="form-control" placeholder="请输入试听课程地址">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="coursedescription" class="col-sm-2 control-label">课程介绍：</label>
-        <div class="col-sm-6">
-            <textarea id="coursedescription" name="coursedescription" rows="9" class="form-control" placeholder="请输入课程介绍"></textarea>
+    <div class="tab-base">
+
+        <!--Nav Tabs-->
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#lft-tab-1">基础设置 </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#lft-tab-2">高级设置</a>
+            </li>
+        </ul>
+
+        <!--Tabs Content-->
+        <div class="tab-content">
+            <div id="lft-tab-1" class="tab-pane fade active in">
+                <div class="form-group">
+                    <label for="coursename" class="col-sm-2 control-label">课程名称：</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="coursename" name="coursename" class="form-control" placeholder="请输入课程名称"
+                               onblur="validField()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="typeid" class="col-sm-2 control-label">课程类别：</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="typeid" name="typeid" class="form-control" placeholder="请输入课程类别">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="coursehours" class="col-sm-2 control-label">课程学时：</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="coursehours" name="coursehours" class="form-control"
+                               placeholder="请输入课程学时">
+                    </div>
+                    <label class="col-sm-2 control-label text-left">分钟</label>
+
+                    <label for="coursefee" class="col-sm-2 control-label">课程学费：</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="coursefee" name="coursefee" class="form-control" placeholder="请输入课程学费">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="isopenselection" class="col-sm-2 control-label">开放选课：</label>
+                    <div class="col-sm-4">
+                        <input type="checkbox" id="isopenselection" name="isopenselection" class="magic-checkbox"><label
+                            for="isopenselection" class="control-label">是</label>
+                    </div>
+
+                    <label for="isscormcourse" class="col-sm-2 control-label">SCORM课程：</label>
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="isscormcourse" name="isscormcourse" class="magic-checkbox"><label
+                            for="isscormcourse" class="control-label">是</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="courseurl" class="col-sm-2 control-label">课程地址：</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="courseurl" name="courseurl" class="form-control" placeholder="请输入课程地址">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="democourseurl" class="col-sm-2 control-label">试听课程地址：</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="democourseurl" name="democourseurl" class="form-control"
+                               placeholder="请输入试听课程地址">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="coursedescription" class="col-sm-2 control-label">课程介绍：</label>
+                    <div class="col-sm-8">
+                    <textarea id="coursedescription" name="coursedescription" rows="9" class="form-control"
+                              placeholder="请输入课程介绍"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div id="lft-tab-2" class="tab-pane fade">
+                <div class="form-group">
+                    <label for="isbulletin" class="col-sm-2 control-label">启用论坛：</label>
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="isbulletin" name="isbulletin" class="magic-checkbox"><label
+                            for="isbulletin" class="control-label">是</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="isresource" class="col-sm-2 control-label">启用资源：</label>
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="isresource" name="isresource" class="magic-checkbox"><label
+                            for="isresource" class="control-label">是</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="isqa" class="col-sm-2 control-label">启用问答：</label>
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="isqa" name="isqa" class="magic-checkbox"><label
+                            for="isqa" class="control-label">是</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="isevaluator" class="col-sm-2 control-label">启用投票：</label>
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="isevaluator" name="isevaluator" class="magic-checkbox"><label
+                            for="isevaluator" class="control-label">是</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="istest" class="col-sm-2 control-label">启用考试：</label>
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="istest" name="istest" class="magic-checkbox"><label
+                            for="istest" class="control-label">是</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ishomework" class="col-sm-2 control-label">启用作业：</label>
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="ishomework" name="ishomework" class="magic-checkbox"><label
+                            for="ishomework" class="control-label">是</label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
@@ -59,7 +125,7 @@
             getInfo('{$id}');
         });
 
-        function validField(){
+        function validField() {
             $('#addform').data('bootstrapValidator').validate("coursename");
         }
 
@@ -73,7 +139,9 @@
                 error: function () {
                     alert("连接错误");
                 },
-                success: function (data) {
+                success: function (info) {
+                    var data = info.data;
+                    var setting = info.setting;
                     $("#coursename").val(data.coursename);
                     $("#typeid").val(data.typeid);
                     $("#coursehours").val(data.coursehours);
@@ -83,8 +151,28 @@
                     $("#coursedescription").val(data.coursedescription);
                     if (data.isopenselection == 1) {
                         $("#isopenselection").attr("checked", true);
-                    }if (data.isscormcourse == 1) {
+                    }
+                    if (data.isscormcourse == 1) {
                         $("#isscormcourse").attr("checked", true);
+                    }
+
+                    if (setting.isbulletin == 1) {
+                        $("#isbulletin").attr("checked", true);
+                    }
+                    if (setting.isresource == 1) {
+                        $("#isresource").attr("checked", true);
+                    }
+                    if (setting.isqa == 1) {
+                        $("#isqa").attr("checked", true);
+                    }
+                    if (setting.isevaluator == 1) {
+                        $("#isevaluator").attr("checked", true);
+                    }
+                    if (setting.istest == 1) {
+                        $("#istest").attr("checked", true);
+                    }
+                    if (setting.ishomework == 1) {
+                        $("#ishomework").attr("checked", true);
                     }
                 }
             });
@@ -121,8 +209,8 @@
                             message: '课程学时不能为空'
                         },
                         between: {
-                            min:1,
-                            max:999,
+                            min: 1,
+                            max: 999,
                             message: '课程学时必须介于1和999之间'
                         }
                     }
@@ -134,8 +222,8 @@
                             message: '课程学费不能为空'
                         },
                         between: {
-                            min:1,
-                            max:999,
+                            min: 1,
+                            max: 999,
                             message: '课程学费必须介于1和999之间'
                         }
                     }

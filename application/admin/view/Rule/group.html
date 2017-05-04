@@ -52,8 +52,8 @@
                             <thead>
                             <tr>
                                 <th data-field="title" data-sortable="true">角色名称</th>
-                                <th data-field="isset" data-sortable="true">是否设置权限</th>
-                                <th data-field="hasUseDesc" data-sortable="true">是否关联用户</th>
+                                <th data-field="isset" data-sortable="true" data-formatter="statusFormatter">是否设置权限</th>
+                                <th data-field="hasUseDesc" data-sortable="true" data-formatter="statusFormatter">是否关联用户</th>
                                 <th data-align="center" data-field="action" data-formatter="actionFormatter"
                                     data-events="actionEvents">操作
                                 </th>
@@ -174,6 +174,23 @@
         } else {
             return sub + edit + del;
         }
+    }
+
+    /**
+     * 状态文字格式化
+     * @param value
+     * @param row
+     * @returns {string}
+     */
+    function statusFormatter(value, row) {
+        var labelColor;
+        if (value == "是") {
+            labelColor = "success";
+        }else if(value == "否"){
+            labelColor = "danger";
+        }
+
+        return '<div class="label label-table label-'+ labelColor+'"> ' + value + '</div>';
     }
 
     //操作事件

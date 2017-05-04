@@ -28,6 +28,12 @@ class Course extends base
         //$map['status'] = ['<>', '0'];
         $data = Db::name('Course')->select();
 
+        //文字转换
+        foreach ($data as $k => $v) {
+            $data[$k]['isopenselectiondesc'] = config('globalConst.YesOrNoDesc')[$v['isopenselection']];
+            $data[$k]['isscormcoursedesc'] = config('globalConst.YesOrNoDesc')[$v['isscormcourse']];
+        }
+
         return json($data);
     }
 
@@ -81,15 +87,40 @@ class Course extends base
             //get course id
             $cid = Db::name('Course')->getLastInsID();
 
+
+            $isbulletin = 0;
+            if (input('?isbulletin')) {
+                $isbulletin = 1;
+            }
+            $isresource = 0;
+            if (input('?isresource')) {
+                $isresource = 1;
+            }
+            $isqa = 0;
+            if (input('?isqa')) {
+                $isqa = 1;
+            }
+            $isevaluator = 0;
+            if (input('?isevaluator')) {
+                $isevaluator = 1;
+            }
+            $istest = 0;
+            if (input('?istest')) {
+                $istest = 1;
+            }
+            $ishomework = 0;
+            if (input('?ishomework')) {
+                $ishomework = 1;
+            }
             //make user group info
             $coursesetting = [
                 'id' => $cid,
-                'isbulletin' => 0,
-                'isresource' => 0,
-                'isqa' => 0,
-                'isevaluator' => 0,
-                'istest' => 0,
-                'ishomework' => 0,
+                'isbulletin' => $isbulletin,
+                'isresource' => $isresource,
+                'isqa' => $isqa,
+                'isevaluator' => $isevaluator,
+                'istest' => $istest,
+                'ishomework' => $ishomework,
             ];
             //insert course setting info
             $result = Db::name("coursesetting")->insert($coursesetting);
@@ -108,9 +139,11 @@ class Course extends base
     {
         //get user info
         $data = Db::name('Course')->where('id', $id)->find();
+        $setting = Db::name('coursesetting')->where('id', $id)->find();
 
+        $returnVal = array('data' => $data, 'setting' => $setting);
         //return data
-        return json($data);
+        return json($returnVal);
     }
 
     /**
@@ -157,6 +190,43 @@ class Course extends base
                     'isscormcourse' => $isscormcourse,
                     'isopenselection' => $isopenselection,
                     'coursedescription' => $data['coursedescription']
+                ]);
+
+
+            $isbulletin = 0;
+            if (input('?isbulletin')) {
+                $isbulletin = 1;
+            }
+            $isresource = 0;
+            if (input('?isresource')) {
+                $isresource = 1;
+            }
+            $isqa = 0;
+            if (input('?isqa')) {
+                $isqa = 1;
+            }
+            $isevaluator = 0;
+            if (input('?isevaluator')) {
+                $isevaluator = 1;
+            }
+            $istest = 0;
+            if (input('?istest')) {
+                $istest = 1;
+            }
+            $ishomework = 0;
+            if (input('?ishomework')) {
+                $ishomework = 1;
+            }
+            //update course setting info
+            $result = Db::name('coursesetting')
+                ->where('id', $id)
+                ->update([
+                    'isbulletin' => $isbulletin,
+                    'isresource' => $isresource,
+                    'isqa' => $isqa,
+                    'isevaluator' => $isevaluator,
+                    'istest' => $istest,
+                    'ishomework' => $ishomework
                 ]);
 
             return json(base::getResult(0, "", null));
