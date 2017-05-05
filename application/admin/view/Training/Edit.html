@@ -17,12 +17,13 @@
                 <div class="form-group">
                     <label for="trainingname" class="col-sm-2 control-label">培训计划名称：</label>
                     <div class="col-sm-3">
-                        <input type="text" id="trainingname" name="trainingname" class="form-control" placeholder="请输入培训计划名称"  onblur="validField()">
+                        <input type="text" id="trainingname" name="trainingname" class="form-control"
+                               placeholder="请输入培训计划名称" onblur="validField()">
                     </div>
                     <label for="trainingcode" class="col-sm-2 control-label">培训计划编号：</label>
                     <div class="col-sm-3">
                         <input type="text" id="trainingcode" name="trainingcode" class="form-control"
-                               placeholder="培训计划编号"  onblur="validField()">
+                               placeholder="培训计划编号" onblur="validField()">
                     </div>
                 </div>
                 <div class="form-group">
@@ -30,6 +31,8 @@
                     <div class="col-sm-6">
                         <input id="registrationtime" name="registrationtime" class="form-control" type="text"
                                placeholder="请输入报名时间"/>
+                        <input id="registrationstarttime" name="registrationstarttime" type="hidden">
+                        <input id="registrationendtime" name="registrationendtime" type="hidden">
                     </div>
                 </div>
                 <div class="form-group">
@@ -37,6 +40,8 @@
                     <div class="col-sm-6">
                         <input type="text" id="trainingtime" name="trainingtime" class="form-control"
                                placeholder="请输入培训计划起止时间">
+                        <input id="starttime" name="starttime" type="hidden">
+                        <input id="endtime" name="endtime" type="hidden">
                     </div>
                 </div>
                 <div class="form-group">
@@ -91,6 +96,7 @@
                         </tbody>
                     </table>
                 </div>
+                <input type="hidden" id="courses" name="courses"/>
             </div>
         </div>
     </div>
@@ -133,7 +139,7 @@
                 var courses = info.courses;
                 $("#trainingname").val(data.trainingname);
                 $("#trainingcode").val(data.trainingcode);
-                
+
                 $("#registrationstarttime").val(data.registrationstarttime);
                 $("#registrationendtime").val(data.registrationendtime);
                 $('#registrationtime').data('daterangepicker').setStartDate(data.registrationstarttime);
@@ -149,6 +155,13 @@
                 $("#description").val(data.description);
                 $("#content").val(data.content);
                 $("#notice").val(data.notice);
+
+                courses.forEach(function (value, index, array) {
+                    $("#select_" + value.scormid).attr("checked", true);
+                    if (value.isrequired == 1) {
+                        $("#required_" + value.scormid).attr("checked", true);
+                    }
+                });
             }
         });
     }
@@ -275,13 +288,13 @@
             },
             success: function (info) {
                 info.forEach(function (value, index, array) {
-                    var check = "<td><input type='checkbox' id='select_" + value.id + "'></td>"
+                    var check = "<td><input type='checkbox' id='select_" + value.id + "' name='select_" + value.id + "' value ='" + value.id + "'></td>"
                     var ccode = "<td>" + value.coursecode + "</td>";
                     var name = "<td>" + value.coursename + "</td>";
                     var type = "<td>" + value.typeid + "</td>";
                     var coursefee = "<td>" + value.coursefee + "</td>";
                     var isscormcourse = "<td>" + statusFormatter(value.isscormcoursedesc, null) + "</td>";
-                    var isrequired = "<td><input id='required_"+ value.id + "' type='checkbox'></td>";
+                    var isrequired = "<td><input id='required_" + value.id + "' name='required_" + value.id + "' type='checkbox' value ='" + value.id + "'> </td>";
                     $("#courseTable").children("tbody").append("<tr>" + check + ccode + name + type + coursefee + isscormcourse + isrequired + "</tr>");
                 });
             }

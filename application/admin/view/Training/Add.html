@@ -17,12 +17,13 @@
                 <div class="form-group">
                     <label for="trainingname" class="col-sm-2 control-label">培训计划名称：</label>
                     <div class="col-sm-3">
-                        <input type="text" id="trainingname" name="trainingname" class="form-control" placeholder="请输入培训计划名称"  onblur="validField()">
+                        <input type="text" id="trainingname" name="trainingname" class="form-control"
+                               placeholder="请输入培训计划名称" onblur="validField()">
                     </div>
                     <label for="trainingcode" class="col-sm-2 control-label">培训计划编号：</label>
                     <div class="col-sm-3">
                         <input type="text" id="trainingcode" name="trainingcode" class="form-control"
-                               placeholder="培训计划编号"  onblur="validField()">
+                               placeholder="培训计划编号" onblur="validField()">
                     </div>
                 </div>
                 <div class="form-group">
@@ -95,6 +96,7 @@
                         </tbody>
                     </table>
                 </div>
+                <input type="hidden" id="courses" name="courses"/>
             </div>
         </div>
     </div>
@@ -185,49 +187,55 @@
                         message: '培训计划起止时间不能为空'
                     }
                 }
-            },
+            }
+            ,
             trainingcost: {
                 message: '培训费无效',
                 validators: {
                     notEmpty: {
                         message: '培训费不能为空'
-                    },
+                    }
+                    ,
                     between: {
                         min: 1,
                         max: 999,
                         message: '培训费必须介于1和999之间'
                     }
                 }
-            },
+            }
+            ,
             allownumberofcourses: {
                 message: '允许选课数无效',
                 validators: {
                     notEmpty: {
                         message: '允许选课数不能为空'
-                    },
+                    }
+                    ,
                     between: {
                         min: 0,
                         max: 999,
                         message: '允许选课数必须介于0和999之间'
                     }
                 }
-            },
+            }
+            ,
             notice: {
                 message: '培训须知无效',
                 validators: {
                     notEmpty: {
                         message: '培训须知不能为空'
-                    },
+                    }
+                    ,
                     stringLength: {
                         min: 2,
                         max: 500,
                         message: '培训须知长度必须在2到500之间'
                     }
                 }
-            }
-
+            },
         }
-    });
+    })
+    ;
 
     /**
      * 绑定课程
@@ -243,13 +251,13 @@
             },
             success: function (info) {
                 info.forEach(function (value, index, array) {
-                    var check = "<td><input type='checkbox' id='select_" + value.id + "'></td>"
+                    var check = "<td><input type='checkbox' id='select_" + value.id + "' name='select_" + value.id + "' value ='" + value.id + "'></td>"
                     var ccode = "<td>" + value.coursecode + "</td>";
                     var name = "<td>" + value.coursename + "</td>";
                     var type = "<td>" + value.typeid + "</td>";
                     var coursefee = "<td>" + value.coursefee + "</td>";
                     var isscormcourse = "<td>" + statusFormatter(value.isscormcoursedesc, null) + "</td>";
-                    var isrequired = "<td><input id='required_"+ value.id + "' type='checkbox'></td>";
+                    var isrequired = "<td><input id='required_" + value.id + "' name='required_" + value.id + "' type='checkbox' value ='" + value.id + "'> </td>";
                     $("#courseTable").children("tbody").append("<tr>" + check + ccode + name + type + coursefee + isscormcourse + isrequired + "</tr>");
                 });
             }

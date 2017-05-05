@@ -24,6 +24,7 @@ class training extends Validate
         'trainingcost' => 'require|between:1,999',
         'allownumberofcourses' => 'require|between:0,999',
         'notice' => 'require',
+        'courses' => 'require',
     ];
 
     protected $message = [
@@ -40,12 +41,13 @@ class training extends Validate
         'allownumberofcourses.require' => '允许选课数不能为空',
         'allownumberofcourses.between' => '允许选课数必须介于0和999之间',
         'notice.require' => '课程地址不能为空',
+        'courses.require' => '至少选择一门课程',
     ];
 
     protected $scene = [
         'edit' => [
             'trainingname' => 'require|length:2,50|unique:training,trainingname^id',
-            'registrationtime','trainingtime','trainingcost','allownumberofcourses','notice'
+            'registrationtime','trainingtime','trainingcost','allownumberofcourses','notice','courses'
         ],
     ];
 }

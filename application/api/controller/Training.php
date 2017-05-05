@@ -15,7 +15,6 @@ use think\Db;
  * 培训班api控制器
  * @package app\api\controller
  */
-
 class training extends base
 {
     /**
@@ -74,20 +73,27 @@ class training extends base
             //get training id
             $tid = Db::name('training')->getLastInsID();
 
-/*
-            //make user group info
-            $coursesetting = [
-                'id' => $tid,
-                'isbulletin' => $isbulletin,
-                'isresource' => $isresource,
-                'isqa' => $isqa,
-                'isevaluator' => $isevaluator,
-                'istest' => $istest,
-                'ishomework' => $ishomework,
-            ];
-            //insert course setting info
-            $result = Db::name("trainingcourse")->insert($coursesetting);
-*/
+            //get all courses info
+            $courses = explode(",", $data['courses']);
+
+            foreach ($courses as $c) {
+                $c_info = explode("_", $c);
+                $isrequired = 0;
+                if (count($c_info) > 1) {
+                    $isrequired = 1;
+                }
+                $course = [
+                    'systemid' => 1,
+                    'trainingid' => $tid,
+                    'scormid' => $c_info[0],
+                    'isrequired' => $isrequired,
+                    'addtime' => datetime(),
+                ];
+
+                //insert course setting info
+                $result = Db::name("trainingcourse")->insert($course);
+            }
+
             return json(base::getresult(0, "", null));
         }
     }
@@ -102,7 +108,7 @@ class training extends base
     {
         //get user info
         $data = Db::name('training')->where('id', $id)->find();
-        $course = Db::name('trainingcourse')->where('trainingid', $id)->find();
+        $course = Db::name('trainingcourse')->where('trainingid', $id)->select();
 
         $returnVal = array('data' => $data, 'courses' => $course);
         //return data
@@ -131,7 +137,7 @@ class training extends base
             }
 
             //update course info
-            $result = Db::name('Course')
+            $result = Db::name('training')
                 ->where('id', $id)
                 ->update([
                     'trainingname' => $data['trainingname'],
@@ -149,19 +155,31 @@ class training extends base
                     'notice' => $data['notice'],
                 ]);
 
-/*
-            //update course setting info
-            $result = Db::name('trainingcourse')
-                ->where('id', $id)
-                ->update([
-                    'isbulletin' => $isbulletin,
-                    'isresource' => $isresource,
-                    'isqa' => $isqa,
-                    'isevaluator' => $isevaluator,
-                    'istest' => $istest,
-                    'ishomework' => $ishomework
-                ]);
-*/
+
+            //delete course setting info
+            Db::name("trainingcourse")->where('trainingid', $id)->delete();
+
+            //get all courses info
+            $courses = explode(",", $data['courses']);
+
+            foreach ($courses as $c) {
+                $c_info = explode("_", $c);
+                $isrequired = 0;
+                if (count($c_info) > 1) {
+                    $isrequired = 1;
+                }
+                $course = [
+                    'systemid' => 1,
+                    'trainingid' => $id,
+                    'scormid' => $c_info[0],
+                    'isrequired' => $isrequired,
+                    'addtime' => datetime(),
+                ];
+
+                //insert course setting info
+                $result = Db::name("trainingcourse")->insert($course);
+            }
+
             return json(base::getresult(0, "", null));
         }
     }
