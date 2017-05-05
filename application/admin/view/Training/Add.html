@@ -235,13 +235,13 @@
             },
             success: function (info) {
                 info.forEach(function (value, index, array) {
-                    var check = "<td><input type='checkbox' value='" + value.id + "'></td>"
+                    var check = "<td><input type='checkbox' id='select_" + value.id + "'></td>"
                     var ccode = "<td>" + value.coursecode + "</td>";
                     var name = "<td>" + value.coursename + "</td>";
                     var type = "<td>" + value.typeid + "</td>";
                     var coursefee = "<td>" + value.coursefee + "</td>";
                     var isscormcourse = "<td>" + statusFormatter(value.isscormcoursedesc, null) + "</td>";
-                    var isrequired = "<td></td>";
+                    var isrequired = "<td><input id='required_"+ value.id + "' type='checkbox'></td>";
                     $("#courseTable").children("tbody").append("<tr>" + check + ccode + name + type + coursefee + isscormcourse + isrequired + "</tr>");
                 });
             }
