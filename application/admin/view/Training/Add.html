@@ -30,6 +30,8 @@
                     <div class="col-sm-6">
                         <input id="registrationtime" name="registrationtime" class="form-control" type="text"
                                placeholder="请输入报名时间"/>
+                        <input id="registrationstarttime" name="registrationstarttime" type="hidden">
+                        <input id="registrationendtime" name="registrationendtime" type="hidden">
                     </div>
                 </div>
                 <div class="form-group">
@@ -37,6 +39,8 @@
                     <div class="col-sm-6">
                         <input type="text" id="trainingtime" name="trainingtime" class="form-control"
                                placeholder="请输入培训计划起止时间">
+                        <input id="starttime" name="starttime" type="hidden">
+                        <input id="endtime" name="endtime" type="hidden">
                     </div>
                 </div>
                 <div class="form-group">
@@ -99,10 +103,14 @@
 
     $(function () {
         $('#registrationtime').daterangepicker(options, function (start, end, label) {
-            //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+            $("#registrationstarttime").val(start.format('YYYY-MM-DD HH:mm'))
+            $("#registrationendtime").val(end.format('YYYY-MM-DD HH:mm'))
+            //console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm') + ' to ' + end.format('YYYY-MM-DD  HH:mm') + ' (predefined range: ' + label + ')');
         });
         $('#trainingtime').daterangepicker(options, function (start, end, label) {
-            //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+            $("#starttime").val(start.format('YYYY-MM-DD HH:mm'))
+            $("#endtime").val(end.format('YYYY-MM-DD HH:mm'))
+            //console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm') + ' to ' + end.format('YYYY-MM-DD  HH:mm') + ' (predefined range: ' + label + ')');
         });
 
         getcourse();

@@ -99,18 +99,58 @@
 
     $(function () {
         $('#registrationtime').daterangepicker(options, function (start, end, label) {
-            //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+            $("#registrationstarttime").val(start.format('YYYY-MM-DD HH:mm'))
+            $("#registrationendtime").val(end.format('YYYY-MM-DD HH:mm'))
+            //console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm') + ' to ' + end.format('YYYY-MM-DD  HH:mm') + ' (predefined range: ' + label + ')');
         });
         $('#trainingtime').daterangepicker(options, function (start, end, label) {
-            //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+            $("#starttime").val(start.format('YYYY-MM-DD HH:mm'))
+            $("#endtime").val(end.format('YYYY-MM-DD HH:mm'))
+            //console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm') + ' to ' + end.format('YYYY-MM-DD  HH:mm') + ' (predefined range: ' + label + ')');
         });
 
         getcourse();
+        getInfo('{$id}');
     });
 
     function validField() {
         $('#addform').data('bootstrapValidator').validate("trainingname");
         $('#addform').data('bootstrapValidator').validate("trainingcode");
+    }
+
+    //get info
+    function getInfo(id) {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/training/" + id,
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                var data = info.data;
+                var courses = info.courses;
+                $("#trainingname").val(data.trainingname);
+                $("#trainingcode").val(data.trainingcode);
+                
+                $("#registrationstarttime").val(data.registrationstarttime);
+                $("#registrationendtime").val(data.registrationendtime);
+                $('#registrationtime').data('daterangepicker').setStartDate(data.registrationstarttime);
+                $('#registrationtime').data('daterangepicker').setEndDate(data.registrationendtime);
+
+                $("#starttime").val(data.starttime);
+                $("#endtime").val(data.endtime);
+                $('#trainingtime').data('daterangepicker').setStartDate(data.starttime);
+                $('#trainingtime').data('daterangepicker').setEndDate(data.endtime);
+
+                $("#trainingcost").val(data.trainingcost);
+                $("#allownumberofcourses").val(data.allownumberofcourses);
+                $("#description").val(data.description);
+                $("#content").val(data.content);
+                $("#notice").val(data.notice);
+            }
+        });
     }
 
     $("#addform").bootstrapValidator({
@@ -126,7 +166,7 @@
                     },
                     threshold: 2,
                     remote: {
-                        url: '/api/training/0/unique',//验证地址
+                        url: '/api/training/{$id}/unique',//验证地址
                         message: '培训计划名称已存在',//提示消息
                         delay: 2000,
                         type: 'POST'
@@ -146,7 +186,7 @@
                     },
                     threshold: 2,
                     remote: {
-                        url: '/api/training/0/unique',//验证地址
+                        url: '/api/training/{$id}/unique',//验证地址
                         message: '培训计划编号已存在',//提示消息
                         delay: 2000,
                         type: 'POST'

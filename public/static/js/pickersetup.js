@@ -4,6 +4,7 @@
 var options = {
     timePicker: true,
     timePicker24Hour: true,
+    timePickerSeconds: true,
     buttonClasses : [ 'btn btn-default' ],
     applyClass : 'btn-small btn-primary',
     cancelClass : 'btn-small btn-danger',
@@ -15,7 +16,7 @@ var options = {
         '最近30日': [moment().subtract('days', 29), moment()]
     },
     locale : {
-        format: "MM/DD/YYYY HH:mm",
+        format: "YYYY-MM-DD HH:mm:ss",
         separator: " 至 ",
         applyLabel : '确定',
         cancelLabel : '取消',

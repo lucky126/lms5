@@ -56,10 +56,10 @@ class training extends base
                 'trainingname' => $data['trainingname'],
                 'trainingcode' => $data['trainingcode'],
                 'traingtype' => 1,
-                'registrationstarttime' => '',
-                'registrationendtime' => '',
-                'starttime' => '',
-                'endtime' => '',
+                'registrationstarttime' => $data['registrationstarttime'],
+                'registrationendtime' => $data['registrationendtime'],
+                'starttime' => $data['starttime'],
+                'endtime' => $data['endtime'],
                 'isopen' => 1,
                 'trainingcost' => $data['trainingcost'],
                 'allownumberofcourses' => $data['allownumberofcourses'],
@@ -102,7 +102,7 @@ class training extends base
     {
         //get user info
         $data = Db::name('training')->where('id', $id)->find();
-        $course = Db::name('trainingcourse')->where('id', $id)->find();
+        $course = Db::name('trainingcourse')->where('trainingid', $id)->find();
 
         $returnVal = array('data' => $data, 'courses' => $course);
         //return data
@@ -136,10 +136,10 @@ class training extends base
                 ->update([
                     'trainingname' => $data['trainingname'],
                     'traingtype' => 1,
-                    'registrationstarttime' => '',
-                    'registrationendtime' => '',
-                    'starttime' => '',
-                    'endtime' => '',
+                    'registrationstarttime' => $data['registrationstarttime'],
+                    'registrationendtime' => $data['registrationendtime'],
+                    'starttime' => $data['starttime'],
+                    'endtime' => $data['endtime'],
                     'isopen' => 1,
                     'trainingcost' => $data['trainingcost'],
                     'allownumberofcourses' => $data['allownumberofcourses'],
