@@ -74,7 +74,23 @@
                 </div>
             </div>
             <div id="lft-tab-2" class="tab-pane fade">
-
+                <div class="table-responsive">
+                    <table class="table table-striped" id="courseTable">
+                        <thead>
+                        <tr>
+                            <th class="text-center"></th>
+                            <th>课程代码</th>
+                            <th>课程名称</th>
+                            <th>课程类别</th>
+                            <th>选课费</th>
+                            <th>SCORM课程</th>
+                            <th>必选课</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -88,5 +104,35 @@
         $('#TrainingTime').daterangepicker(options, function (start, end, label) {
             console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
         });
+
+        getCourse();
     });
+
+    /**
+     * 绑定课程
+     */
+    function getCourse() {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/course",
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                info.forEach(function (value, index, array) {
+                    var check = "<td><input type='checkbox' value='" + value.id + "'></td>"
+                    var ccode = "<td>" + value.coursecode + "</td>";
+                    var name = "<td>" + value.coursename + "</td>";
+                    var type = "<td>" + value.typeid + "</td>";
+                    var coursefee = "<td>" + value.coursefee + "</td>";
+                    var isscormcourse = "<td>" + statusFormatter(value.isscormcoursedesc, null) + "</td>";
+                    var isrequired = "<td></td>";
+                    $("#courseTable").children("tbody").append("<tr>" + check + ccode + name + type + coursefee + isscormcourse + isrequired + "</tr>");
+                });
+            }
+        });
+    }
+
 </script>

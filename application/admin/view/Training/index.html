@@ -149,6 +149,23 @@
         ].join('');
     }
 
+    /**
+     * 状态文字格式化
+     * @param value
+     * @param row
+     * @returns {string}
+     */
+    function statusFormatter(value, row) {
+        var labelColor;
+        if (value == "是") {
+            labelColor = "success";
+        }else if(value == "否"){
+            labelColor = "danger";
+        }
+
+        return '<div class="label label-table label-'+ labelColor+'"> ' + value + '</div>';
+    }
+
     //操作事件
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
