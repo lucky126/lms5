@@ -1,7 +1,7 @@
 <form method="post" action="" class="form-horizontal" id="addform">
     <div class="tab-base">
 
-        <!--Nav Tabs-->
+        <!--nav Tabs-->
         <ul class="nav nav-tabs">
             <li class="active">
                 <a data-toggle="tab" href="#lft-tab-1">基础设置 </a>
@@ -11,64 +11,64 @@
             </li>
         </ul>
 
-        <!--Tabs Content-->
+        <!--Tabs content-->
         <div class="tab-content">
             <div id="lft-tab-1" class="tab-pane fade active in">
                 <div class="form-group">
-                    <label for="TrainingName" class="col-sm-2 control-label">培训计划名称：</label>
+                    <label for="trainingname" class="col-sm-2 control-label">培训计划名称：</label>
                     <div class="col-sm-3">
-                        <input type="text" id="TrainingName" name="TrainingName" class="form-control" placeholder="请输入培训计划名称"  onblur="validField()">
+                        <input type="text" id="trainingname" name="trainingname" class="form-control" placeholder="请输入培训计划名称"  onblur="validField()">
                     </div>
-                    <label for="TrainingCode" class="col-sm-2 control-label">培训计划编号：</label>
+                    <label for="trainingcode" class="col-sm-2 control-label">培训计划编号：</label>
                     <div class="col-sm-3">
-                        <input type="text" id="TrainingCode" name="TrainingCode" class="form-control"
+                        <input type="text" id="trainingcode" name="trainingcode" class="form-control"
                                placeholder="培训计划编号"  onblur="validField()">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="RegistrationTime" class="col-sm-2 control-label">报名起止时间：</label>
+                    <label for="registrationtime" class="col-sm-2 control-label">报名起止时间：</label>
                     <div class="col-sm-6">
-                        <input id="RegistrationTime" name="RegistrationTime" class="form-control" type="text"
+                        <input id="registrationtime" name="registrationtime" class="form-control" type="text"
                                placeholder="请输入报名时间"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="TrainingTime" class="col-sm-2 control-label">培训计划起止时间：</label>
+                    <label for="trainingtime" class="col-sm-2 control-label">培训计划起止时间：</label>
                     <div class="col-sm-6">
-                        <input type="text" id="TrainingTime" name="TrainingTime" class="form-control"
+                        <input type="text" id="trainingtime" name="trainingtime" class="form-control"
                                placeholder="请输入培训计划起止时间">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="TrainingCost" class="col-sm-2 control-label">培训费：</label>
+                    <label for="trainingcost" class="col-sm-2 control-label">培训费：</label>
                     <div class="col-sm-2">
-                        <input type="text" id="TrainingCost" name="TrainingCost" class="form-control"
+                        <input type="text" id="trainingcost" name="trainingcost" class="form-control"
                                placeholder="请输入培训费">
                     </div>
-                    <label for="AllowNumberOfCourses" class="col-sm-2 col-sm-offset-1 control-label">允许选课数：</label>
+                    <label for="allownumberofcourses" class="col-sm-2 col-sm-offset-1 control-label">允许选课数：</label>
                     <div class="col-sm-2">
-                        <input type="text" id="AllowNumberOfCourses" name="AllowNumberOfCourses" class="form-control"
+                        <input type="text" id="allownumberofcourses" name="allownumberofcourses" class="form-control"
                                value="0" placeholder="请输入允许选课数">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="Description" class="col-sm-2 control-label">培训介绍：</label>
+                    <label for="description" class="col-sm-2 control-label">培训介绍：</label>
                     <div class="col-sm-8">
-                        <textarea id="Description" name="Description" rows="3" class="form-control"
+                        <textarea id="description" name="description" rows="3" class="form-control"
                                   placeholder="请输入培训介绍"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="Content" class="col-sm-2 control-label">培训内容：</label>
+                    <label for="content" class="col-sm-2 control-label">培训内容：</label>
                     <div class="col-sm-8">
-                        <textarea id="Content" name="Content" rows="3" class="form-control"
+                        <textarea id="content" name="content" rows="3" class="form-control"
                                   placeholder="请输入培训内容"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="Notice" class="col-sm-2 control-label">培训须知：</label>
+                    <label for="notice" class="col-sm-2 control-label">培训须知：</label>
                     <div class="col-sm-8">
-                        <textarea id="Notice" name="Notice" rows="3" class="form-control"
+                        <textarea id="notice" name="notice" rows="3" class="form-control"
                                   placeholder="请输入培训须知"></textarea>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                             <th>课程名称</th>
                             <th>课程类别</th>
                             <th>选课费</th>
-                            <th>SCORM课程</th>
+                            <th>ScoRM课程</th>
                             <th>必选课</th>
                         </tr>
                         </thead>
@@ -98,19 +98,19 @@
 <script type="text/javascript">
 
     $(function () {
-        $('#RegistrationTime').daterangepicker(options, function (start, end, label) {
+        $('#registrationtime').daterangepicker(options, function (start, end, label) {
             //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
         });
-        $('#TrainingTime').daterangepicker(options, function (start, end, label) {
+        $('#trainingtime').daterangepicker(options, function (start, end, label) {
             //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
         });
 
-        getCourse();
+        getcourse();
     });
 
     function validField() {
-        $('#addform').data('bootstrapValidator').validate("TrainingName");
-        $('#addform').data('bootstrapValidator').validate("TrainingCode");
+        $('#addform').data('bootstrapValidator').validate("trainingname");
+        $('#addform').data('bootstrapValidator').validate("trainingcode");
     }
 
     $("#addform").bootstrapValidator({
@@ -118,7 +118,7 @@
         //反馈图标
         feedbackIcons: faIcon,
         fields: {
-            TrainingName: {
+            trainingname: {
                 message: '培训计划名称无效',
                 validators: {
                     notEmpty: {
@@ -138,7 +138,7 @@
                     }
                 }
             },
-            TrainingCode: {
+            trainingcode: {
                 message: '培训计划编号无效',
                 validators: {
                     notEmpty: {
@@ -162,7 +162,7 @@
                     }
                 }
             },
-            RegistrationTime: {
+            registrationtime: {
                 message: '报名起止时间无效',
                 validators: {
                     notEmpty: {
@@ -170,7 +170,7 @@
                     }
                 }
             },
-            TrainingTime: {
+            trainingtime: {
                 message: '培训计划起止时间无效',
                 validators: {
                     notEmpty: {
@@ -178,7 +178,7 @@
                     }
                 }
             },
-            TrainingCost: {
+            trainingcost: {
                 message: '培训费无效',
                 validators: {
                     notEmpty: {
@@ -191,7 +191,7 @@
                     }
                 }
             },
-            AllowNumberOfCourses: {
+            allownumberofcourses: {
                 message: '允许选课数无效',
                 validators: {
                     notEmpty: {
@@ -204,7 +204,7 @@
                     }
                 }
             },
-            Notice: {
+            notice: {
                 message: '培训须知无效',
                 validators: {
                     notEmpty: {
@@ -224,7 +224,7 @@
     /**
      * 绑定课程
      */
-    function getCourse() {
+    function getcourse() {
         $.ajax({
             cache: true,
             type: "GET",

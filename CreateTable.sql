@@ -241,48 +241,48 @@ VALUES
 DROP TABLE IF EXISTS `lms_training`;
 CREATE TABLE lms_training
 (
-  ID                    INT                  NOT NULL AUTO_INCREMENT
+  id                    INT                  NOT NULL AUTO_INCREMENT
   COMMENT '培训班ID',
-  SystemID              INT                  NOT NULL
+  systemid              INT                  NOT NULL
   COMMENT '系统ID',
-  TrainingName          NATIONAL VARCHAR(50) NOT NULL
+  trainingname          NATIONAL VARCHAR(50) NOT NULL
   COMMENT '培训班名称',
-  TrainingCode          VARCHAR(50)          NOT NULL
+  trainingcode          VARCHAR(50)          NOT NULL
   COMMENT '培训计划编号',
-  TraingType            INT                  NOT NULL
+  traingtype            INT                  NOT NULL
   COMMENT '培训类别',
-  RegistrationStartTime DATETIME             NOT NULL
+  registrationstarttime DATETIME             NOT NULL
   COMMENT '报名开始时间',
-  RegistrationEndTime   DATETIME             NOT NULL
+  registrationendtime   DATETIME             NOT NULL
   COMMENT '报名结束时间',
-  StartTime             DATETIME             NOT NULL
+  starttime             DATETIME             NOT NULL
   COMMENT '培训开始时间',
-  EndTime               DATETIME             NOT NULL
+  endtime               DATETIME             NOT NULL
   COMMENT '培训结束时间',
-  IsOpen                INT                  NOT NULL DEFAULT 0
+  isopen                INT                  NOT NULL DEFAULT 0
   COMMENT '是否开放（1-开放，0-未开放）',
-  TrainingCost          DECIMAL(9, 1)        NOT NULL
+  trainingcost          DECIMAL(9, 1)        NOT NULL
   COMMENT '培训费',
-  AllowNumberOfCourses  INT                  NOT NULL DEFAULT 0
+  allownumberofcourses  INT                  NOT NULL DEFAULT 0
   COMMENT '允许选课数（0-选择全部）',
-  Description           TEXT                 NOT NULL
+  description           TEXT                 NOT NULL
   COMMENT '培训介绍',
-  Content               TEXT                 NOT NULL
+  content               TEXT                 NOT NULL
   COMMENT '培训内容',
-  Memeber               TEXT                 NOT NULL
+  memeber               TEXT                 NOT NULL
   COMMENT '培训对象',
-  Notice                TEXT                 NOT NULL
+  notice                TEXT                 NOT NULL
   COMMENT '培训须知',
-  IsPublishResult       INT                  NOT NULL DEFAULT 0
+  isspublishresult       INT                  NOT NULL DEFAULT 0
   COMMENT '是否发布成绩',
-  MinPassResult         DECIMAL(4, 1)        NOT NULL DEFAULT 60
+  minpassresult         DECIMAL(4, 1)        NOT NULL DEFAULT 60
   COMMENT '最小通过成绩',
-  PeriodNumberCode      VARCHAR(20)          NOT NULL,
-  AddTime               DATETIME             NOT NULL
+  periodnumbercode      VARCHAR(20)          NOT NULL,
+  addtime               DATETIME             NOT NULL
   COMMENT '添加时间',
-  Status                INT                  NOT NULL DEFAULT 0
+  status                INT                  NOT NULL DEFAULT 0
   COMMENT '状态：0，禁用；1，正常；-1，删除',
-  PRIMARY KEY (ID)
+  PRIMARY KEY (id)
 )
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8
@@ -292,18 +292,18 @@ CREATE TABLE lms_training
 /*==============================================================*/
 /* Table: lms_TrainingType                                      */
 /*==============================================================*/
-DROP TABLE IF EXISTS `lms_TrainingType`;
-CREATE TABLE lms_TrainingType
+DROP TABLE IF EXISTS `lms_trainingtype`;
+CREATE TABLE lms_trainingtype
 (
-  ID      INT         NOT NULL
+  id      INT         NOT NULL
   COMMENT '类别ID',
-  Name    VARCHAR(50) NOT NULL
+  name    VARCHAR(50) NOT NULL
   COMMENT '类别名称',
-  AddTime DATETIME    NOT NULL
+  addtime DATETIME    NOT NULL
   COMMENT '添加时间',
-  Status  INT         NOT NULL DEFAULT 0
+  status  INT         NOT NULL DEFAULT 0
   COMMENT '状态：0，禁用；1，正常；-1，删除',
-  PRIMARY KEY (ID)
+  PRIMARY KEY (id)
 )
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8
