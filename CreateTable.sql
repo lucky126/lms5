@@ -36,7 +36,7 @@ CREATE TABLE `lms_auth_group` (
   COMMENT = '用户组表';
 
 INSERT INTO `lms_auth_group` (`id`, `title`, `status`, `rules`)
-VALUES ('1', '管理员', '1', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33');
+VALUES ('1', '管理员', '1', '');
 
 -- ----------------------------
 -- Table structure for lms_auth_rule
@@ -76,79 +76,96 @@ VALUES ('1', '0', 'Admin/Index/index', '控制台', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('2', '1', 'System', '系统管理', '1', '1', '', 'fa fa-cloud', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('3', '2', 'Admin/System/index', '系统管理', '1', '1', '', '', '1');
+VALUES ('200', '2', 'Admin/System/index', '系统管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 
-VALUES ('4', '1', 'Training', '培训计划管理', '1', '1', '', 'fa fa-group', '1');
+VALUES ('3', '1', 'Training', '培训计划管理', '1', '1', '', 'fa fa-group', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('5', '4', 'Admin/Training/index', '培训计划管理', '1', '1', '', '', '1');
+VALUES ('300', '3', 'Admin/Training/index', '培训计划管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('32', '4', 'Admin/Training/Add', '添加培训计划', '1', '1', '', '', '0');
+VALUES ('301', '3', 'Admin/Training/Add', '添加培训计划', '1', '1', '', '', '0');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('33', '4', 'Admin/Training/Edit', '修改培训计划', '1', '1', '', '', '0');
+VALUES ('302', '3', 'Admin/Training/Edit', '修改培训计划', '1', '1', '', '', '0');
 
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('6', '1', 'Course', '课程管理', '1', '1', '', 'fa fa-book', '1');
+VALUES ('4', '1', 'Course', '课程管理', '1', '1', '', 'fa fa-book', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('7', '6', 'Admin/Course/index', '课程管理', '1', '1', '', '', '1');
+VALUES ('400', '4', 'Admin/Course/index', '课程管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('34', '6', 'Admin/Course/Add', '添加课程', '1', '1', '', '', '0');
+VALUES ('401', '4', 'Admin/Course/Add', '添加课程', '1', '1', '', '', '0');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('35', '6', 'Admin/Course/Edit', '修改课程', '1', '1', '', '', '0');
+VALUES ('402', '4', 'Admin/Course/Edit', '修改课程', '1', '1', '', '', '0');
 
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('8', '1', 'Student', '学员管理', '1', '1', '', 'fa fa-slideshare', '1');
+VALUES ('410', '4', 'Admin/Bulletin/index', '论坛管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('9', '8', 'Admin/Student/index', '学员信息管理', '1', '1', '', '', '1');
+VALUES ('420', '4', 'Admin/Resource/index', '资源管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('10', '8', 'Admin/Student/RegManager', '注册学员管理', '1', '1', '', '', '1');
+VALUES ('430', '4', 'Admin/QA/index', '问答管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('11', '8', 'Admin/Student/Import', '导入学员账号', '1', '1', '', '', '1');
+VALUES ('440', '4', 'Admin/Evaluator/index', '投票管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('12', '1', 'Finance', '财务管理', '1', '1', '', 'fa fa-money', '1');
+VALUES ('450', '4', 'Admin/Exam/index', '考试管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('13', '12', 'Admin/Finance/index', '交费查询', '1', '1', '', '', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('14', '12', 'Admin/Finance/OfflineConfirm', '离线交费确认', '1', '1', '', '', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('15', '12', 'Admin/Finance/Stat', '财务统计', '1', '1', '', '', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('16', '1', 'ActivationCode', '激活码管理', '1', '1', '', 'fa fa-barcode', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('17', '16', 'Admin/ActivationCode/index', '查询激活码', '1', '1', '', '', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('18', '16', 'Admin/ActivationCode/Revoke', '撤销激活码', '1', '1', '', '', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('19', '1', 'Progress', '学习情况', '1', '1', '', 'fa fa-line-chart', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('20', '19', 'Admin/Progress/index', '学习情况查询', '1', '1', '', '', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('21', '19', 'Admin/Progress/stat', '学习情况统计', '1', '1', '', '', '1');
-INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('22', '1', 'User', '用户权限管理', '1', '1', '', 'fa fa-user-md', '1');
+VALUES ('460', '4', 'Admin/Homework/index', '作业管理', '1', '1', '', '', '1');
 
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('23', '22', 'Admin/User/index', '后台用户管理', '1', '1', '', '', '1');
+VALUES ('5', '1', 'Student', '学员管理', '1', '1', '', 'fa fa-slideshare', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('24', '22', 'Admin/User/Add', '添加用户', '1', '1', '', '', '0');
+VALUES ('500', '5', 'Admin/Student/index', '学员信息管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('25', '22', 'Admin/User/Edit', '修改用户', '1', '1', '', '', '0');
+VALUES ('501', '5', 'Admin/Student/RegManager', '注册学员管理', '1', '1', '', '', '1');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('502', '5', 'Admin/Student/Import', '导入学员账号', '1', '1', '', '', '1');
 
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('26', '22', 'Admin/Rule/index', '权限管理', '1', '1', '', '', '1');
+VALUES ('6', '1', 'Finance', '财务管理', '1', '1', '', 'fa fa-money', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('27', '22', 'Admin/Rule/Add', '添加权限', '1', '1', '', '', '0');
+VALUES ('601', '6', 'Admin/Finance/index', '交费查询', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('28', '22', 'Admin/Rule/Edit', '修改权限', '1', '1', '', '', '0');
+VALUES ('602', '6', 'Admin/Finance/OfflineConfirm', '离线交费确认', '1', '1', '', '', '1');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('603', '6', 'Admin/Finance/Stat', '财务统计', '1', '1', '', '', '1');
 
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('29', '22', 'Admin/Rule/Group', '角色管理', '1', '1', '', '', '1');
+VALUES ('7', '1', 'ActivationCode', '激活码管理', '1', '1', '', 'fa fa-barcode', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('30', '22', 'Admin/Rule/Addgroup', '添加角色', '1', '1', '', '', '0');
+VALUES ('700', '7', 'Admin/ActivationCode/index', '查询激活码', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('31', '22', 'Admin/Rule/Editgroup', '修改角色', '1', '1', '', '', '0');
+VALUES ('701', '7', 'Admin/ActivationCode/Revoke', '撤销激活码', '1', '1', '', '', '1');
+
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('36', '22', 'Admin/Rule/Grouprule', '角色权限', '1', '1', '', '', '0');
+VALUES ('8', '1', 'Progress', '学习情况', '1', '1', '', 'fa fa-line-chart', '1');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('800', '8', 'Admin/Progress/index', '学习情况查询', '1', '1', '', '', '1');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('801', '8', 'Admin/Progress/stat', '学习情况统计', '1', '1', '', '', '1');
+
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('9', '1', 'User', '用户权限管理', '1', '1', '', 'fa fa-user-md', '1');
+
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('900', '9', 'Admin/User/index', '后台用户管理', '1', '1', '', '', '1');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('902', '9', 'Admin/User/Add', '添加用户', '1', '1', '', '', '0');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('903', '9', 'Admin/User/Edit', '修改用户', '1', '1', '', '', '0');
+
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('910', '9', 'Admin/Rule/index', '权限管理', '1', '1', '', '', '1');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('911', '9', 'Admin/Rule/Add', '添加权限', '1', '1', '', '', '0');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('912', '9', 'Admin/Rule/Edit', '修改权限', '1', '1', '', '', '0');
+
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('920', '9', 'Admin/Rule/Group', '角色管理', '1', '1', '', '', '1');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('922', '9', 'Admin/Rule/Addgroup', '添加角色', '1', '1', '', '', '0');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('923', '9', 'Admin/Rule/Editgroup', '修改角色', '1', '1', '', '', '0');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('924', '9', 'Admin/Rule/Grouprule', '角色权限', '1', '1', '', '', '0');
 
 -- ----------------------------
 -- Table structure for lms_auth_group_access

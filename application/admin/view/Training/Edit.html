@@ -15,14 +15,14 @@
         <div class="tab-content">
             <div id="lft-tab-1" class="tab-pane fade active in">
                 <div class="form-group">
-                    <label for="Name" class="col-sm-2 control-label">培训计划名称：</label>
+                    <label for="TrainingName" class="col-sm-2 control-label">培训计划名称：</label>
                     <div class="col-sm-3">
-                        <input type="text" id="Name" name="Name" class="form-control" placeholder="请输入培训计划名称">
+                        <input type="text" id="TrainingName" name="TrainingName" class="form-control" placeholder="请输入培训计划名称"  onblur="validField()">
                     </div>
                     <label for="TrainingCode" class="col-sm-2 control-label">培训计划编号：</label>
                     <div class="col-sm-3">
-                        <input type="text" id="TrainingCode" name="TrainingCode" class="form-control"
-                               placeholder="培训计划编号">
+                        <input type="text" id="TrainingCode" name="TrainingCode" class="form-control" readonly
+                               placeholder="培训计划编号"  onblur="validField()">
                     </div>
                 </div>
                 <div class="form-group">
@@ -74,6 +74,23 @@
                 </div>
             </div>
             <div id="lft-tab-2" class="tab-pane fade">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="courseTable">
+                        <thead>
+                        <tr>
+                            <th class="text-center"></th>
+                            <th>课程代码</th>
+                            <th>课程名称</th>
+                            <th>课程类别</th>
+                            <th>选课费</th>
+                            <th>SCORM课程</th>
+                            <th>必选课</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -87,5 +104,148 @@
         $('#TrainingTime').daterangepicker(options, function (start, end, label) {
             console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
         });
+
+        getCourse();
     });
+
+    function validField() {
+        $('#addform').data('bootstrapValidator').validate("TrainingName");
+        $('#addform').data('bootstrapValidator').validate("TrainingCode");
+    }
+
+    $("#addform").bootstrapValidator({
+        message: 'This value is not valid',
+        //反馈图标
+        feedbackIcons: faIcon,
+        fields: {
+            TrainingName: {
+                message: '培训计划名称无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训计划名称不能为空'
+                    },
+                    threshold: 2,
+                    remote: {
+                        url: '/api/training/0/unique',//验证地址
+                        message: '培训计划名称已存在',//提示消息
+                        delay: 2000,
+                        type: 'POST'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 50,
+                        message: '培训计划名称长度必须在2到50之间'
+                    }
+                }
+            },
+            TrainingCode: {
+                message: '培训计划编号无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训计划编号不能为空'
+                    },
+                    threshold: 2,
+                    remote: {
+                        url: '/api/training/0/unique',//验证地址
+                        message: '培训计划编号已存在',//提示消息
+                        delay: 2000,
+                        type: 'POST'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 30,
+                        message: '培训计划编号长度必须在2到30之间'
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_]+$/,
+                        message: '培训计划编号只能由字母，数字，下划线组成'
+                    }
+                }
+            },
+            RegistrationTime: {
+                message: '报名起止时间无效',
+                validators: {
+                    notEmpty: {
+                        message: '报名起止时间不能为空'
+                    }
+                }
+            },
+            TrainingTime: {
+                message: '培训计划起止时间无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训计划起止时间不能为空'
+                    }
+                }
+            },
+            TrainingCost: {
+                message: '培训费无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训费不能为空'
+                    },
+                    between: {
+                        min: 1,
+                        max: 999,
+                        message: '培训费必须介于1和999之间'
+                    }
+                }
+            },
+            AllowNumberOfCourses: {
+                message: '允许选课数无效',
+                validators: {
+                    notEmpty: {
+                        message: '允许选课数不能为空'
+                    },
+                    between: {
+                        min: 0,
+                        max: 999,
+                        message: '允许选课数必须介于0和999之间'
+                    }
+                }
+            },
+            Notice: {
+                message: '培训须知无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训须知不能为空'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 500,
+                        message: '培训须知长度必须在2到500之间'
+                    }
+                }
+            }
+
+        }
+    });
+
+    /**
+     * 绑定课程
+     */
+    function getCourse() {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/course",
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                info.forEach(function (value, index, array) {
+                    var check = "<td><input type='checkbox' value='" + value.id + "'></td>"
+                    var ccode = "<td>" + value.coursecode + "</td>";
+                    var name = "<td>" + value.coursename + "</td>";
+                    var type = "<td>" + value.typeid + "</td>";
+                    var coursefee = "<td>" + value.coursefee + "</td>";
+                    var isscormcourse = "<td>" + statusFormatter(value.isscormcoursedesc, null) + "</td>";
+                    var isrequired = "<td></td>";
+                    $("#courseTable").children("tbody").append("<tr>" + check + ccode + name + type + coursefee + isscormcourse + isrequired + "</tr>");
+                });
+            }
+        });
+    }
+
 </script>

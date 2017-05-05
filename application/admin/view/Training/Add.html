@@ -15,14 +15,14 @@
         <div class="tab-content">
             <div id="lft-tab-1" class="tab-pane fade active in">
                 <div class="form-group">
-                    <label for="Name" class="col-sm-2 control-label">培训计划名称：</label>
+                    <label for="TrainingName" class="col-sm-2 control-label">培训计划名称：</label>
                     <div class="col-sm-3">
-                        <input type="text" id="Name" name="Name" class="form-control" placeholder="请输入培训计划名称">
+                        <input type="text" id="TrainingName" name="TrainingName" class="form-control" placeholder="请输入培训计划名称"  onblur="validField()">
                     </div>
                     <label for="TrainingCode" class="col-sm-2 control-label">培训计划编号：</label>
                     <div class="col-sm-3">
                         <input type="text" id="TrainingCode" name="TrainingCode" class="form-control"
-                               placeholder="培训计划编号">
+                               placeholder="培训计划编号"  onblur="validField()">
                     </div>
                 </div>
                 <div class="form-group">
@@ -99,13 +99,126 @@
 
     $(function () {
         $('#RegistrationTime').daterangepicker(options, function (start, end, label) {
-            console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+            //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
         });
         $('#TrainingTime').daterangepicker(options, function (start, end, label) {
-            console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+            //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
         });
 
         getCourse();
+    });
+
+    function validField() {
+        $('#addform').data('bootstrapValidator').validate("TrainingName");
+        $('#addform').data('bootstrapValidator').validate("TrainingCode");
+    }
+
+    $("#addform").bootstrapValidator({
+        message: 'This value is not valid',
+        //反馈图标
+        feedbackIcons: faIcon,
+        fields: {
+            TrainingName: {
+                message: '培训计划名称无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训计划名称不能为空'
+                    },
+                    threshold: 2,
+                    remote: {
+                        url: '/api/training/0/unique',//验证地址
+                        message: '培训计划名称已存在',//提示消息
+                        delay: 2000,
+                        type: 'POST'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 50,
+                        message: '培训计划名称长度必须在2到50之间'
+                    }
+                }
+            },
+            TrainingCode: {
+                message: '培训计划编号无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训计划编号不能为空'
+                    },
+                    threshold: 2,
+                    remote: {
+                        url: '/api/training/0/unique',//验证地址
+                        message: '培训计划编号已存在',//提示消息
+                        delay: 2000,
+                        type: 'POST'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 30,
+                        message: '培训计划编号长度必须在2到30之间'
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_]+$/,
+                        message: '培训计划编号只能由字母，数字，下划线组成'
+                    }
+                }
+            },
+            RegistrationTime: {
+                message: '报名起止时间无效',
+                validators: {
+                    notEmpty: {
+                        message: '报名起止时间不能为空'
+                    }
+                }
+            },
+            TrainingTime: {
+                message: '培训计划起止时间无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训计划起止时间不能为空'
+                    }
+                }
+            },
+            TrainingCost: {
+                message: '培训费无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训费不能为空'
+                    },
+                    between: {
+                        min: 1,
+                        max: 999,
+                        message: '培训费必须介于1和999之间'
+                    }
+                }
+            },
+            AllowNumberOfCourses: {
+                message: '允许选课数无效',
+                validators: {
+                    notEmpty: {
+                        message: '允许选课数不能为空'
+                    },
+                    between: {
+                        min: 0,
+                        max: 999,
+                        message: '允许选课数必须介于0和999之间'
+                    }
+                }
+            },
+            Notice: {
+                message: '培训须知无效',
+                validators: {
+                    notEmpty: {
+                        message: '培训须知不能为空'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 500,
+                        message: '培训须知长度必须在2到500之间'
+                    }
+                }
+            }
+
+        }
     });
 
     /**
