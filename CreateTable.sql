@@ -36,7 +36,7 @@ CREATE TABLE `lms_auth_group` (
   COMMENT = '用户组表';
 
 INSERT INTO `lms_auth_group` (`id`, `title`, `status`, `rules`)
-VALUES ('1', '超级管理员', '1', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33');
+VALUES ('1', '管理员', '1', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33');
 
 -- ----------------------------
 -- Table structure for lms_auth_rule
@@ -92,6 +92,11 @@ VALUES ('6', '1', 'Course', '课程管理', '1', '1', '', 'fa fa-book', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('7', '6', 'Admin/Course/index', '课程管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('34', '6', 'Admin/Course/Add', '添加课程', '1', '1', '', '', '0');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('35', '6', 'Admin/Course/Edit', '修改课程', '1', '1', '', '', '0');
+
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('8', '1', 'Student', '学员管理', '1', '1', '', 'fa fa-slideshare', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('9', '8', 'Admin/Student/index', '学员信息管理', '1', '1', '', '', '1');
@@ -141,7 +146,9 @@ VALUES ('29', '22', 'Admin/Rule/Group', '角色管理', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('30', '22', 'Admin/Rule/Addgroup', '添加角色', '1', '1', '', '', '0');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('31', '22', 'Admin/Rule/Editgrou', '修改角色', '1', '1', '', '', '0');
+VALUES ('31', '22', 'Admin/Rule/Editgroup', '修改角色', '1', '1', '', '', '0');
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('36', '22', 'Admin/Rule/Grouprule', '角色权限', '1', '1', '', '', '0');
 
 -- ----------------------------
 -- Table structure for lms_auth_group_access
@@ -163,7 +170,7 @@ CREATE TABLE `lms_auth_group_access` (
 -- ----------------------------
 -- Records of admin_auth_group_access
 -- ----------------------------
-INSERT INTO `lms_auth_group_access` (`uid` ,`group_id`) VALUES ('1', '1');
+-- INSERT INTO `lms_auth_group_access` (`uid` ,`group_id`) VALUES ('1', '1');
 
 -- ----------------------------
 -- Table structure for lms_user
