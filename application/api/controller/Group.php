@@ -88,6 +88,7 @@ class Group extends base
             $userdata = [
                 'title' => $data['title'],
                 'rules' => '',
+                'status' => 1,
             ];
 
             //insert

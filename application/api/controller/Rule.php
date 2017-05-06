@@ -93,6 +93,7 @@ class Rule extends base
                 'title' => $data['title'],
                 'icon' => $data['icon'],
                 'isshow' => $isshow,
+                'status' => 1,
             ];
 
             $result = Db::name('AuthRule')->insert($userdata);

@@ -10,7 +10,7 @@ CREATE TABLE `lms_system` (
   memo           TEXT COMMENT '备注',
   addtime        DATETIME             NOT NULL
   COMMENT '添加时间',
-  status         INT                  NOT NULL DEFAULT 0
+  status         INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -220,7 +220,7 @@ CREATE TABLE `lms_user` (
   avator           VARCHAR(100)         NOT NULL,
   addtime          DATETIME             NOT NULL
   COMMENT '添加时间',
-  status           INT                  NOT NULL DEFAULT 0
+  status           INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -232,7 +232,7 @@ INSERT INTO `lms_user` (`uid`, `loginname`, `pwd`, `realname`, `systemid`, `user
 VALUES
   ('1D4AB851-0D0D-1CC4-BC8D-F908C750F53A', 'admin', 'a2b44a387185a1263de5a8806655419c', 'admin', '0', '0',
                                            '2017-04-01 00:00:00', '0', '2017-04-01 00:00:00',
-                                           '2017-04-01 00:00:00', '0', '1.png', '2017-04-01 00:00:00', '0');
+                                           '2017-04-01 00:00:00', '0', '1.png', '2017-04-01 00:00:00', '1');
 
 
 /*==============================================================*/
@@ -280,7 +280,7 @@ CREATE TABLE lms_training
   periodnumbercode      VARCHAR(20)          NOT NULL,
   addtime               DATETIME             NOT NULL
   COMMENT '添加时间',
-  status                INT                  NOT NULL DEFAULT 0
+  status                INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -326,7 +326,7 @@ CREATE TABLE lms_trainingcourse
   COMMENT '是否必修课程（1-是，0-否）',
   addtime    DATETIME NOT NULL
   COMMENT '添加时间',
-  status     INT      NOT NULL DEFAULT 0
+  status     INT      NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (systemid, trainingid, scormid)
 )
@@ -371,7 +371,7 @@ CREATE TABLE lms_course
   COMMENT '是否热门：0，否；1，是',
   addtime           DATETIME             NOT NULL
   COMMENT '添加时间',
-  status            INT                  NOT NULL DEFAULT 0
+  status            INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -391,7 +391,7 @@ CREATE TABLE lms_coursetype
   COMMENT '类别名称',
   addtime DATETIME    NOT NULL
   COMMENT '添加时间',
-  status  INT         NOT NULL DEFAULT 0
+  status  INT         NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -443,7 +443,7 @@ CREATE TABLE lms_coursebulletin
   COMMENT '显示状态：0，不显示；1，显示；',
   `addtime`   DATETIME     NOT NULL
   COMMENT '添加时间',
-  `status`    INT          NOT NULL DEFAULT 0
+  `status`    INT          NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -472,7 +472,7 @@ CREATE TABLE lms_courseresource
   COMMENT '是否是URL：0，不是；1，是',
   addtime  DATETIME     NOT NULL
   COMMENT '添加时间',
-  status   INT          NOT NULL DEFAULT 0
+  status   INT          NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -494,7 +494,7 @@ CREATE TABLE lms_courseevaluator
   lastmodifytime DATETIME      NOT NULL,
   addtime        DATETIME      NOT NULL
   COMMENT '添加时间',
-  status         INT           NOT NULL DEFAULT 0
+  status         INT           NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -524,7 +524,7 @@ CREATE TABLE lms_topic
   COMMENT '是否精华：0，否；1，是',
   addtime  DATETIME      NOT NULL
   COMMENT '添加时间',
-  status   INT           NOT NULL DEFAULT 0
+  status   INT           NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -555,7 +555,7 @@ CREATE TABLE lms_reply
   COMMENT '是否是主贴：0，不是；1，是',
   addtime  DATETIME      NOT NULL
   COMMENT '添加时间',
-  status   INT           NOT NULL DEFAULT 0
+  status   INT           NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -578,7 +578,7 @@ CREATE TABLE lms_studentbulletinreadinfo
   readflag  INT COMMENT '阅读标记：0，未读；1，已读；',
   addtime   DATETIME NOT NULL
   COMMENT '添加时间',
-  status    INT      NOT NULL DEFAULT 0
+  status    INT      NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id, studentid, courseid)
 )
@@ -601,7 +601,7 @@ CREATE TABLE lms_note
   content   TEXT         NOT NULL,
   addtime   DATETIME     NOT NULL
   COMMENT '添加时间',
-  status    INT          NOT NULL DEFAULT 0
+  status    INT          NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -621,7 +621,7 @@ CREATE TABLE lms_notefavorite
   COMMENT '学生ID',
   addtime   DATETIME NOT NULL
   COMMENT '添加时间',
-  status    INT      NOT NULL DEFAULT 0
+  status    INT      NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -646,7 +646,7 @@ CREATE TABLE lms_studentcourseevaluate
   COMMENT '评价内容',
   addtime   DATETIME      NOT NULL
   COMMENT '添加时间',
-  status    INT           NOT NULL DEFAULT 0
+  status    INT           NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -686,7 +686,7 @@ CREATE TABLE lms_studentbasicinfo
   COMMENT '证件号码',
   addtime   DATETIME             NOT NULL
   COMMENT '添加时间',
-  status    INT                  NOT NULL DEFAULT 0
+  status    INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -724,7 +724,7 @@ CREATE TABLE lms_teacher
   COMMENT '头像',
   addtime      DATETIME     NOT NULL
   COMMENT '添加时间',
-  status       INT          NOT NULL DEFAULT 0
+  status       INT          NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -744,7 +744,7 @@ CREATE TABLE lms_teachercourse
   COMMENT '课程ID',
   addtime DATETIME NOT NULL
   COMMENT '添加时间',
-  status  INT      NOT NULL DEFAULT 0
+  status  INT      NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (userid, scormid)
 )
