@@ -25,7 +25,7 @@ class Group extends base
     public function index()
     {
         //get data
-        $map['status'] = ['<>', '0'];
+        $map['status'] = ['<>', '-1'];
         $data = Db::name('AuthGroup')->where($map)->select();
 
         //get user group relation
@@ -33,8 +33,6 @@ class Group extends base
             ->field('group_id,count(uid) AS cnt')
             ->group('group_id')
             ->select();
-
-        //dump($userGroup);
 
         //文字转换
         foreach ($data as $k => $v) {
@@ -60,7 +58,9 @@ class Group extends base
     public function read($id)
     {
         //find data
-        $data = Db::name('AuthGroup')->where('id', $id)->find();
+        $map['status'] = ['<>', '-1'];
+        $map['id'] = ['=', $id];
+        $data = Db::name('AuthGroup')->where($map)->find();
 
         return json($data);
     }
@@ -115,7 +115,6 @@ class Group extends base
         if (request()->isPut()) {
             $data = input('put.');
             $data['id'] = $id;
-            //dump($data);
 
             //validate
             $result = $this->validate($data, 'Group.edit');
@@ -128,7 +127,6 @@ class Group extends base
             Db::name('AuthGroup')
                 ->where('id', $id)
                 ->update(['title' => $data['title']]);
-
 
             return json(base::getResult(0, "", null));
         } else
@@ -242,7 +240,7 @@ class Group extends base
         if (empty($data)) {
             return array();
         }
-        // dump($data);
+
         $arr = array();
         foreach ($data as $v) {
             if ($v["pid"] == $pid) {
