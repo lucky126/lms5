@@ -67,6 +67,7 @@ class training extends base
                 'memeber' => '',
                 'notice' => $data['notice'],
                 'addtime' => datetime(),
+                'status' => 1,
             ];
             //insert data
             $result = Db::name('training')->insert($userdata);

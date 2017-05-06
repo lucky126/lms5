@@ -67,6 +67,7 @@ class System extends base
                 'systemname' => $data['systemname'],
                 'memo' => '',
                 'addtime' => datetime(),
+                'status' => 1,
             ];
 
             //insert

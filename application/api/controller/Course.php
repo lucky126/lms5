@@ -81,6 +81,7 @@ class Course extends base
                 'coursedescription' => $data['coursedescription'],
                 'isrecommand' => 0,
                 'addtime' => datetime(),
+                'status' => 1,
             ];
             //insert data
             $result = Db::name('Course')->insert($userdata);

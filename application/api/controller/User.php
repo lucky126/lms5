@@ -57,6 +57,7 @@ class User extends base
                 'registiontime' => datetime(),
                 'addtime' => datetime(),
                 'systemid' => 1,
+                'status' => 1,
             ];
             //insert data
             $result = Db::name('user')->insert($userdata);
