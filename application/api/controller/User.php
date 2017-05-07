@@ -165,7 +165,7 @@ class User extends base
             );
 
             $data = input('post.');
-            $map['loginname'] = $data['LoginName'];
+            $map['loginname'] = $data['loginname'];
 
             if (Db::name('user')->where($map)->find() != null) {
                 return json($result);

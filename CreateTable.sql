@@ -679,7 +679,6 @@ CREATE TABLE lms_studentbasicinfo
   COMMENT '手机',
   email     VARCHAR(50)          NOT NULL
   COMMENT 'Email',
-  birthdate DATETIME COMMENT '生日',
   idtype    SMALLINT             NOT NULL
   COMMENT '证件类型：1，身份证；2，护照；3：其他；',
   idcode    VARCHAR(30)          NOT NULL

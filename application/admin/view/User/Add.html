@@ -1,12 +1,12 @@
 <form method="post" action="" class="form-horizontal" id="addform">
     <div class="form-group">
-        <label for="LoginName" class="col-sm-2 control-label">登录名：</label>
+        <label for="loginname" class="col-sm-2 control-label">登录名：</label>
         <div class="col-sm-6">
             <div class="input-group">
                 <span class="input-group-addon">
                     <i class="ion-at"></i>
                 </span>
-                <input type="text" id="LoginName" name="LoginName" class="form-control" placeholder="请输入登录名"
+                <input type="text" id="loginname" name="loginname" class="form-control" placeholder="请输入登录名"
                        onblur="validField()">
             </div>
         </div>
@@ -67,7 +67,7 @@
     }
 
     function validField() {
-        $('#addform').data('bootstrapValidator').validate("LoginName");
+        $('#addform').data('bootstrapValidator').validate("loginname");
     }
 
     $("#addform").bootstrapValidator({
