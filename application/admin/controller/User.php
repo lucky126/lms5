@@ -39,6 +39,21 @@ class User extends Basic
         return $this->fetch();
     }
 
+    public function profile()
+    {
+        return $this->fetch();
+    }
+
+    public function message()
+    {
+        return $this->fetch();
+    }
+
+    public function setting()
+    {
+        return $this->fetch();
+    }
+
     /**
      * 获得用户等级html显示内容
      * @return string
