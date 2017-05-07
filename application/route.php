@@ -10,6 +10,10 @@ use think\Route;
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
+
+Route::rule('student/login', 'Student/Index/Login');
+Route::rule('student/register', 'Student/Index/Register');
+
 Route::rule('admin/login', 'admin/Common/login');
 Route::rule('admin/main', 'admin/Index/index');
 Route::rule('api/login', 'api/login/index', "POST");
