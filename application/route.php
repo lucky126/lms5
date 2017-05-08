@@ -28,6 +28,7 @@ Route::rule('api/user/:id/unique', 'api/User/Unique', "POST");
 Route::rule('api/system/:id/unique', 'api/System/Unique', "POST");
 Route::rule('api/course/:id/unique', 'api/Course/Unique', "POST");
 Route::rule('api/training/:id/unique', 'api/Training/Unique', "POST");
+Route::rule('api/register/:id/unique', 'api/Register/Unique', "POST");
 
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');
@@ -35,6 +36,7 @@ Route::resource('api/group', 'api/Group');
 Route::resource('api/system', 'api/System');
 Route::resource('api/course', 'api/Course');
 Route::resource('api/training', 'api/Training');
+Route::resource('api/register', 'api/Register');
 
 return [
     '__pattern__' => [

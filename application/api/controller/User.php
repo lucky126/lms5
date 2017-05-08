@@ -50,7 +50,7 @@ class User extends base
             //make user data
             $userdata = [
                 'uid' => getGuid(),
-                'loginname' => $data['LoginName'],
+                'loginname' => $data['loginname'],
                 'realname' => $data['RealName'],
                 'pwd' => getEncPassword($data['Password']),
                 'usertype' => $data['UserType'],

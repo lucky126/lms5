@@ -8,7 +8,6 @@
 
 namespace app\api\controller;
 
-use think\Controller;
 use think\exception\HttpResponseException;
 use think\Response;
 use think\Cookie;
@@ -17,25 +16,8 @@ use think\Cookie;
  * api控制器基类
  * @package app\api\controller
  */
-class base extends Controller
+class base extends common
 {
-    /**
-     *  定义返回值结构体
-     * @param $code
-     * @param $msg
-     * @param $data
-     * @return array
-     */
-    protected function getResult($code, $msg, $data)
-    {
-        $result = array(
-            'code' => $code,
-            'msg' => $msg,
-            'data' => $data
-        );
-
-        return $result;
-    }
 
     /**
      * 构造函数，用于判断是否有权限访问API

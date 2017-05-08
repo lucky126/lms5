@@ -219,7 +219,7 @@ class Group extends base
                 ->where('id', $id)
                 ->update(['rules' => $rule]);
 
-            if ($result <= 0) {
+            if ($result < 0) {
                 return json(base::getResult(-100, "", null));
             }
 
