@@ -85,7 +85,7 @@
             $.ajax({
                 cache: true,
                 type: "POST",
-                url: "/api/Login/",
+                url: "/api/student/Login/",
                 data: {
                     username: $("#loginname").val(),
                     password: $("#password").val()
@@ -96,7 +96,15 @@
                 },
                 success: function (data) {
                     if (data.code == 0) {
-                        location.href = "/admin/index";
+                        location.href = "/student/index";
+                    } else {
+                        $.niftyNoty({
+                            type: 'danger',
+                            icon: 'pli-cross icon-2x',
+                            message: data.msg,
+                            container: 'floating',
+                            timer: 5000
+                        });
                     }
                 }
             });

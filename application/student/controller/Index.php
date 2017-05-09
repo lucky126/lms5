@@ -1,17 +1,48 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: lucky
+ * Date: 2017/5/9
+ * Time: 15:08
+ */
 
 namespace app\student\controller;
 
-use think\Controller;
 
-class Index extends Controller
+class Index extends Basic
 {
-    public function Login()
+    /**
+     * 首页
+     * @return mixed
+     */
+    public function index()
     {
         return $this->fetch();
     }
 
-    public function Register()
+    /**
+     * 菜单
+     * @return mixed
+     */
+    public function menu()
+    {
+        return $this->fetch();
+    }
+
+    /**
+     * 顶部提示消息
+     * @return mixed
+     */
+    public function message()
+    {
+        return $this->fetch();
+    }
+
+    /**
+     * 顶部个人信息
+     * @return mixed
+     */
+    public function topinfo()
     {
         return $this->fetch();
     }

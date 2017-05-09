@@ -10,6 +10,7 @@ namespace app\student\controller;
 
 use think\Controller;
 use think\Cookie;
+use think\Request;
 
 /**
  * 学生端页面控制器基础类
@@ -39,5 +40,21 @@ class Basic extends Controller
         //get currrent url
         $url = $this::getUrl();
 
+    }
+
+    /**
+     * 得到当前访问路径
+     * @return string
+     */
+    protected function getUrl()
+    {
+        $request = Request::instance();
+        //get url
+        $m = $request->module();
+        $c = $request->controller();
+        $a = $request->action();
+        $rule_name = $m . '/' . $c . '/' . $a;
+
+        return $rule_name;
     }
 }

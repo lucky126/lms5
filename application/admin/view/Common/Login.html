@@ -97,6 +97,14 @@
                 success: function (data) {
                     if (data.code == 0) {
                         location.href = "/admin/index";
+                    } else {
+                        $.niftyNoty({
+                            type: 'danger',
+                            icon: 'pli-cross icon-2x',
+                            message: data.msg,
+                            container: 'floating',
+                            timer: 5000
+                        });
                     }
                 }
             });

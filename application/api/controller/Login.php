@@ -18,26 +18,56 @@ use think\Cookie;
 class Login extends Base
 {
     /**
-     * 登录
+     * 管理员登录
      * @param $username
      * @param $password
      * @return array|\think\response\Json
      */
     public function adminlogin($username, $password)
     {
+        $map['usertype'] = ['<>', 3];
+        return $this::login($username, $password, $map);
+    }
+
+    /**
+     * 学生登录
+     * @param $username
+     * @param $password
+     * @return \think\response\Json
+     */
+    public function studentlogin($username, $password)
+    {
+        $map['usertype'] = ['=', 3];
+        return $this::login($username, $password, $map);
+    }
+
+    /**
+     * 统一登录逻辑
+     * @param $username
+     * @param $password
+     * @param $map
+     * @return \think\response\Json
+     */
+    private function login($username, $password, $map)
+    {
         //check loginname
-        $data = Db::name('user')->where('loginname', $username)->find();
+        $map['loginname'] = ['=', $username];
+        $data = Db::name('user')->where($map)->find();
         //dump($data);
         if ($data == null) {
             return json(Base::getResult(-201, "用户不存在！", null));
         }
+        if ($data['status'] == 0) {
+            return json(Base::getResult(-202, "用户已被禁用！", null));
+        }
+
         //get id
         $uid = $data['uid'];
         $id = $data['id'];
 
         //check password
         if ($data['pwd'] <> getEncPassword($password)) {
-            return json(Base::getResult(-202, "密码错误！", null));
+            return json(Base::getResult(-203, "密码错误！", null));
         }
 
         //update logininfo

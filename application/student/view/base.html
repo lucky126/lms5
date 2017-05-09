@@ -40,7 +40,7 @@
 
 
     <!--Specify page [ SAMPLE ]-->
-    {load href="/static/css/themes/type-c/theme-ocean.min.css" /}
+    {load href="/static/css/themes/type-c/theme-well-red.min.css" /}
 
     {block name="js"}{/block}
     {load href="/static/js/main.js" /}
@@ -50,7 +50,7 @@
 <!--TIPS-->
 <!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
 <body class="  pace-done">
-<div id="container" class="aside-float aside-bright mainnav-lg effect navbar-fixed footer-fixed">
+<div id="container" class="navbar-fixed footer-fixed effect mainnav-lg aside-bright boxed-layout">
 
     <!--NAVBAR-->
     <!--===================================================-->
@@ -60,7 +60,7 @@
             <!--Brand logo & name-->
             <!--================================-->
             <div class="navbar-header">
-                <a href="/admin/index" class="navbar-brand">
+                <a href="/student/index" class="navbar-brand">
                     <img src="/static/img/logo.png" alt="Nifty Logo" class="brand-icon">
                     <div class="brand-title">
                         <span class="brand-text">企业培训平台</span>
@@ -139,15 +139,7 @@
 
                             <!--Profile Widget-->
                             <!--================================-->
-                            {include file="index/leftinfo" /}
-
                             {include file="index/menu" /}
-
-                            <!--Widget-->
-                            <!--================================-->
-                            {include file="index/serverstatus" /}
-                            <!--================================-->
-                            <!--End widget-->
 
                         </div>
                     </div>
@@ -202,7 +194,7 @@
         $.ajax({
             cache: true,
             type: "POST",
-            url: "/api/student/logout",
+            url: "/api/logout",
             error: function () {
                 alert("连接错误");
             },
@@ -210,6 +202,29 @@
                 if (data.code == 0) {
                     location.href = "/student/login";
                 }
+            }
+        });
+    }
+
+    /**
+     * get user info
+     */
+    $(function () {
+        getUserInfo();
+    });
+
+    function getUserInfo()
+    {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/user/{$uid}" ,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (data) {
+                var realname = data.realname;
+                $(".username").html(realname);
             }
         });
     }

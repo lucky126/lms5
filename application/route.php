@@ -11,14 +11,16 @@ use think\Route;
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-Route::rule('student/login', 'Student/Index/Login');
-Route::rule('student/register', 'Student/Index/Register');
-
+Route::rule('student/login', 'Student/Common/Login');
+Route::rule('student/register', 'Student/Common/Register');
 Route::rule('admin/login', 'admin/Common/login');
+
+Route::rule('student/main', 'Student/Index/index');
 Route::rule('admin/main', 'admin/Index/index');
 
 Route::rule('api/admin/login', 'api/login/adminlogin', "POST");
-Route::rule('api/admin/logout', 'api/login/logout', "POST");
+Route::rule('api/student/login', 'api/login/studentlogin', "POST");
+Route::rule('api/logout', 'api/login/logout', "POST");
 
 Route::rule('api/group/:id/rule', 'api/Group/GetRule', "GET");
 Route::rule('api/group/:id/rule', 'api/Group/SaveRule', "PUT");
