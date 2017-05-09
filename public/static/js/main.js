@@ -1,8 +1,6 @@
 /**
  * Created by lucky on 2017/4/27.
  */
-//设置bootstrap table为中文
-$('#table').bootstrapTable({locale: 'zh-CN'});
 
 //设置bootstrap validator FEEDBACK 样式
 var faIcon = {

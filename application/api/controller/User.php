@@ -18,7 +18,8 @@ class User extends Authority
     public function index()
     {
         //
-        $data = Db::name('user')->where("usertype", "<>", "0")->select();
+        $map['usertype'] = ['not in', '0,3'];
+        $data = Db::name('user')->where($map)->select();
 
         //文字转换
         foreach ($data as $k => $v) {
