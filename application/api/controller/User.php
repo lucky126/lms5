@@ -8,7 +8,7 @@ use think\Db;
  * 用户api控制器
  * @package app\api\controller
  */
-class User extends base
+class User extends Authority
 {
     /**
      * 显示用户资源列表
@@ -44,7 +44,7 @@ class User extends base
             $result = $this->validate($data, 'User');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             //make user data
@@ -72,7 +72,7 @@ class User extends base
             //insert user group info
             $result = Db::name("AuthGroupAccess")->insert($group);
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         }
     }
 
@@ -112,7 +112,7 @@ class User extends base
             $result = $this->validate($data, 'User.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             //update user info
@@ -127,7 +127,7 @@ class User extends base
                 ->where('uid', $user_id)
                 ->update(['group_id' => $data['UserGroup']]);
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         }
     }
 
@@ -147,7 +147,7 @@ class User extends base
 
         //delete user info
         Db::name('user')->where('uid', $id)->delete();
-        return json(base::getResult(0, "", null));
+        return json(Base::getResult(0, "", null));
     }
 
     /**

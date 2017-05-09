@@ -63,7 +63,7 @@ class User extends Basic
         $html = '';
 
         foreach (config('globalConst.UserTypelNameDesc') as $k => $v) {
-            if ($k > 1) {
+            if ($k > 0 && $k < 3) {
                 $html .= '<input type="radio" name="UserType" id="UserType" class="cbr cbr-blue" value="' . $k . '" > ' . $v . '  ';
             }
         }

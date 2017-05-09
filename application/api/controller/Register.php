@@ -14,7 +14,7 @@ use think\Db;
  * 学生注册api控制器
  * @package app\api\controller
  */
-class Register extends common
+class Register extends Base
 {
     /**
      * 保存新建的学生资源
@@ -32,7 +32,7 @@ class Register extends common
             $result = $this->validate($data, 'Student');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(common::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             //make user data
@@ -71,7 +71,7 @@ class Register extends common
 
             $result = Db::name("studentbasicinfo")->insert($student);
 
-            return json(common::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         }
     }
 

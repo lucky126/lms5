@@ -206,7 +206,7 @@ CREATE TABLE `lms_user` (
   systemid         INT                  NOT NULL DEFAULT 0
   COMMENT '系统ID',
   usertype         INT                  NOT NULL
-  COMMENT '用户类型：0超管（测试帐号），1系统管理员，2教务管理员，3教师，4学生',
+  COMMENT '用户类型：0超管，1管理员，2教师，3学生',
   registiontime    DATETIME             NOT NULL
   COMMENT '注册日期',
   logincount       INT                  NOT NULL DEFAULT 0

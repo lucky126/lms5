@@ -119,49 +119,10 @@ class Basic extends Controller
 
         $rule = DB::name('AuthRule')->where($map)->field('id,pid,name,title,icon')->select();
 
-        $data = $this::channelLevel($rule, $url);
+        $data = channelLevel($rule, $url);
 
         return $data;
     }
 
-    /**
-     *
-     * @param $data
-     * @param $path
-     * @param int $pid
-     * @param string $fieldPri
-     * @param string $fieldPid
-     * @param int $level
-     * @return array
-     */
-    static public function channelLevel($data, $path = '', $pid = 0, $fieldPri = 'id', $level = 1)
-    {
-        if (empty($data)) {
-            return array();
-        }
-        // dump($data);
-        $arr = array();
-        foreach ($data as $v) {
-            if ($v["pid"] == $pid) {
-                $selected = 0;
-                if (strtolower($path) == strtolower($v["name"])) {
-                    $selected = 1;
-                }
-                $arr[$v[$fieldPri]] = $v;
-                $arr[$v[$fieldPri]]['_level'] = $level;
-                $arr[$v[$fieldPri]]['_selected'] = $selected;
-                $arr[$v[$fieldPri]]["_data"] = self::channelLevel($data, $path, $v[$fieldPri], $fieldPri, $level + 1);
 
-                foreach ($arr[$v[$fieldPri]]["_data"] as $child) {
-                    if ($child["_selected"] == 1) {
-                        $arr[$v[$fieldPri]]['_selected'] = 1;
-                        break;
-                    }
-                }
-            }
-        }
-
-
-        return $arr;
-    }
 }

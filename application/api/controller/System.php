@@ -14,7 +14,7 @@ use think\Db;
  * 系统api控制器
  * @package app\api\controller
  */
-class System extends base
+class System extends Authority
 {
     /**
      * 显示系统资源列表
@@ -59,7 +59,7 @@ class System extends base
             $result = $this->validate($data, 'System');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             //make data
@@ -74,12 +74,12 @@ class System extends base
             $result = Db::name('System')->insert($userdata);
 
             if ($result <= 0) {
-                return json(base::getResult(-100, "", null));
+                return json(Base::getResult(-100, "", null));
             }
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         } else
-            return json(base::getResult(-100, "", null));
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -100,7 +100,7 @@ class System extends base
             $result = $this->validate($data, 'System.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             //update
@@ -109,9 +109,9 @@ class System extends base
                 ->update(['systemname' => $data['systemname']]);
 
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         } else
-            return json(base::getResult(-100, "", null));
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -124,7 +124,7 @@ class System extends base
     {
         //delete
         Db::name('System')->where('id', $id)->delete();
-        return json(base::getResult(0, "", null));
+        return json(Base::getResult(0, "", null));
     }
 
     /**
@@ -154,6 +154,6 @@ class System extends base
             return json($result);
         }
 
-        return json(base::getResult(-100, "", null));
+        return json(Base::getResult(-100, "", null));
     }
 }

@@ -15,7 +15,7 @@ use think\Db;
  * 权限api控制器
  * @package app\api\controller
  */
-class Rule extends base
+class Rule extends Authority
 {
     /**
      * 显示权限资源列表
@@ -84,7 +84,7 @@ class Rule extends base
 
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             $userdata = [
@@ -97,7 +97,7 @@ class Rule extends base
             ];
 
             $result = Db::name('AuthRule')->insert($userdata);
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         }
     }
 
@@ -126,7 +126,7 @@ class Rule extends base
 
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             $result = Db::name('AuthRule')
@@ -136,7 +136,7 @@ class Rule extends base
                     'icon' => $data['icon'],
                     'isshow' => $isshow]);
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         }
     }
 
@@ -150,7 +150,7 @@ class Rule extends base
     {
         //
         Db::name('AuthRule')->where('id', $id)->delete();
-        return json(base::getResult(0, "", null));
+        return json(Base::getResult(0, "", null));
     }
 
     /**

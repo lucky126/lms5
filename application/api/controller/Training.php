@@ -15,7 +15,7 @@ use think\Db;
  * 培训班api控制器
  * @package app\api\controller
  */
-class training extends base
+class training extends Authority
 {
     /**
      * 显示培训班资源列表

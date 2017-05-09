@@ -38,29 +38,6 @@ function getEncPassword($password)
 }
 
 /**
- * 判定是否
- */
-function getYesOrNo($yesOrNo)
-{
-    if ((int)$yesOrNo == 1) {
-        $str = "<span class=\"YesOrNo\">是</span>";
-    } else {
-        $str = "";
-    }
-
-    return $str;
-}
-
-/**
- * 格式化datetime
- * @return string
- */
-function datetimeShow($date)
-{
-    return date('Y年m月d日 H:i', strtotime(str_replace('/', '-', $date)));
-}
-
-/**
  * 生成datetime
  * @return string
  */
@@ -135,25 +112,6 @@ function getDiscussCount($cnt)
 }
 
 /**
- * 获得用户Gender html显示内容
- * @return string
- */
-function getGenderOption($gender)
-{
-    $html = '';
-
-    foreach (config('globalConst.GenderNamDesc') as $k => $v) {
-        $isCheck = '';
-        if ($k == $gender) {
-            $isCheck = 'checked';
-        }
-        $html .= '<input type="radio" name="Gender" id="Gender" class="cbr cbr-blue" value="' . $k . '" ' . $isCheck . '> ' . $v . '  ';
-    }
-
-    return $html;
-}
-
-/**
  * get token
  * @param $userid
  * @return string
@@ -185,4 +143,45 @@ function checkToken($token, $userid){
     $data->setId('4f1g23a12aa');
 //$token->getClaim('uid')
     return $token->validate($data); // false, because we created a token that cannot be used before of `time() + 60`
+}
+
+/**
+ *
+ * @param $data
+ * @param $path
+ * @param int $pid
+ * @param string $fieldPri
+ * @param string $fieldPid
+ * @param int $level
+ * @return array
+ */
+function channelLevel($data, $path = '', $pid = 0, $fieldPri = 'id', $level = 1)
+{
+    if (empty($data)) {
+        return array();
+    }
+    // dump($data);
+    $arr = array();
+    foreach ($data as $v) {
+        if ($v["pid"] == $pid) {
+            $selected = 0;
+            if (strtolower($path) == strtolower($v["name"])) {
+                $selected = 1;
+            }
+            $arr[$v[$fieldPri]] = $v;
+            $arr[$v[$fieldPri]]['_level'] = $level;
+            $arr[$v[$fieldPri]]['_selected'] = $selected;
+            $arr[$v[$fieldPri]]["_data"] = channelLevel($data, $path, $v[$fieldPri], $fieldPri, $level + 1);
+
+            foreach ($arr[$v[$fieldPri]]["_data"] as $child) {
+                if ($child["_selected"] == 1) {
+                    $arr[$v[$fieldPri]]['_selected'] = 1;
+                    break;
+                }
+            }
+        }
+    }
+
+
+    return $arr;
 }

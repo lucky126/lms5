@@ -15,8 +15,8 @@ return array(
     'SearchTypeNameDesc' => array( "标题和关键字", "问题描述", "最佳回复" ),
     // 模式文字表述
     'ModeNameDesc' => array( "所有人可见", "仅发帖人可见" ),
-    // 用户类型文字描述 0超管（测试帐号），1系统管理员，2教务管理员，3教师，4学生
-    'UserTypelNameDesc' => array( "超管","系统管理员", "教务管理员", "教师", "学生管理员" ),
+    // 用户类型文字描述 0超管，1管理员，2教师，3学生
+    'UserTypelNameDesc' => array( "超管","管理员", "教师", "学生" ),
     // 性别文字描述
     'GenderNamDesc' => array( "男", "女" ),
     // 性别文字描述

@@ -202,13 +202,13 @@
         $.ajax({
             cache: true,
             type: "POST",
-            url: "/api/logout",
+            url: "/api/student/logout",
             error: function () {
                 alert("连接错误");
             },
             success: function (data) {
                 if (data.code == 0) {
-                    location.href = "/admin/login";
+                    location.href = "/student/login";
                 }
             }
         });

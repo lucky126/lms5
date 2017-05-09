@@ -12,10 +12,10 @@ use think\Db;
 use think\Cookie;
 
 /**
- * 登录登出api控制器
+ * 登录api控制器
  * @package app\api\controller
  */
-class Login
+class Login extends Base
 {
     /**
      * 登录
@@ -23,17 +23,13 @@ class Login
      * @param $password
      * @return array|\think\response\Json
      */
-    public function index($username, $password)
+    public function adminlogin($username, $password)
     {
-        $returnModel = array("code" => 0, "message" => "", "data" => null);
-
         //check loginname
         $data = Db::name('user')->where('loginname', $username)->find();
         //dump($data);
         if ($data == null) {
-            $returnModel["code"] = "-201";
-            $returnModel["message"] = "用户不存在！";
-            return $returnModel;
+            return json(Base::getResult(-201, "用户不存在！", null));
         }
         //get id
         $uid = $data['uid'];
@@ -41,9 +37,7 @@ class Login
 
         //check password
         if ($data['pwd'] <> getEncPassword($password)) {
-            $returnModel["code"] = "-202";
-            $returnModel["message"] = "密码错误！";
-            return $returnModel;
+            return json(Base::getResult(-202, "密码错误！", null));
         }
 
         //update logininfo
@@ -62,7 +56,7 @@ class Login
         Cookie::set('id', $id, 3600);
 
         //return data
-        return json($returnModel);
+        return json(Base::getResult(0, "", null));
     }
 
     /**
@@ -71,11 +65,9 @@ class Login
      */
     public function logout()
     {
-        $returnModel = array("code" => 0, "message" => "", "data" => null);
-
         Cookie::delete('token');
         Cookie::delete('uid');
 
-        return json($returnModel);
+        return json(Base::getResult(0, "", null));
     }
 }

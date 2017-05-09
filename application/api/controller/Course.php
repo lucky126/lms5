@@ -15,7 +15,7 @@ use think\Db;
  * 课程api控制器
  * @package app\api\controller
  */
-class Course extends base
+class Course extends Authority
 {
     /**
      * 显示课程资源列表
@@ -53,7 +53,7 @@ class Course extends base
             $result = $this->validate($data, 'Course');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             $isopenselection = 0;
@@ -126,7 +126,7 @@ class Course extends base
             //insert course setting info
             $result = Db::name("coursesetting")->insert($coursesetting);
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         }
     }
 
@@ -165,7 +165,7 @@ class Course extends base
             $result = $this->validate($data, 'Course.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             $isopenselection = 0;
@@ -230,7 +230,7 @@ class Course extends base
                     'ishomework' => $ishomework
                 ]);
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         }
     }
 
@@ -246,7 +246,7 @@ class Course extends base
         Db::name("coursesetting")->where('id', $id)->delete();
         //delete course info
         Db::name('Course')->where('id', $id)->delete();
-        return json(base::getResult(0, "", null));
+        return json(Base::getResult(0, "", null));
     }
 
     /**

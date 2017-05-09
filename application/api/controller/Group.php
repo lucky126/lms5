@@ -15,7 +15,7 @@ use think\Db;
  * 角色api控制器
  * @package app\api\controller
  */
-class Group extends base
+class Group extends Authority
 {
     /**
      * 显示角色资源列表
@@ -81,7 +81,7 @@ class Group extends base
             $result = $this->validate($data, 'Group');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             //make data
@@ -95,12 +95,12 @@ class Group extends base
             $result = Db::name('AuthGroup')->insert($userdata);
 
             if ($result <= 0) {
-                return json(base::getResult(-100, "", null));
+                return json(Base::getResult(-100, "", null));
             }
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         } else
-            return json(base::getResult(-100, "", null));
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -120,7 +120,7 @@ class Group extends base
             $result = $this->validate($data, 'Group.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getResult(-101, $result, null));
+                return json(Base::getResult(-101, $result, null));
             }
 
             //update
@@ -128,9 +128,9 @@ class Group extends base
                 ->where('id', $id)
                 ->update(['title' => $data['title']]);
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         } else
-            return json(base::getResult(-100, "", null));
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -144,11 +144,11 @@ class Group extends base
         //get user group relation
         $userGroup = Db::name('AuthGroupAccess')->where('group_id', $id)->select();
         if (count($userGroup) > 0) {
-            return json(base::getResult(-201, "存在关联用户", null));
+            return json(Base::getResult(-201, "存在关联用户", null));
         }
         //delete
         Db::name('AuthGroup')->where('id', $id)->delete();
-        return json(base::getResult(0, "", null));
+        return json(Base::getResult(0, "", null));
     }
 
     /**
@@ -178,7 +178,7 @@ class Group extends base
             return json($result);
         }
 
-        return json(base::getResult(-100, "", null));
+        return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -220,12 +220,12 @@ class Group extends base
                 ->update(['rules' => $rule]);
 
             if ($result < 0) {
-                return json(base::getResult(-100, "", null));
+                return json(Base::getResult(-100, "", null));
             }
 
-            return json(base::getResult(0, "", null));
+            return json(Base::getResult(0, "", null));
         } else
-            return json(base::getResult(-100, "", null));
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
