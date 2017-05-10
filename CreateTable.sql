@@ -408,12 +408,18 @@ CREATE TABLE lms_coursesetting
 (
   id          INT NOT NULL AUTO_INCREMENT
   COMMENT '课程ID',
-  isbulletin  INT NOT NULL,
-  isresource  INT NOT NULL,
-  isqa        INT NOT NULL,
-  isevaluator INT NOT NULL,
-  istest      INT NOT NULL,
-  ishomework  INT NOT NULL,
+  isbulletin  INT NOT NULL
+  COMMENT '启用论坛',
+  isresource  INT NOT NULL
+  COMMENT '启用资源',
+  isqa        INT NOT NULL
+  COMMENT '启用问答',
+  isevaluator INT NOT NULL
+  COMMENT '启用评估',
+  istest      INT NOT NULL
+  COMMENT '启用测试',
+  ishomework  INT NOT NULL
+  COMMENT '启用作业',
   PRIMARY KEY (id)
 )
   ENGINE = MyISAM
@@ -597,8 +603,10 @@ CREATE TABLE lms_note
   COMMENT '学生UUID',
   courseid  INT          NOT NULL
   COMMENT '课程ID',
-  title     VARCHAR(200) NOT NULL,
-  content   TEXT         NOT NULL,
+  title     VARCHAR(200) NOT NULL
+  COMMENT '标题',
+  content   TEXT         NOT NULL
+  COMMENT '内容',
   addtime   DATETIME     NOT NULL
   COMMENT '添加时间',
   status    INT          NOT NULL DEFAULT 1
@@ -895,10 +903,10 @@ CREATE TABLE lms_scoinfo
 
 
 /*==============================================================*/
-/* Table: e_activatecode                                        */
+/* Table: lms_activatecode                                      */
 /*==============================================================*/
-DROP TABLE IF EXISTS e_activatecode;
-CREATE TABLE e_activatecode
+DROP TABLE IF EXISTS lms_activatecode;
+CREATE TABLE lms_activatecode
 (
   activatecode VARCHAR(50) NOT NULL
   COMMENT '激活码',
@@ -918,7 +926,92 @@ CREATE TABLE e_activatecode
   COMMENT = '激活码';
 
 
+/*==============================================================*/
+/* Table: lms_activatecodehistory                               */
+/*==============================================================*/
 
+DROP TABLE IF EXISTS lms_activatecodehistory;
+CREATE TABLE lms_activatecodehistory
+(
+  id            INT         NOT NULL AUTO_INCREMENT
+  COMMENT 'id',
+  activatecode  VARCHAR(50) NOT NULL
+  COMMENT '激活码',
+  activatedate  DATETIME COMMENT '激活日期',
+  adddate       DATETIME    NOT NULL
+  COMMENT '添加日期',
+  batchcode     VARCHAR(20) NOT NULL
+  COMMENT '批次代码',
+  systemid      INT         NOT NULL
+  COMMENT '系统ID',
+  studentid     VARCHAR(36) NOT NULL
+  COMMENT '学生UUID',
+  beifenshijian DATETIME    NOT NULL
+  COMMENT '备份时间',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '激活码历史';
+
+
+/*==============================================================*/
+/* Table: lms_activatecodelog                                   */
+/*==============================================================*/
+
+DROP TABLE IF EXISTS lms_activatecodelog;
+CREATE TABLE lms_activatecodelog
+(
+  id           INT           NOT NULL AUTO_INCREMENT
+  COMMENT 'id',
+  generatenum  INT           NOT NULL
+  COMMENT '生成数量',
+  adddate      DATETIME      NOT NULL
+  COMMENT '添加日期',
+  batchcode    VARCHAR(20)   NOT NULL
+  COMMENT '批次代码',
+  systemid     INT           NOT NULL
+  COMMENT '系统ID',
+  paymentmoney DECIMAL(9, 1) NOT NULL
+  COMMENT '交费金额',
+  userid       INT           NOT NULL
+  COMMENT '操作用户',
+  operatorip   VARCHAR(50)   NOT NULL
+  COMMENT '操作IP',
+  paymentid    INT           NOT NULL
+  COMMENT '缴费单据ID',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '激活码生成日志';
+
+
+/*==============================================================*/
+/* Table: lms_removelactivatecode                               */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_removelactivatecode;
+CREATE TABLE lms_removelactivatecode
+(
+  id           INT                   NOT NULL AUTO_INCREMENT,
+  studentid    INT                   NOT NULL
+  COMMENT '学生ID',
+  activatecode VARCHAR(50)           NOT NULL
+  COMMENT '激活码',
+  userid       INT                   NOT NULL
+  COMMENT '操作用户',
+  operatorip   VARCHAR(50) COMMENT '操作IP',
+  operatordate DATETIME              NOT NULL
+  COMMENT '操作日期',
+  systemid     INT                   NOT NULL
+  COMMENT '系统ID',
+  removereason NATIONAL VARCHAR(200) NOT NULL
+  COMMENT '撤销原因',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '取消激活码日志';
 
 
 
