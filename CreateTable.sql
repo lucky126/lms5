@@ -779,7 +779,7 @@ CREATE TABLE lms_teachercourse
   COMMENT '添加时间',
   status    INT      NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
-  PRIMARY KEY (userid, scormid)
+  PRIMARY KEY (teacherid, courseid)
 )
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8
