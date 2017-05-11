@@ -24,7 +24,7 @@ class Authority extends Base
      */
     public function _initialize()
     {
-        if (!Cookie::has('token')) {
+        if (!Cookie::has('admin') && !Cookie::has('student')) {
             //$this->result("error","401","","json");
             $result = $this->getResult(401, "invalid token", null);
             $response = Response::create($result, "json", 401)->header([]);

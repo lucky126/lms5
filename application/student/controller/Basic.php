@@ -30,7 +30,7 @@ class Basic extends Controller
         parent::_initialize();
 
         //check token
-        if (!Cookie::has('token')) {
+        if (!Cookie::has('student')) {
             $this->redirect("/student/login");
         }
         //get uid

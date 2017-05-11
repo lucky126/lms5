@@ -31,7 +31,7 @@ class Basic extends Controller
         parent::_initialize();
 
         //check token
-        if (!Cookie::has('token')) {
+        if (!Cookie::has('admin')) {
             $this->redirect("/admin/login");
         }
         //get uid
@@ -41,7 +41,8 @@ class Basic extends Controller
         //get currrent url
         $url = $this::getUrl();
         //check admin
-        $isAdmin = $this::checkAdmin();
+        $service = controller('api/UserService', 'Service');
+        $isAdmin = $service->checkAdmin(Cookie::get('id'));
         //check auth
         if (!$isAdmin && !$this::checkAuth($url)) {
             $this->error('您没有权限访问');
@@ -51,20 +52,7 @@ class Basic extends Controller
         $this->assign("menu", $menu);
     }
 
-    /**
-     * 判断是否是管理员
-     */
-    private function checkAdmin()
-    {
-        $user = DB::name('User')->where('id', Cookie::get('id'))->find();
 
-        $isAdmin = false;
-        if ($user['usertype'] == 0) {
-            $isAdmin = true;
-        }
-
-        return $isAdmin;
-    }
 
     /**
      * 得到当前访问路径
@@ -104,9 +92,6 @@ class Basic extends Controller
      */
     public function getMenu($url, $isAdmin)
     {
-        //$groupaccess = DB::name('AuthGroupAccess')->where('uid', Cookie::get('id'))->find();
-        //$group = DB::name('AuthGroup')->where('id', $groupaccess['group_id'])->find();
-
         $data = Db::view('AuthGroupAccess', 'uid')
             ->view('AuthGroup', 'rules', 'AuthGroup.id=AuthGroupAccess.group_id')
             ->where('uid', '=', Cookie::get('id'))

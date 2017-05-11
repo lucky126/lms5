@@ -3,7 +3,7 @@
 namespace app\api\service;
 
 use think\Db;
-use think\Cookie;
+
 /**
  * 用户服务类
  * @package app\apimodule\controller
@@ -17,15 +17,22 @@ class UserService extends BaseService
      * @param $map
      * @return array|\think\response\Json
      */
-    public function login($username, $password, $map)
+    public function login($username, $password, $isadmin)
     {
+        if ($isadmin) {
+            $map['usertype'] = ['<>', 3];
+        } else {
+            $map['usertype'] = ['=', 3];
+        }
+
         //check loginname
         $map['loginname'] = ['=', $username];
         $data = Db::name('user')->where($map)->find();
-        //dump($data);
+
         if ($data == null) {
             return json(BaseService::getResult(-201, "用户不存在！", null));
         }
+
         if ($data['status'] == 0) {
             return json(BaseService::getResult(-202, "用户已被禁用！", null));
         }
@@ -49,12 +56,31 @@ class UserService extends BaseService
 
         //get token
         $token = getToken($uid);
-        //set cookie
-        Cookie::set('token', $token, 3600);
-        Cookie::set('uid', $uid, 3600);
-        Cookie::set('id', $id, 3600);
+        //set userinfo
+        $userInfo =  array(
+            'uid' => $uid,
+            'id' => $id,
+            'token' => $token
+        );
 
-        //return data
-        return BaseService::getResult(0, "", null);
+        //return success data
+        return BaseService::getResult(0, "", $userInfo);
+    }
+
+    /**
+     * 判断是否是管理员
+     * @param $id
+     * @return bool
+     */
+    public function checkAdmin($id)
+    {
+        $user = DB::name('User')->where('id', $id)->find();
+
+        $isAdmin = false;
+        if ($user['usertype'] == 0) {
+            $isAdmin = true;
+        }
+
+        return $isAdmin;
     }
 }

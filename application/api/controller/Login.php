@@ -25,10 +25,14 @@ class Login extends Base
      */
     public function adminlogin($username, $password)
     {
-        $map['usertype'] = ['<>', 3];
         $service = controller('UserService', 'Service');
-        $result = $service->login($username, $password, $map);
-        return json($result);
+        $result = $service->login($username, $password, true);
+        $userInfo = $result['data'];
+
+        Cookie::set('admin', $userInfo['token'], 3600);
+        Cookie::set('id', $userInfo['id'], 3600);
+        Cookie::set('uid', $userInfo['uid'], 3600);
+        return json(Base::getResult($result['code'], $result['msg'], null));
     }
 
     /**
@@ -39,26 +43,34 @@ class Login extends Base
      */
     public function studentlogin($username, $password)
     {
-        $map['usertype'] = ['=', 3];
         $service = controller('UserService', 'Service');
-        $result = $service->login($username, $password, $map);
-        return json($result);
+        $result = $service->login($username, $password, false);
+        $userInfo = $result['data'];
+
+        Cookie::set('student', $userInfo['token'], 3600);
+        Cookie::set('id', $userInfo['id'], 3600);
+        Cookie::set('uid', $userInfo['uid'], 3600);
+        return json(Base::getResult($result['code'], $result['msg'], null));
     }
 
     /**
+     * 管理员登出
      * @return mixed
      */
     public function adminlogout()
     {
-        return logout();
+        Cookie::delete('admin');
+        return $this::logout();
     }
 
     /**
+     * 学生登出
      * @return mixed
      */
     public function studentlogout()
     {
-        return logout();
+        Cookie::delete('student');
+        return $this::logout();
     }
 
     /**
@@ -67,9 +79,6 @@ class Login extends Base
      */
     private function logout()
     {
-        Cookie::delete('token');
-        Cookie::delete('uid');
-
         return json(Base::getResult(0, "", null));
     }
 }
