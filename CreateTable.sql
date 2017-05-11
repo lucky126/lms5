@@ -3,14 +3,14 @@
 -- ----------------------------
 DROP TABLE IF EXISTS `lms_system`;
 CREATE TABLE `lms_system` (
-  id             INT                  NOT NULL AUTO_INCREMENT
+  id         INT                  NOT NULL AUTO_INCREMENT
   COMMENT '系统ID',
-  systemname     NATIONAL VARCHAR(50) NOT NULL
+  systemname NATIONAL VARCHAR(50) NOT NULL
   COMMENT '系统名称',
-  memo           TEXT COMMENT '备注',
-  addtime        DATETIME             NOT NULL
+  memo       TEXT COMMENT '备注',
+  addtime    DATETIME             NOT NULL
   COMMENT '添加时间',
-  status         INT                  NOT NULL DEFAULT 1
+  status     INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
 )
@@ -194,9 +194,9 @@ CREATE TABLE `lms_auth_group_access` (
 -- ----------------------------
 DROP TABLE IF EXISTS `lms_user`;
 CREATE TABLE `lms_user` (
-  `id`        INT(11) UNSIGNED    NOT NULL AUTO_INCREMENT,
-  uid               CHAR(36)             NOT NULL
-  COMMENT '用户ID',
+  `id`             INT(11) UNSIGNED     NOT NULL AUTO_INCREMENT,
+  uid              CHAR(36)             NOT NULL
+  COMMENT '用户UUID',
   loginname        NATIONAL VARCHAR(50) NOT NULL
   COMMENT '用户名',
   pwd              VARCHAR(50)          NOT NULL
@@ -273,7 +273,7 @@ CREATE TABLE lms_training
   COMMENT '培训对象',
   notice                TEXT                 NOT NULL
   COMMENT '培训须知',
-  isspublishresult       INT                  NOT NULL DEFAULT 0
+  isspublishresult      INT                  NOT NULL DEFAULT 0
   COMMENT '是否发布成绩',
   minpassresult         DECIMAL(4, 1)        NOT NULL DEFAULT 60
   COMMENT '最小通过成绩',
@@ -408,12 +408,18 @@ CREATE TABLE lms_coursesetting
 (
   id          INT NOT NULL AUTO_INCREMENT
   COMMENT '课程ID',
-  isbulletin  INT NOT NULL,
-  isresource  INT NOT NULL,
-  isqa        INT NOT NULL,
-  isevaluator INT NOT NULL,
-  istest      INT NOT NULL,
-  ishomework  INT NOT NULL,
+  isbulletin  INT NOT NULL
+  COMMENT '启用论坛',
+  isresource  INT NOT NULL
+  COMMENT '启用资源',
+  isqa        INT NOT NULL
+  COMMENT '启用问答',
+  isevaluator INT NOT NULL
+  COMMENT '启用评估',
+  istest      INT NOT NULL
+  COMMENT '启用测试',
+  ishomework  INT NOT NULL
+  COMMENT '启用作业',
   PRIMARY KEY (id)
 )
   ENGINE = MyISAM
@@ -515,7 +521,7 @@ CREATE TABLE lms_topic
   title    VARCHAR(200)  NOT NULL
   COMMENT '标题',
   userid   CHAR(36)      NOT NULL
-  COMMENT '用户ID',
+  COMMENT '用户UUID',
   postip   VARBINARY(50) NOT NULL
   COMMENT '发帖IP',
   istop    INT           NOT NULL DEFAULT 0
@@ -548,7 +554,7 @@ CREATE TABLE lms_reply
   content  TEXT          NOT NULL
   COMMENT '内容',
   userid   CHAR(36)      NOT NULL
-  COMMENT '用户ID',
+  COMMENT '用户UUID',
   postip   VARBINARY(50) NOT NULL
   COMMENT '发帖IP',
   istopic  INT           NOT NULL DEFAULT 0
@@ -572,7 +578,7 @@ CREATE TABLE lms_studentbulletinreadinfo
   id        INT      NOT NULL AUTO_INCREMENT
   COMMENT '公告ID',
   studentid CHAR(36) NOT NULL
-  COMMENT '学生ID',
+  COMMENT '学生UUID',
   courseid  INT      NOT NULL
   COMMENT '课程ID',
   readflag  INT COMMENT '阅读标记：0，未读；1，已读；',
@@ -594,11 +600,13 @@ CREATE TABLE lms_note
 (
   id        INT          NOT NULL AUTO_INCREMENT,
   studentid CHAR(36)     NOT NULL
-  COMMENT '学生ID',
+  COMMENT '学生UUID',
   courseid  INT          NOT NULL
   COMMENT '课程ID',
-  title     VARCHAR(200) NOT NULL,
-  content   TEXT         NOT NULL,
+  title     VARCHAR(200) NOT NULL
+  COMMENT '标题',
+  content   TEXT         NOT NULL
+  COMMENT '内容',
   addtime   DATETIME     NOT NULL
   COMMENT '添加时间',
   status    INT          NOT NULL DEFAULT 1
@@ -618,7 +626,7 @@ CREATE TABLE lms_notefavorite
   id        INT      NOT NULL AUTO_INCREMENT,
   noteid    INT      NOT NULL,
   studentid CHAR(36) NOT NULL
-  COMMENT '学生ID',
+  COMMENT '学生UUID',
   addtime   DATETIME NOT NULL
   COMMENT '添加时间',
   status    INT      NOT NULL DEFAULT 1
@@ -637,7 +645,7 @@ CREATE TABLE lms_studentcourseevaluate
 (
   id        INT           NOT NULL AUTO_INCREMENT,
   studentid CHAR(36)      NOT NULL
-  COMMENT '学生ID',
+  COMMENT '学生UUID',
   courseid  INT           NOT NULL
   COMMENT '课程ID',
   score     DECIMAL(3, 1) NOT NULL
@@ -663,7 +671,7 @@ CREATE TABLE lms_studentbasicinfo
 (
   id        INT                  NOT NULL AUTO_INCREMENT
   COMMENT '学生ID',
-  uid       CHAR(36)             NOT NULL
+  studentid CHAR(36)             NOT NULL
   COMMENT '学生UUID',
   userid    CHAR(36)             NOT NULL
   COMMENT '用户ID',
@@ -694,6 +702,32 @@ CREATE TABLE lms_studentbasicinfo
   COMMENT = '学员基本信息';
 
 /*==============================================================*/
+/* Table: lms_studentextinfo                                    */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_studentextinfo;
+CREATE TABLE lms_studentextinfo
+(
+  id           CHAR(36)              NOT NULL
+  COMMENT '学生UUID',
+  degree       NATIONAL VARCHAR(20)  NOT NULL
+  COMMENT '学历',
+  company      NATIONAL VARCHAR(100) NOT NULL
+  COMMENT '工作单位',
+  address      NATIONAL VARCHAR(100) NOT NULL
+  COMMENT '家庭地址',
+  postcode     VARCHAR(10)           NOT NULL
+  COMMENT '邮政编码',
+  provincecode VARCHAR(10)           NOT NULL
+  COMMENT '省份',
+  citycode     VARCHAR(10)           NOT NULL,
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '学员扩展信息';
+
+
+/*==============================================================*/
 /* Table: lms_teacher                                           */
 /*==============================================================*/
 DROP TABLE IF EXISTS `lms_teacher`;
@@ -701,10 +735,10 @@ CREATE TABLE lms_teacher
 (
   id           INT          NOT NULL AUTO_INCREMENT
   COMMENT '教师ID',
-  uid          CHAR(36)     NOT NULL
+  teacherid    CHAR(36)     NOT NULL
   COMMENT '教师UUID',
   userid       CHAR(36)     NOT NULL
-  COMMENT '用户ID',
+  COMMENT '用户UUID',
   name         VARCHAR(50)  NOT NULL
   COMMENT '教师姓名',
   position     VARCHAR(50)  NOT NULL
@@ -737,13 +771,13 @@ CREATE TABLE lms_teacher
 DROP TABLE IF EXISTS `lms_teachercourse`;
 CREATE TABLE lms_teachercourse
 (
-  userid  CHAR(36) NOT NULL
-  COMMENT '用户ID',
-  scormid INT      NOT NULL
+  teacherid CHAR(36) NOT NULL
+  COMMENT '教师UUID',
+  courseid  INT      NOT NULL
   COMMENT '课程ID',
-  addtime DATETIME NOT NULL
+  addtime   DATETIME NOT NULL
   COMMENT '添加时间',
-  status  INT      NOT NULL DEFAULT 1
+  status    INT      NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (userid, scormid)
 )
@@ -752,8 +786,232 @@ CREATE TABLE lms_teachercourse
   COMMENT = '教师课程关系';
 
 
+/*==============================================================*/
+/* Table: lms_stuenttraning                                     */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_stuenttraning;
+CREATE TABLE lms_stuenttraning
+(
+  trainingid       INT           NOT NULL
+  COMMENT '培训班ID',
+  systemid         INT           NOT NULL
+  COMMENT '系统ID',
+  studentid        CHAR(36)      NOT NULL
+  COMMENT '学生UUID',
+  signintime       DATETIME      NOT NULL
+  COMMENT '报名时间',
+  totalscore       DECIMAL(4, 1) NOT NULL DEFAULT -1
+  COMMENT '总成绩',
+  ispayment        INT           NOT NULL DEFAULT 0
+  COMMENT '是否交费：0，未交费；1，已交费',
+  isallowlearning  TINYINT       NOT NULL DEFAULT 0
+  COMMENT '是否允许学习：0，不允许；1，允许',
+  isclosed         TINYINT       NOT NULL DEFAULT 0
+  COMMENT '是否已经学完（只要参加了终结性考试就算学完）：0，还在学；1，已经学完，',
+  isgetcertificate TINYINT       NOT NULL DEFAULT 0
+  COMMENT '是否领取证书：0，未领取，1，领取',
+  lastlogintime    DATETIME      NOT NULL
+  COMMENT '上次登录时间',
+  loginnum         INT           NOT NULL DEFAULT 0
+  COMMENT '登录次数',
+  totalstudytime   INT           NOT NULL DEFAULT 0
+  COMMENT '学习总时长，单位为分钟',
+  certificatecode  VARCHAR(30)   NOT NULL
+  COMMENT '证书编号',
+  PRIMARY KEY (trainingid, systemid, studentid)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '学生培训计划';
 
 
+/*==============================================================*/
+/* Table: lms_studentcourse                                     */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_studentcourse;
+CREATE TABLE lms_studentcourse
+(
+  trainingid      INT           NOT NULL
+  COMMENT '培训班ID',
+  systemid        INT           NOT NULL
+  COMMENT '系统ID',
+  studentid       CHAR(36)      NOT NULL
+  COMMENT '学生UUID',
+  courseid        INT           NOT NULL
+  COMMENT '课程ID',
+  selecttime      DATETIME      NOT NULL
+  COMMENT '选课时间',
+  type            SMALLINT      NOT NULL
+  COMMENT '选课类型：0，自由选单门课；1，自由选课程包；2，培训班选课',
+  ispayment       TINYINT       NOT NULL DEFAULT 0
+  COMMENT '是否交费：0，未交费；1，已交费',
+  isallowlearning TINYINT       NOT NULL DEFAULT 0
+  COMMENT '是否允许学：0，不允许；1，允许',
+  score           DECIMAL(4, 1) NOT NULL DEFAULT -1
+  COMMENT '成绩',
+  lastlogintime   DATETIME      NOT NULL
+  COMMENT '上次登录时间',
+  loginnum        INT           NOT NULL DEFAULT 0
+  COMMENT '登录次数',
+  totalstudytime  INT           NOT NULL DEFAULT 0
+  COMMENT '学习总时长，单位为分钟',
+  PRIMARY KEY (trainingid, systemid, studentid, courseid)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '学生选课';
+
+
+/*==============================================================*/
+/* Table: lms_scoinfo                                           */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_scoinfo;
+CREATE TABLE lms_scoinfo
+(
+  scoid               INT                   NOT NULL AUTO_INCREMENT,
+  systemid            INT                   NOT NULL DEFAULT 1
+  COMMENT '系统ID',
+  courseid            INT                   NOT NULL
+  COMMENT '课程ID',
+  chaptertitle        NATIONAL VARCHAR(200) NOT NULL
+  COMMENT '章节标题',
+  scotype             VARCHAR(5)            NOT NULL DEFAULT 'sco'
+  COMMENT 'SCO类型',
+  launchurl           VARCHAR(255)          NOT NULL
+  COMMENT '加载URL',
+  manifest            VARCHAR(255) COMMENT '清单文件',
+  organization        VARCHAR(255) COMMENT '组织',
+  scoparentidentifier VARCHAR(255)          NOT NULL
+  COMMENT 'SCO父标识符',
+  scoidentifier       VARCHAR(255)          NOT NULL
+  COMMENT 'SCO标识符',
+  parameters          VARCHAR(255) COMMENT '参数',
+  prerequisites       VARCHAR(200) COMMENT '先决条件',
+  maxtimeallowed      DATETIME COMMENT '最大允许时间',
+  timelimitaction     DATETIME COMMENT '时间结束行为',
+  datafromlms         VARCHAR(255) COMMENT 'LMS数据',
+  masteryscore        VARCHAR(200) COMMENT '通过得分',
+  next                SMALLINT                       DEFAULT 0
+  COMMENT '下一个',
+  previous            SMALLINT                       DEFAULT 0
+  COMMENT '上一个',
+  PRIMARY KEY (scoid)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '课程SCO信息';
+
+
+/*==============================================================*/
+/* Table: lms_activatecode                                      */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_activatecode;
+CREATE TABLE lms_activatecode
+(
+  activatecode VARCHAR(50) NOT NULL
+  COMMENT '激活码',
+  activatedate DATETIME COMMENT '激活日期',
+  adddate      DATETIME    NOT NULL
+  COMMENT '添加日期',
+  batchcode    VARCHAR(20) NOT NULL
+  COMMENT '批次代码',
+  systemid     INT         NOT NULL
+  COMMENT '系统ID',
+  studentid    VARCHAR(36) NOT NULL
+  COMMENT '学生UUID',
+  PRIMARY KEY (activatecode)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '激活码';
+
+
+/*==============================================================*/
+/* Table: lms_activatecodehistory                               */
+/*==============================================================*/
+
+DROP TABLE IF EXISTS lms_activatecodehistory;
+CREATE TABLE lms_activatecodehistory
+(
+  id            INT         NOT NULL AUTO_INCREMENT
+  COMMENT 'id',
+  activatecode  VARCHAR(50) NOT NULL
+  COMMENT '激活码',
+  activatedate  DATETIME COMMENT '激活日期',
+  adddate       DATETIME    NOT NULL
+  COMMENT '添加日期',
+  batchcode     VARCHAR(20) NOT NULL
+  COMMENT '批次代码',
+  systemid      INT         NOT NULL
+  COMMENT '系统ID',
+  studentid     VARCHAR(36) NOT NULL
+  COMMENT '学生UUID',
+  beifenshijian DATETIME    NOT NULL
+  COMMENT '备份时间',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '激活码历史';
+
+
+/*==============================================================*/
+/* Table: lms_activatecodelog                                   */
+/*==============================================================*/
+
+DROP TABLE IF EXISTS lms_activatecodelog;
+CREATE TABLE lms_activatecodelog
+(
+  id           INT           NOT NULL AUTO_INCREMENT
+  COMMENT 'id',
+  generatenum  INT           NOT NULL
+  COMMENT '生成数量',
+  adddate      DATETIME      NOT NULL
+  COMMENT '添加日期',
+  batchcode    VARCHAR(20)   NOT NULL
+  COMMENT '批次代码',
+  systemid     INT           NOT NULL
+  COMMENT '系统ID',
+  paymentmoney DECIMAL(9, 1) NOT NULL
+  COMMENT '交费金额',
+  userid       INT           NOT NULL
+  COMMENT '操作用户',
+  operatorip   VARCHAR(50)   NOT NULL
+  COMMENT '操作IP',
+  paymentid    INT           NOT NULL
+  COMMENT '缴费单据ID',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '激活码生成日志';
+
+
+/*==============================================================*/
+/* Table: lms_removelactivatecode                               */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_removelactivatecode;
+CREATE TABLE lms_removelactivatecode
+(
+  id           INT                   NOT NULL AUTO_INCREMENT,
+  studentid    INT                   NOT NULL
+  COMMENT '学生ID',
+  activatecode VARCHAR(50)           NOT NULL
+  COMMENT '激活码',
+  userid       INT                   NOT NULL
+  COMMENT '操作用户',
+  operatorip   VARCHAR(50) COMMENT '操作IP',
+  operatordate DATETIME              NOT NULL
+  COMMENT '操作日期',
+  systemid     INT                   NOT NULL
+  COMMENT '系统ID',
+  removereason NATIONAL VARCHAR(200) NOT NULL
+  COMMENT '撤销原因',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '取消激活码日志';
 
 
 

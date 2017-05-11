@@ -55,8 +55,8 @@ class Register extends Base
 
             //make student data
             $student = [
-                'uid' => $uid,
-                'userid' => $userId,
+                'studentid' => getGuid(),
+                'userid' => $uid,
                 'name' => $data['realname'],
                 'gender' => $data['gender'],
                 'photo' => '',
