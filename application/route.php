@@ -20,7 +20,8 @@ Route::rule('admin/main', 'admin/Index/index');
 
 Route::rule('api/admin/login', 'api/login/adminlogin', "POST");
 Route::rule('api/student/login', 'api/login/studentlogin', "POST");
-Route::rule('api/logout', 'api/login/logout', "POST");
+Route::rule('api/admin/logout', 'api/login/adminlogout', "POST");
+Route::rule('api/student/logout', 'api/login/studentlogout', "POST");
 
 Route::rule('api/group/:id/rule', 'api/Group/GetRule', "GET");
 Route::rule('api/group/:id/rule', 'api/Group/SaveRule', "PUT");
