@@ -24,27 +24,8 @@ class Group extends Authority
      */
     public function index()
     {
-        //get data
-        $map['status'] = ['<>', '-1'];
-        $data = Db::name('AuthGroup')->where($map)->select();
-
-        //get user group relation
-        $userGroup = Db::name('AuthGroupAccess')
-            ->field('group_id,count(uid) AS cnt')
-            ->group('group_id')
-            ->select();
-
-        //文字转换
-        foreach ($data as $k => $v) {
-            $data[$k]['isset'] = strlen($v['rules']) == 0 ? '否' : '是';
-            $data[$k]['hasUse'] = 0;
-            foreach ($userGroup as $ku => $vu) {
-                if ($userGroup[$ku]['group_id'] == $v['id']) {
-                    $data[$k]['hasUse'] = $vu['cnt'];
-                }
-            }
-            $data[$k]['hasUseDesc'] = $data[$k]['hasUse'] == 0 ? '否' : '是';
-        }
+        $service = controller('GroupService', 'Service');
+        $data = $service->GetList();
 
         return json($data);
     }
@@ -52,15 +33,13 @@ class Group extends Authority
     /**
      * 显示指定的角色资源
      *
-     * @param  int $id 角色id
+     * @param  $id 角色id
      * @return \think\Response
      */
     public function read($id)
     {
-        //find data
-        $map['status'] = ['<>', '-1'];
-        $map['id'] = ['=', $id];
-        $data = Db::name('AuthGroup')->where($map)->find();
+        $service = controller('GroupService', 'Service');
+        $data = $service->Get($id);
 
         return json($data);
     }
@@ -84,29 +63,23 @@ class Group extends Authority
                 return json(Base::getResult(-101, $result, null));
             }
 
-            //make data
-            $userdata = [
-                'title' => $data['title'],
-                'rules' => '',
-                'status' => 1,
-            ];
-
-            //insert
-            $result = Db::name('AuthGroup')->insert($userdata);
+            $service = controller('GroupService', 'Service');
+            $result = $service->Insert($data);
 
             if ($result <= 0) {
                 return json(Base::getResult(-100, "", null));
             }
 
             return json(Base::getResult(0, "", null));
-        } else
+        } else {
             return json(Base::getResult(-100, "", null));
+        }
     }
 
     /**
      * 保存更新的角色资源
      *
-     * @param  int $id 角色id
+     * @param  $id 角色id
      * @return \think\Response
      */
     public function update($id)
@@ -123,38 +96,37 @@ class Group extends Authority
                 return json(Base::getResult(-101, $result, null));
             }
 
-            //update
-            Db::name('AuthGroup')
-                ->where('id', $id)
-                ->update(['title' => $data['title']]);
+            $service = controller('GroupService', 'Service');
+            $result = $service->Update($data);
 
             return json(Base::getResult(0, "", null));
-        } else
+        } else {
             return json(Base::getResult(-100, "", null));
+        }
     }
 
     /**
      * 删除指定角色资源
      *
-     * @param  int $id 角色id
+     * @param  $id 角色id
      * @return \think\Response
      */
     public function delete($id)
     {
-        //get user group relation
-        $userGroup = Db::name('AuthGroupAccess')->where('group_id', $id)->select();
-        if (count($userGroup) > 0) {
+        $service = controller('GroupService', 'Service');
+        $result = $service->Delete($id);
+
+        if ($result < 0) {
             return json(Base::getResult(-201, "存在关联用户", null));
         }
-        //delete
-        Db::name('AuthGroup')->where('id', $id)->delete();
+
         return json(Base::getResult(0, "", null));
     }
 
     /**
      * 验证角色名称唯一性
      *
-     * @param int $id 角色id
+     * @param $id 角色id
      * @return bool
      */
     public function Unique($id)
@@ -166,11 +138,10 @@ class Group extends Authority
             );
 
             $data = input('post.');
-            $map['title'] = $data['title'];
-            if ($id != 0) {
-                $map['id'] = ['neq', $id];
-            }
-            if (Db::name('AuthGroup')->where($map)->find() != null) {
+            //call user service
+            $service = controller('GroupService', 'Service');
+
+            if (!$service->CheckUnique($data, $id)) {
                 return json($result);
             }
 
@@ -184,25 +155,21 @@ class Group extends Authority
     /**
      * 获得角色权限树
      *
-     * @param int $id 角色id
+     * @param $id 角色id
      * @return \think\response\Json
      */
     public function GetRule($id)
     {
-        //get rule list
-        $ruleList = DB::name('AuthRule')->field('id,pid,name,title')->select();
-        //get group's rule ids
-        $groupAccess = Db::name('AuthGroup')->where('id', '=', $id)->find();
-        $groupRule = $groupAccess['rules'];
+        $service = controller('GroupService', 'Service');
+        $data = $service->GetRule($id);
 
-        $data = $this::channelLevel($ruleList, $groupRule, 0);
         return json($data);
     }
 
     /**
      * 保存角色权限树
      *
-     * @param int $id 角色id
+     * @param $id 角色id
      * @return \think\response\Json
      */
     public function SaveRule($id)
@@ -211,13 +178,8 @@ class Group extends Authority
             $data = input('put.');
             $rule = $data['rules'];
 
-            if (stripos(',' . $rule . ',', ',1,') === false) {
-                $rule = '1,' . $rule;
-            }
-
-            $result = Db::name('AuthGroup')
-                ->where('id', $id)
-                ->update(['rules' => $rule]);
+            $service = controller('GroupService', 'Service');
+            $result = $service->SaveRule($id,$rule);
 
             if ($result < 0) {
                 return json(Base::getResult(-100, "", null));
@@ -228,34 +190,5 @@ class Group extends Authority
             return json(Base::getResult(-100, "", null));
     }
 
-    /**
-     * 内部递归获取树的函数
-     * @param array $data 列表数据
-     * @param string $groupRule 角色权限列表
-     * @param int $pid 父权限id
-     * @return array
-     */
-    static private function channelLevel($data, $groupRule, $pid = 0)
-    {
-        if (empty($data)) {
-            return array();
-        }
 
-        $arr = array();
-        foreach ($data as $v) {
-            if ($v["pid"] == $pid) {
-                $tmp["text"] = $v["title"];
-                $tmp["id"] = $v["id"];
-                $tmp['state']["checked"] = false;
-
-                if (stripos(',' . $groupRule . ',', ',' . $v["id"] . ',') !== false) {
-                    $tmp['state']["checked"] = true;
-                }
-                $tmp["nodes"] = self::channelLevel($data, $groupRule, $v["id"]);
-                array_push($arr, $tmp);
-            }
-        }
-
-        return $arr;
-    }
 }

@@ -72,7 +72,7 @@ class UserService extends BaseService
      * @param $id 用户ID
      * @return bool
      */
-    public function checkAdmin($id)
+    public function CheckAdmin($id)
     {
         $user = DB::name('User')->where('id', $id)->find();
 
@@ -89,7 +89,7 @@ class UserService extends BaseService
      * @param $isAdmin 是否管理员
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function getUserList($isAdmin)
+    public function GetList($isAdmin)
     {
         if ($isAdmin) {
             $map['usertype'] = ['not in', '0,3'];
@@ -198,11 +198,12 @@ class UserService extends BaseService
 
     /**
      * 检查用户名是否唯一
-     * @param $map
+     * @param $data
      * @return bool
      */
-    public function CheckUnique($map)
+    public function CheckUnique($data)
     {
+        $map['loginname'] = $data['loginname'];
         if (Db::name('user')->where($map)->find() != null) {
             return false;
         }

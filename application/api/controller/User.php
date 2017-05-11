@@ -17,7 +17,7 @@ class User extends Authority
     {
         //
         $service = controller('UserService', 'Service');
-        $data = $service->getUserList(true);
+        $data = $service->GetList(true);
 
         return json($data);
     }
@@ -123,12 +123,11 @@ class User extends Authority
             );
 
             $data = input('post.');
-            $map['loginname'] = $data['loginname'];
 
             //call user service
             $service = controller('UserService', 'Service');
 
-            if (!$service->CheckUnique($map)) {
+            if (!$service->CheckUnique($data)) {
                 return json($result);
             }
 
