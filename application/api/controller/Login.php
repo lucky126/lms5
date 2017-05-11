@@ -29,9 +29,7 @@ class Login extends Base
         $result = $service->login($username, $password, true);
         $userInfo = $result['data'];
 
-        Cookie::set('admin', $userInfo['token'], 3600);
-        Cookie::set('id', $userInfo['id'], 3600);
-        Cookie::set('uid', $userInfo['uid'], 3600);
+        Cookie::set('admin', $userInfo['token']);
         return json(Base::getResult($result['code'], $result['msg'], null));
     }
 
@@ -47,9 +45,7 @@ class Login extends Base
         $result = $service->login($username, $password, false);
         $userInfo = $result['data'];
 
-        Cookie::set('student', $userInfo['token'], 3600);
-        Cookie::set('id', $userInfo['id'], 3600);
-        Cookie::set('uid', $userInfo['uid'], 3600);
+        Cookie::set('student', $userInfo['token']);
         return json(Base::getResult($result['code'], $result['msg'], null));
     }
 

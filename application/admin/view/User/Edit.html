@@ -48,7 +48,7 @@
                     alert("连接错误");
                 },
                 success: function (data) {
-                    $("#LoginName").val(data.loginname);
+                    $("#loginname").val(data.loginname);
                     $("#RealName").val(data.realname);
                     $("input[name='UserType'][value=" + data.usertype + "]").attr("checked", true);
                     $("#UserGroup").val(data.usergroup);

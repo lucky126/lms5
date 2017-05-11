@@ -35,23 +35,24 @@ class Basic extends Controller
             $this->redirect("/admin/login");
         }
         //get uid
-        $this->uid = Cookie::get('uid');
-        //set uid
+        $token = Cookie::get('admin');
+        $this->uid = getTokenInfo($token, 'uid');
+        //set uid to view
         $this->assign("uid", $this->uid);
-        //get currrent url
+        //get current url
         $url = $this::getUrl();
         //check admin
+        $id = getTokenInfo($token, 'id');
         $service = controller('api/UserService', 'Service');
-        $isAdmin = $service->checkAdmin(Cookie::get('id'));
+        $isAdmin = $service->checkAdmin($id);
         //check auth
         if (!$isAdmin && !$this::checkAuth($url)) {
             $this->error('您没有权限访问');
         }
         //make menu
-        $menu = $this::getMenu($url, $isAdmin);
+        $menu = $this::getMenu($url, $isAdmin, $id);
         $this->assign("menu", $menu);
     }
-
 
 
     /**
@@ -87,14 +88,16 @@ class Basic extends Controller
 
     /**
      * 得到用户菜单
-     * @param $url
-     * @return array
+     * @param $url 当前url
+     * @param $isAdmin 是否管理员
+     * @param $id 用户id
+     * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function getMenu($url, $isAdmin)
+    public function getMenu($url, $isAdmin, $id)
     {
         $data = Db::view('AuthGroupAccess', 'uid')
             ->view('AuthGroup', 'rules', 'AuthGroup.id=AuthGroupAccess.group_id')
-            ->where('uid', '=', Cookie::get('id'))
+            ->where('uid', '=', $id)
             ->find();
 
         if (!$isAdmin)

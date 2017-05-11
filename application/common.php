@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\ValidationData;
 
 // 应用公共文件
@@ -113,21 +114,35 @@ function getDiscussCount($cnt)
 
 /**
  * get token
- * @param $userid
+ * @param $uid
+ * @param $id
  * @return string
  */
-function getToken($userid)
+function getToken($uid, $id)
 {
-    $token = (new Builder())->setIssuer('http://example.com')// Configures the issuer (iss claim)
-    ->setAudience('http://example.org')// Configures the audience (aud claim)
+    $token = (new Builder())->setIssuer('http://lms.5iexam.com')// Configures the issuer (iss claim)
+    ->setAudience('http://lms.5iexam.com')// Configures the audience (aud claim)
     ->setId('4f1g23a12aa', true)// Configures the id (jti claim), replicating as a header item
     ->setIssuedAt(time())// Configures the time that the token was issue (iat claim)
     ->setNotBefore(time() + 0)// Configures the time that the token can be used (nbf claim)
     ->setExpiration(time() + 3600)// Configures the expiration time of the token (nbf claim)
-    ->set('uid', $userid)// Configures a new claim, called "uid"
+    ->set('uid', $uid)// Configures a new claim, called "uid"
+    ->set('id', $id)// Configures a new claim, called "id"
     ->getToken(); // Retrieves the generated token
 
     return $token;
+}
+
+/**
+ * get token param info
+ * @param $token
+ * @param $param
+ * @return mixed
+ */
+function getTokenInfo($token, $param)
+{
+    $token = (new Parser())->parse((string) $token);
+    return $token->getClaim($param);
 }
 
 /**
@@ -136,7 +151,8 @@ function getToken($userid)
  * @param $userid
  * @return bool
  */
-function checkToken($token, $userid){
+function checkToken($token, $userid)
+{
     $data = new ValidationData(); // It will use the current time to validate (iat, nbf and exp)
     $data->setIssuer('http://example.com');
     $data->setAudience('http://example.org');

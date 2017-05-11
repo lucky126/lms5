@@ -34,10 +34,11 @@ class Basic extends Controller
             $this->redirect("/student/login");
         }
         //get uid
-        $this->uid = Cookie::get('uid');
+        $token = Cookie::get('admin');
+        $this->uid = getTokenInfo($token, 'uid');
         //set uid
         $this->assign("uid", $this->uid);
-        //get currrent url
+        //get current url
         $url = $this::getUrl();
 
     }

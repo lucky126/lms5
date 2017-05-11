@@ -2,8 +2,6 @@
 
 namespace app\api\controller;
 
-use think\Db;
-
 /**
  * 用户api控制器
  * @package app\api\controller
@@ -18,13 +16,8 @@ class User extends Authority
     public function index()
     {
         //
-        $map['usertype'] = ['not in', '0,3'];
-        $data = Db::name('user')->where($map)->select();
-
-        //文字转换
-        foreach ($data as $k => $v) {
-            $data[$k]['UseTypeDesc'] = config('globalConst.UserTypelNameDesc')[$v['usertype']];
-        }
+        $service = controller('UserService', 'Service');
+        $data = $service->getUserList(true);
 
         return json($data);
     }
@@ -48,30 +41,9 @@ class User extends Authority
                 return json(Base::getResult(-101, $result, null));
             }
 
-            //make user data
-            $userdata = [
-                'uid' => getGuid(),
-                'loginname' => $data['loginname'],
-                'realname' => $data['RealName'],
-                'pwd' => getEncPassword($data['Password']),
-                'usertype' => $data['UserType'],
-                'registiontime' => datetime(),
-                'addtime' => datetime(),
-                'systemid' => 1,
-                'status' => 1,
-            ];
-            //insert data
-            $result = Db::name('user')->insert($userdata);
-            //get user id
-            $userId = Db::name('user')->getLastInsID();
-
-            //make user group info
-            $group = [
-                'uid' => $userId,
-                'group_id' => $data['UserGroup'],
-            ];
-            //insert user group info
-            $result = Db::name("AuthGroupAccess")->insert($group);
+            //call user service
+            $service = controller('UserService', 'Service');
+            $service->Insert($data);
 
             return json(Base::getResult(0, "", null));
         }
@@ -85,12 +57,10 @@ class User extends Authority
      */
     public function read($id)
     {
-        //get user info
-        $data = Db::name('user')->where('uid', $id)->find();
-        //get user group info
-        $group = Db::name("AuthGroupAccess")->where('uid', $data['id'])->find();
-        //set user group info into user info
-        $data['usergroup'] = $group == null ? "" : $group['group_id'];
+        //call user service
+        $service = controller('UserService', 'Service');
+        $data = $service->Get($id);
+
         //return data
         return json($data);
     }
@@ -106,8 +76,7 @@ class User extends Authority
         //must put
         if (request()->isPut()) {
             $data = input('put.');
-            $data['id'] = $id;
-            //dump($data);
+            $data['uid'] = $id;
 
             //validate
             $result = $this->validate($data, 'User.edit');
@@ -116,17 +85,9 @@ class User extends Authority
                 return json(Base::getResult(-101, $result, null));
             }
 
-            //update user info
-            $result = Db::name('user')
-                ->where('uid', $id)
-                ->update(['realname' => $data['RealName'], 'usertype' => $data['UserType']]);
-            //get user id
-            $user = Db::name('user')->where('uid', $id)->find();
-            $user_id = $user['id'];
-            //update user group info
-            $result = Db::name("AuthGroupAccess")
-                ->where('uid', $user_id)
-                ->update(['group_id' => $data['UserGroup']]);
+            //call user service
+            $service = controller('UserService', 'Service');
+            $service->Update($data);
 
             return json(Base::getResult(0, "", null));
         }
@@ -140,14 +101,10 @@ class User extends Authority
      */
     public function delete($id)
     {
-        //get user id
-        $user = Db::name('user')->where('uid', $id)->find();
-        $user_id = $user['id'];
-        //delete user group info
-        Db::name('AuthGroupAccess')->where('uid', $user_id)->delete();
+        //call user service
+        $service = controller('UserService', 'Service');
+        $service->Delete($id);
 
-        //delete user info
-        Db::name('user')->where('uid', $id)->delete();
         return json(Base::getResult(0, "", null));
     }
 
@@ -168,7 +125,10 @@ class User extends Authority
             $data = input('post.');
             $map['loginname'] = $data['loginname'];
 
-            if (Db::name('user')->where($map)->find() != null) {
+            //call user service
+            $service = controller('UserService', 'Service');
+
+            if (!$service->CheckUnique($map)) {
                 return json($result);
             }
 
