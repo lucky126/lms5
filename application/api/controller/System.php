@@ -24,7 +24,8 @@ class System extends Authority
     public function index()
     {
         //
-        $data = Db::name('System')->select();
+        $service = controller('SystemService', 'Service');
+        $data = $service->GetList();
 
         return json($data);
     }
@@ -38,7 +39,9 @@ class System extends Authority
     public function read($id)
     {
         //find data
-        $data = Db::name('System')->where('id', $id)->find();
+        $service = controller('SystemService', 'Service');
+        $data = $service->Get($id);
+
 
         return json($data);
     }
@@ -62,16 +65,8 @@ class System extends Authority
                 return json(Base::getResult(-101, $result, null));
             }
 
-            //make data
-            $userdata = [
-                'systemname' => $data['systemname'],
-                'memo' => '',
-                'addtime' => datetime(),
-                'status' => 1,
-            ];
-
-            //insert
-            $result = Db::name('System')->insert($userdata);
+            $service = controller('SystemService', 'Service');
+            $result = $service->Insert($data);
 
             if ($result <= 0) {
                 return json(Base::getResult(-100, "", null));
@@ -94,7 +89,6 @@ class System extends Authority
         if (request()->isPut()) {
             $data = input('put.');
             $data['id'] = $id;
-            //dump($data);
 
             //validate
             $result = $this->validate($data, 'System.edit');
@@ -103,11 +97,8 @@ class System extends Authority
                 return json(Base::getResult(-101, $result, null));
             }
 
-            //update
-            Db::name('System')
-                ->where('id', $id)
-                ->update(['systemname' => $data['systemname']]);
-
+            $service = controller('SystemService', 'Service');
+            $result = $service->Update($data);
 
             return json(Base::getResult(0, "", null));
         } else
@@ -123,7 +114,9 @@ class System extends Authority
     public function delete($id)
     {
         //delete
-        Db::name('System')->where('id', $id)->delete();
+        $service = controller('SystemService', 'Service');
+        $result = $service->Delete($id);
+
         return json(Base::getResult(0, "", null));
     }
 
@@ -142,11 +135,10 @@ class System extends Authority
             );
 
             $data = input('post.');
-            $map['systemname'] = $data['systemname'];
-            if ($id != 0) {
-                $map['id'] = ['neq', $id];
-            }
-            if (Db::name('System')->where($map)->find() != null) {
+            //call user service
+            $service = controller('SystemService', 'Service');
+
+            if (!$service->CheckUnique($data, $id)) {
                 return json($result);
             }
 
