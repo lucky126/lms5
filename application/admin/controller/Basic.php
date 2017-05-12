@@ -40,13 +40,13 @@ class Basic extends Controller
         //set uid to view
         $this->assign("uid", $this->uid);
         //get current url
-        $url = $this::getUrl();
+        $url = getUrl();
         //check admin
         $id = getTokenInfo($token, 'id');
         $service = controller('api/UserService', 'Service');
         $isAdmin = $service->CheckAdmin($id);
         //check auth
-        if (!$isAdmin && !$this::checkAuth($url)) {
+        if (!$isAdmin && !$this::checkAuth($url, $id)) {
             $this->error('您没有权限访问');
         }
         //make menu
@@ -54,35 +54,19 @@ class Basic extends Controller
         $this->assign("menu", $menu);
     }
 
-
-    /**
-     * 得到当前访问路径
-     * @return string
-     */
-    protected function getUrl()
-    {
-        $request = Request::instance();
-        //get url
-        $m = $request->module();
-        $c = $request->controller();
-        $a = $request->action();
-        $rule_name = $m . '/' . $c . '/' . $a;
-
-        return $rule_name;
-    }
-
     /**
      * 判断权限
      * @param $url
+     * @param $id
      * @return bool
      */
-    protected function checkAuth($url)
+    protected function checkAuth($url, $id)
     {
         //make auth
         $auth = new \think\Auth();
 
         //check auth
-        $result = $auth->check($url, Cookie::get('id'));
+        $result = $auth->check($url, $id);
         return $result;
     }
 

@@ -12,6 +12,7 @@
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\ValidationData;
+use think\Request;
 
 // 应用公共文件
 /**
@@ -200,4 +201,20 @@ function channelLevel($data, $path = '', $pid = 0, $fieldPri = 'id', $level = 1)
 
 
     return $arr;
+}
+
+/**
+ * 得到当前访问路径
+ * @return string
+ */
+function getUrl()
+{
+    $request = Request::instance();
+    //get url
+    $m = $request->module();
+    $c = $request->controller();
+    $a = $request->action();
+    $rule_name = $m . '/' . $c . '/' . $a;
+
+    return $rule_name;
 }
