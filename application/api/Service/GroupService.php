@@ -48,6 +48,20 @@ class GroupService extends BaseService
     }
 
     /**
+     * 获取指定角色数据
+     * @param $id
+     * @return array|false|\PDOStatement|string|\think\Model
+     */
+    public function Get($id)
+    {
+        $map['status'] = ['<>', '-1'];
+        $map['id'] = ['=', $id];
+        $data = Db::name('AuthGroup')->where($map)->find();
+
+        return $data;
+    }
+
+    /**
      * 新增角色数据
      * @param $data
      * @return int|string
@@ -65,20 +79,6 @@ class GroupService extends BaseService
         $result = Db::name('AuthGroup')->insert($userdata);
 
         return $result;
-    }
-
-    /**
-     * 获取指定角色数据
-     * @param $id
-     * @return array|false|\PDOStatement|string|\think\Model
-     */
-    public function Get($id)
-    {
-        $map['status'] = ['<>', '-1'];
-        $map['id'] = ['=', $id];
-        $data = Db::name('AuthGroup')->where($map)->find();
-
-        return $data;
     }
 
     /**
@@ -111,7 +111,7 @@ class GroupService extends BaseService
     }
 
     /**
-     * 检查用户名是否唯一
+     * 检查字段是否唯一
      * @param $data
      * @param $id
      * @return bool

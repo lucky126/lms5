@@ -9,7 +9,6 @@
 namespace app\api\controller;
 
 use think\Request;
-use think\Db;
 
 /**
  * 角色api控制器

@@ -8,9 +8,6 @@
 
 namespace app\api\controller;
 
-use think\Request;
-use think\Db;
-
 /**
  * 课程api控制器
  * @package app\api\controller
@@ -24,15 +21,9 @@ class Course extends Authority
      */
     public function index()
     {
-        //get data
-        //$map['status'] = ['<>', '0'];
-        $data = Db::name('Course')->select();
-
-        //文字转换
-        foreach ($data as $k => $v) {
-            $data[$k]['isopenselectiondesc'] = config('globalConst.YesOrNoDesc')[$v['isopenselection']];
-            $data[$k]['isscormcoursedesc'] = config('globalConst.YesOrNoDesc')[$v['isscormcourse']];
-        }
+        //
+        $service = controller('CourseService', 'Service');
+        $data = $service->GetList();
 
         return json($data);
     }
@@ -56,75 +47,43 @@ class Course extends Authority
                 return json(Base::getResult(-101, $result, null));
             }
 
-            $isopenselection = 0;
+            $data['isopenselection'] = 0;
             if (input('?isopenselection')) {
-                $isopenselection = 1;
+                $data['isopenselection'] = 1;
             }
 
-            $isscormcourse = 0;
+            $data['isscormcourse'] = 0;
             if (input('?isscormcourse')) {
-                $isscormcourse = 1;
+                $data['isscormcourse'] = 1;
             }
 
-            //make user data
-            $userdata = [
-                'systemid' => 1,
-                'coursecode' => $data['coursecode'],
-                'coursename' => $data['coursename'],
-                'typeid' => $data['typeid'],
-                'courseurl' => $data['courseurl'],
-                'democourseurl' => $data['democourseurl'],
-                'coursehours' => $data['coursehours'],
-                'coursefee' => $data['coursefee'],
-                'isscormcourse' => $isscormcourse,
-                'isopenselection' => $isopenselection,
-                'coursedescription' => $data['coursedescription'],
-                'isrecommand' => 0,
-                'addtime' => datetime(),
-                'status' => 1,
-            ];
-            //insert data
-            $result = Db::name('Course')->insert($userdata);
-            //get course id
-            $cid = Db::name('Course')->getLastInsID();
-
-
-            $isbulletin = 0;
+            $dataSetting['isbulletin'] = 0;
             if (input('?isbulletin')) {
-                $isbulletin = 1;
+                $dataSetting['isbulletin'] = 1;
             }
-            $isresource = 0;
+            $dataSetting['isresource'] = 0;
             if (input('?isresource')) {
-                $isresource = 1;
+                $dataSetting['isresource'] = 1;
             }
-            $isqa = 0;
+            $dataSetting['isqa'] = 0;
             if (input('?isqa')) {
-                $isqa = 1;
+                $dataSetting['isqa'] = 1;
             }
-            $isevaluator = 0;
+            $dataSetting['isevaluator'] = 0;
             if (input('?isevaluator')) {
-                $isevaluator = 1;
+                $dataSetting['isevaluator'] = 1;
             }
-            $istest = 0;
+            $dataSetting['istest'] = 0;
             if (input('?istest')) {
-                $istest = 1;
+                $dataSetting['istest'] = 1;
             }
-            $ishomework = 0;
+            $dataSetting['ishomework'] = 0;
             if (input('?ishomework')) {
-                $ishomework = 1;
+                $dataSetting['ishomework'] = 1;
             }
-            //make user group info
-            $coursesetting = [
-                'id' => $cid,
-                'isbulletin' => $isbulletin,
-                'isresource' => $isresource,
-                'isqa' => $isqa,
-                'isevaluator' => $isevaluator,
-                'istest' => $istest,
-                'ishomework' => $ishomework,
-            ];
-            //insert course setting info
-            $result = Db::name("coursesetting")->insert($coursesetting);
+
+            $service = controller('CourseService', 'Service');
+            $result = $service->Insert($data, $dataSetting);
 
             return json(Base::getResult(0, "", null));
         }
@@ -139,10 +98,9 @@ class Course extends Authority
     public function read($id)
     {
         //get user info
-        $data = Db::name('Course')->where('id', $id)->find();
-        $setting = Db::name('coursesetting')->where('id', $id)->find();
+        $service = controller('CourseService', 'Service');
+        $returnVal = $service->Get($id);
 
-        $returnVal = array('data' => $data, 'setting' => $setting);
         //return data
         return json($returnVal);
     }
@@ -168,67 +126,43 @@ class Course extends Authority
                 return json(Base::getResult(-101, $result, null));
             }
 
-            $isopenselection = 0;
+            $data['isopenselection'] = 0;
             if (input('?isopenselection')) {
-                $isopenselection = 1;
+                $data['isopenselection'] = 1;
             }
 
-            $isscormcourse = 0;
+            $data['isscormcourse'] = 0;
             if (input('?isscormcourse')) {
-                $isscormcourse = 1;
+                $data['isscormcourse'] = 1;
             }
 
-            //update course info
-            $result = Db::name('Course')
-                ->where('id', $id)
-                ->update([
-                    'coursename' => $data['coursename'],
-                    'typeid' => $data['typeid'],
-                    'courseurl' => $data['courseurl'],
-                    'democourseurl' => $data['democourseurl'],
-                    'coursehours' => $data['coursehours'],
-                    'coursefee' => $data['coursefee'],
-                    'isscormcourse' => $isscormcourse,
-                    'isopenselection' => $isopenselection,
-                    'coursedescription' => $data['coursedescription']
-                ]);
-
-
-            $isbulletin = 0;
+            $dataSetting['isbulletin'] = 0;
             if (input('?isbulletin')) {
-                $isbulletin = 1;
+                $dataSetting['isbulletin'] = 1;
             }
-            $isresource = 0;
+            $dataSetting['isresource'] = 0;
             if (input('?isresource')) {
-                $isresource = 1;
+                $dataSetting['isresource'] = 1;
             }
-            $isqa = 0;
+            $dataSetting['isqa'] = 0;
             if (input('?isqa')) {
-                $isqa = 1;
+                $dataSetting['isqa'] = 1;
             }
-            $isevaluator = 0;
+            $dataSetting['isevaluator'] = 0;
             if (input('?isevaluator')) {
-                $isevaluator = 1;
+                $dataSetting['isevaluator'] = 1;
             }
-            $istest = 0;
+            $dataSetting['istest'] = 0;
             if (input('?istest')) {
-                $istest = 1;
+                $dataSetting['istest'] = 1;
             }
-            $ishomework = 0;
+            $dataSetting['ishomework'] = 0;
             if (input('?ishomework')) {
-                $ishomework = 1;
+                $dataSetting['ishomework'] = 1;
             }
-            //update course setting info
-            $result = Db::name('coursesetting')
-                ->where('id', $id)
-                ->update([
-                    'isbulletin' => $isbulletin,
-                    'isresource' => $isresource,
-                    'isqa' => $isqa,
-                    'isevaluator' => $isevaluator,
-                    'istest' => $istest,
-                    'ishomework' => $ishomework
-                ]);
+
+            $service = controller('CourseService', 'Service');
+            $result = $service->Update($data, $dataSetting);
 
             return json(Base::getResult(0, "", null));
         }
@@ -242,10 +176,9 @@ class Course extends Authority
      */
     public function delete($id)
     {
-        //delete course setting info
-        Db::name("coursesetting")->where('id', $id)->delete();
-        //delete course info
-        Db::name('Course')->where('id', $id)->delete();
+        $service = controller('CourseService', 'Service');
+        $result = $service->Delete($id);
+
         return json(Base::getResult(0, "", null));
     }
 
@@ -265,15 +198,10 @@ class Course extends Authority
 
             $data = input('post.');
 
-            if (input('?post.coursename'))
-                $map['coursename'] = $data['coursename'];
-            if (input('?post.coursecode'))
-                $map['coursecode'] = $data['coursecode'];
+            //call user service
+            $service = controller('CourseService', 'Service');
 
-            if ($id != 0) {
-                $map['id'] = ['neq', $id];
-            }
-            if (Db::name('Course')->where($map)->find() != null) {
+            if (!$service->CheckUnique($data, $id)) {
                 return json($result);
             }
 

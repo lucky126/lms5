@@ -107,6 +107,23 @@ class UserService extends BaseService
     }
 
     /**
+     * 根据用户uuid获取用户信息
+     * @param $uid
+     * @return array|false|\PDOStatement|string|\think\Model
+     */
+    public function Get($uid)
+    {
+        //get user info
+        $data = Db::name('user')->where('uid', $uid)->find();
+        //get user group info
+        $group = Db::name("AuthGroupAccess")->where('uid', $data['id'])->find();
+        //set user group info into user info
+        $data['usergroup'] = $group == null ? "" : $group['group_id'];
+        //return data
+        return $data;
+    }
+
+    /**
      * 新增用户数据
      * @param $data
      * @return int|string
@@ -139,23 +156,6 @@ class UserService extends BaseService
         $result = Db::name("AuthGroupAccess")->insert($group);
 
         return $result;
-    }
-
-    /**
-     * 根据用户uuid获取用户信息
-     * @param $uid
-     * @return array|false|\PDOStatement|string|\think\Model
-     */
-    public function Get($uid)
-    {
-        //get user info
-        $data = Db::name('user')->where('uid', $uid)->find();
-        //get user group info
-        $group = Db::name("AuthGroupAccess")->where('uid', $data['id'])->find();
-        //set user group info into user info
-        $data['usergroup'] = $group == null ? "" : $group['group_id'];
-        //return data
-        return $data;
     }
 
     /**

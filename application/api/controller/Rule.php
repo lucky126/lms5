@@ -8,9 +8,6 @@
 
 namespace app\api\controller;
 
-use think\Request;
-use think\Db;
-
 /**
  * 权限api控制器
  * @package app\api\controller
@@ -25,28 +22,10 @@ class Rule extends Authority
     public function index($pid = 0)
     {
         //
-        $data = $this->getRule($pid);
+        $service = controller('RuleService', 'Service');
+        $data = $service->GetList($pid);
 
         return json($data);
-    }
-
-    /**
-     * 获取指定父节点下的权限
-     *
-     * @param int $pid 父权限id
-     * @return false|\PDOStatement|string|\think\Collection
-     */
-    private function getRule($pid)
-    {
-        //
-        $data = Db::name('AuthRule')->where("status", "<>", "0")->where("pid", "=", $pid)->select();
-
-        //文字转换
-        foreach ($data as $k => $v) {
-            $data[$k]['isshowdesc'] = config('globalConst.YesOrNoDesc')[$v['isshow']];
-        }
-
-        return $data;
     }
 
     /**
@@ -58,7 +37,8 @@ class Rule extends Authority
     public function read($id)
     {
         //
-        $data = Db::name('AuthRule')->where('id', $id)->find();
+        $service = controller('RuleService', 'Service');
+        $data = $service->Get($id);
 
         return json($data);
     }
@@ -72,32 +52,27 @@ class Rule extends Authority
     public function save()
     {
         //
-        if (Request::instance()->post()) {
+        if (request()->isPost()) {
             $data = input('post.');
-            $isshow = 0;
+            $data['isshow'] = 0;
             if (input('?isshow')) {
-                $isshow = 1;
+                $data['isshow'] = 1;
             }
 
             //validate
-            $result = $this->validate($data,'Rule');
+            $result = $this->validate($data, 'Rule');
 
             if (true !== $result) {
                 // 验证失败 输出错误信息
                 return json(Base::getResult(-101, $result, null));
             }
 
-            $userdata = [
-                'pid' => $data['pid'],
-                'name' => $data['name'],
-                'title' => $data['title'],
-                'icon' => $data['icon'],
-                'isshow' => $isshow,
-                'status' => 1,
-            ];
+            $service = controller('RuleService', 'Service');
+            $service->Insert($data);
 
-            $result = Db::name('AuthRule')->insert($userdata);
             return json(Base::getResult(0, "", null));
+        }else {
+            return json(Base::getResult(-100, "", null));
         }
     }
 
@@ -110,33 +85,30 @@ class Rule extends Authority
     public function update($id)
     {
         //
-        if (Request::instance()->put()) {
+        if (request()->isPut()) {
             $data = input('put.');
             //set id
             $data['id'] = $id;
             //set isshow
-            $isshow = 0;
+            $data['isshow'] = 0;
             if (input('?isshow')) {
-                $isshow = 1;
+                $data['isshow'] = 1;
             }
-            //dump($isshow);
 
             //validate
-            $result = $this->validate($data,'Rule.edit');
+            $result = $this->validate($data, 'Rule.edit');
 
             if (true !== $result) {
                 // 验证失败 输出错误信息
                 return json(Base::getResult(-101, $result, null));
             }
 
-            $result = Db::name('AuthRule')
-                ->where('id', $id)
-                ->update(['title' => $data['title'],
-                    'name' => $data['name'],
-                    'icon' => $data['icon'],
-                    'isshow' => $isshow]);
+            $service = controller('RuleService', 'Service');
+            $service->Update($data);
 
             return json(Base::getResult(0, "", null));
+        }else {
+            return json(Base::getResult(-100, "", null));
         }
     }
 
@@ -149,7 +121,9 @@ class Rule extends Authority
     public function delete($id)
     {
         //
-        Db::name('AuthRule')->where('id', $id)->delete();
+        $service = controller('RuleService', 'Service');
+        $result = $service->Delete($id);
+
         return json(Base::getResult(0, "", null));
     }
 
@@ -169,20 +143,17 @@ class Rule extends Authority
 
             $data = input('post.');
 
-            if(input('?post.title'))
-                $map['title'] = $data['title'];
-            if(input('?post.name'))
-                $map['name'] = $data['name'];
+            //call user service
+            $service = controller('RuleService', 'Service');
 
-            if ($id != 0) {
-                $map['id'] = ['neq', $id];
-            }
-            if (Db::name('AuthRule')->where($map)->find() != null) {
+            if (!$service->CheckUnique($data, $id)) {
                 return json($result);
             }
 
             $result['valid'] = true;
             return json($result);
         }
+
+        return json(Base::getResult(-100, "", null));
     }
 }
