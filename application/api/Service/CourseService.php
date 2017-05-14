@@ -123,7 +123,7 @@ class CourseService extends BaseService
                 'coursedescription' => $data['coursedescription']
             ]);
 
-        if ($result > 0) {
+        if ($result >= 0) {
             //update course setting info
             $result = Db::name('coursesetting')
                 ->where('id', $data['id'])

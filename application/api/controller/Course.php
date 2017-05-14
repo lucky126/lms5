@@ -100,7 +100,8 @@ class Course extends Authority
         //get user info
         $service = controller('CourseService', 'Service');
         $returnVal = $service->Get($id);
-
+        if($returnVal == null)
+            return Authority::ResourceNotFound();
         //return data
         return json($returnVal);
     }

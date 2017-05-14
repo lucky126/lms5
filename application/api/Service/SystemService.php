@@ -14,7 +14,6 @@ use think\Db;
  * 系统服务类
  * @package app\api\service
  */
-
 class SystemService extends BaseService
 {
     /**
@@ -24,7 +23,7 @@ class SystemService extends BaseService
     public function GetList()
     {
         //
-        $data =Db::name('System')->select();
+        $data = Db::name('System')->select();
 
         return $data;
     }
@@ -38,7 +37,7 @@ class SystemService extends BaseService
     {
         $map['status'] = ['<>', '-1'];
         $map['id'] = ['=', $id];
-        $data =Db::name('System')->where($map)->find();
+        $data = Db::name('System')->where($map)->find();
 
         return $data;
     }
@@ -72,9 +71,9 @@ class SystemService extends BaseService
     public function Update($data)
     {
         //update
-        return  Db::name('System')
-                ->where('id', $data['id'])
-                ->update(['systemname' => $data['systemname']]);
+        return Db::name('System')
+            ->where('id', $data['id'])
+            ->update(['systemname' => $data['systemname']]);
     }
 
     /**

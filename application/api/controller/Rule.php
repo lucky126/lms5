@@ -39,6 +39,8 @@ class Rule extends Authority
         //
         $service = controller('RuleService', 'Service');
         $data = $service->Get($id);
+        if($data == null)
+            return Authority::ResourceNotFound();
 
         return json($data);
     }

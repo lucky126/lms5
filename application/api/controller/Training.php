@@ -25,7 +25,8 @@ class training extends Authority
     public function index()
     {
         //
-        $data = Db::name('training')->where("status", "<>", "-1")->select();
+        $service = controller('TrainingService', 'Service');
+        $data = $service->GetList();
 
         return json($data);
     }
@@ -49,54 +50,16 @@ class training extends Authority
                 return json(base::getresult(-101, $result, null));
             }
 
-            //make user data
-            $userdata = [
-                'systemid' => 1,
-                'trainingname' => $data['trainingname'],
-                'trainingcode' => $data['trainingcode'],
-                'traingtype' => 1,
-                'registrationstarttime' => $data['registrationstarttime'],
-                'registrationendtime' => $data['registrationendtime'],
-                'starttime' => $data['starttime'],
-                'endtime' => $data['endtime'],
-                'isopen' => 1,
-                'trainingcost' => $data['trainingcost'],
-                'allownumberofcourses' => $data['allownumberofcourses'],
-                'description' => $data['description'],
-                'content' => $data['content'],
-                'memeber' => '',
-                'notice' => $data['notice'],
-                'addtime' => datetime(),
-                'status' => 1,
-            ];
-            //insert data
-            $result = Db::name('training')->insert($userdata);
-            //get training id
-            $tid = Db::name('training')->getLastInsID();
+            $service = controller('TrainingService', 'Service');
+            $result = $service->Insert($data);
 
-            //get all courses info
-            $courses = explode(",", $data['courses']);
-
-            foreach ($courses as $c) {
-                $c_info = explode("_", $c);
-                $isrequired = 0;
-                if (count($c_info) > 1) {
-                    $isrequired = 1;
-                }
-                $course = [
-                    'systemid' => 1,
-                    'trainingid' => $tid,
-                    'scormid' => $c_info[0],
-                    'isrequired' => $isrequired,
-                    'addtime' => datetime(),
-                ];
-
-                //insert course setting info
-                $result = Db::name("trainingcourse")->insert($course);
+            if ($result <= 0) {
+                return json(Base::getResult(-100, "", null));
             }
 
             return json(base::getresult(0, "", null));
-        }
+        } else
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -107,13 +70,14 @@ class training extends Authority
      */
     public function read($id)
     {
-        //get user info
-        $data = Db::name('training')->where('id', $id)->find();
-        $course = Db::name('trainingcourse')->where('trainingid', $id)->select();
+        //find data
+        $service = controller('TrainingService', 'Service');
+        $data = $service->Get($id);
+        if ($data == null || $data['data'] == null)
+            return Authority::ResourceNotFound();
 
-        $returnVal = array('data' => $data, 'courses' => $course);
         //return data
-        return json($returnVal);
+        return json($data);
     }
 
     /**
@@ -137,52 +101,12 @@ class training extends Authority
                 return json(base::getresult(-101, $result, null));
             }
 
-            //update course info
-            $result = Db::name('training')
-                ->where('id', $id)
-                ->update([
-                    'trainingname' => $data['trainingname'],
-                    'traingtype' => 1,
-                    'registrationstarttime' => $data['registrationstarttime'],
-                    'registrationendtime' => $data['registrationendtime'],
-                    'starttime' => $data['starttime'],
-                    'endtime' => $data['endtime'],
-                    'isopen' => 1,
-                    'trainingcost' => $data['trainingcost'],
-                    'allownumberofcourses' => $data['allownumberofcourses'],
-                    'description' => $data['description'],
-                    'content' => $data['content'],
-                    'memeber' => '',
-                    'notice' => $data['notice'],
-                ]);
+            $service = controller('TrainingService', 'Service');
+            $result = $service->Update($data);
 
-
-            //delete course setting info
-            Db::name("trainingcourse")->where('trainingid', $id)->delete();
-
-            //get all courses info
-            $courses = explode(",", $data['courses']);
-
-            foreach ($courses as $c) {
-                $c_info = explode("_", $c);
-                $isrequired = 0;
-                if (count($c_info) > 1) {
-                    $isrequired = 1;
-                }
-                $course = [
-                    'systemid' => 1,
-                    'trainingid' => $id,
-                    'scormid' => $c_info[0],
-                    'isrequired' => $isrequired,
-                    'addtime' => datetime(),
-                ];
-
-                //insert course setting info
-                $result = Db::name("trainingcourse")->insert($course);
-            }
-
-            return json(base::getresult(0, "", null));
-        }
+            return json(Base::getResult(0, "", null));
+        } else
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -193,10 +117,10 @@ class training extends Authority
      */
     public function delete($id)
     {
-        //delete course setting info
-        Db::name("trainingcourse")->where('trainingid', $id)->delete();
-        //delete course info
-        Db::name('training')->where('id', $id)->delete();
+        //delete
+        $service = controller('TrainingService', 'Service');
+        $result = $service->Delete($id);
+
         return json(base::getresult(0, "", null));
     }
 
@@ -216,15 +140,9 @@ class training extends Authority
 
             $data = input('post.');
 
-            if (input('?post.trainingname'))
-                $map['trainingname'] = $data['trainingname'];
-            if (input('?post.trainingcode'))
-                $map['trainingcode'] = $data['trainingcode'];
+            $service = controller('TrainingService', 'Service');
 
-            if ($id != 0) {
-                $map['id'] = ['neq', $id];
-            }
-            if (Db::name('training')->where($map)->find() != null) {
+            if (!$service->CheckUnique($data, $id)) {
                 return json($result);
             }
 

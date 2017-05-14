@@ -31,4 +31,14 @@ class Authority extends Base
             throw new HttpResponseException($response);
         }
     }
+
+    /**
+     * 404
+     */
+    public function ResourceNotFound()
+    {
+        $result = $this->getResult(404, "not found", null);
+        $response = Response::create($result, "json", 404)->header([]);
+        throw new HttpResponseException($response);
+    }
 }

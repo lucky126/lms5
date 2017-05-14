@@ -60,6 +60,8 @@ class User extends Authority
         //call user service
         $service = controller('UserService', 'Service');
         $data = $service->Get($id);
+        if($data == null)
+            return Authority::ResourceNotFound();
 
         //return data
         return json($data);

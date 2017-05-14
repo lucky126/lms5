@@ -39,6 +39,8 @@ class Group extends Authority
     {
         $service = controller('GroupService', 'Service');
         $data = $service->Get($id);
+        if($data == null)
+            return Authority::ResourceNotFound();
 
         return json($data);
     }

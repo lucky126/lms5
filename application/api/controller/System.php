@@ -41,7 +41,8 @@ class System extends Authority
         //find data
         $service = controller('SystemService', 'Service');
         $data = $service->Get($id);
-
+        if($data == null)
+            return Authority::ResourceNotFound();
 
         return json($data);
     }
