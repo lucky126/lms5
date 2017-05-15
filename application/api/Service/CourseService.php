@@ -28,7 +28,7 @@ class CourseService extends BaseService
         $course = new Course();
 
         $data = $course->order('id', 'desc')
-                        ->select();
+            ->select();
 
         return $data;
     }
@@ -78,11 +78,12 @@ class CourseService extends BaseService
         //$course->coursesetting = $coursesetting;
 
         //$result = $course->together('Coursesetting')->save();
-        if($course->save()){
-            $result = $course->setting()->save($coursesetting);
+        if ($course->save()) {
+            $course->setting()->save($coursesetting);
+            return 0;
+        } else {
+            return $course->getError();
         }
-
-        return $result;
     }
 
     /**
@@ -93,36 +94,32 @@ class CourseService extends BaseService
      */
     public function Update($data, $dataSetting)
     {
-        //update course info
-        $result = Db::name('Course')
-            ->where('id', $data['id'])
-            ->update([
-                'coursename' => $data['coursename'],
-                'typeid' => $data['typeid'],
-                'courseurl' => $data['courseurl'],
-                'democourseurl' => $data['democourseurl'],
-                'coursehours' => $data['coursehours'],
-                'coursefee' => $data['coursefee'],
-                'isscormcourse' => $data['isscormcourse'],
-                'isopenselection' => $data['isopenselection'],
-                'coursedescription' => $data['coursedescription']
-            ]);
+        $course = Course::get($data['id']);
+        $course->coursename = $data['coursename'];
+        $course->typeid = $data['typeid'];
+        $course->courseurl = $data['courseurl'];
+        $course->democourseurl = $data['democourseurl'];
+        $course->coursehours = $data['coursehours'];
+        $course->coursefee = $data['coursefee'];
+        $course->isscormcourse = $data['isscormcourse'];
+        $course->isopenselection = $data['isopenselection'];
+        $course->coursedescription = $data['coursedescription'];
 
-        if ($result >= 0) {
-            //update course setting info
-            $result = Db::name('coursesetting')
-                ->where('id', $data['id'])
-                ->update([
-                    'isbulletin' => $dataSetting['isbulletin'],
-                    'isresource' => $dataSetting['isresource'],
-                    'isqa' => $dataSetting['isqa'],
-                    'isevaluator' => $dataSetting['isevaluator'],
-                    'istest' => $dataSetting['istest'],
-                    'ishomework' => $dataSetting['ishomework'],
-                ]);
+        if ($course->save()) {
+            // 更新关联数据
+            $course->setting->isbulletin = $dataSetting['isbulletin'];
+            $course->setting->isresource = $dataSetting['isresource'];
+            $course->setting->isqa = $dataSetting['isqa'];
+            $course->setting->isevaluator = $dataSetting['isevaluator'];
+            $course->setting->istest = $dataSetting['istest'];
+            $course->setting->ishomework = $dataSetting['ishomework'];
+
+            $course->setting->save();
+
+            return 0;
+        } else {
+            return $course->getError();
         }
-
-        return $result;
     }
 
     /**
@@ -132,14 +129,14 @@ class CourseService extends BaseService
      */
     public function Delete($id)
     {
-        //delete course setting info
-        $result = Db::name("coursesetting")->where('id', $id)->delete();
-        if ($result > 0) {
-            //delete course info
-            $result = Db::name('Course')->where('id', $id)->delete();
+        $course = Course::get($id);
+        if ($course->delete()) {
+            // 删除关联数据
+            $course->setting->delete();
+            return 0;
+        } else {
+            return $course->getError();
         }
-
-        return $result;
     }
 
     /**

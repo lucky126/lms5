@@ -19,7 +19,7 @@ class Course extends Model
     protected $readonly = ['coursecode'];
 
     //protected $auto = ['name', 'ip'];
-    protected $insert = ['status' => 1 ,'isrecommand' => 0];
+    protected $insert = ['status' => 1, 'isrecommand' => 0];
     protected $update = [];
 
     protected $type = [
@@ -34,9 +34,14 @@ class Course extends Model
         'status' => 'integer',
     ];
 
+    protected function base($query)
+    {
+        $query->where('status', '<>', -1);
+    }
+
     public function setting()
     {
-        return $this->hasOne('Coursesetting','id','id');
+        return $this->hasOne('Coursesetting', 'id', 'id');
     }
 
     public function getIsscormcourseAttr($value)
