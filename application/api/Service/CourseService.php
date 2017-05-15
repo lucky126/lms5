@@ -25,14 +25,10 @@ class CourseService extends BaseService
     public function GetList()
     {
         //get data
-        //$map['status'] = ['<>', '0'];
-        $data = Db::name('Course')->select();
+        $course = new Course();
 
-        //文字转换
-        foreach ($data as $k => $v) {
-            $data[$k]['isopenselectiondesc'] = config('globalConst.YesOrNoDesc')[$v['isopenselection']];
-            $data[$k]['isscormcoursedesc'] = config('globalConst.YesOrNoDesc')[$v['isscormcourse']];
-        }
+        $data = $course->order('id', 'desc')
+                        ->select();
 
         return $data;
     }
@@ -45,7 +41,7 @@ class CourseService extends BaseService
     public function Get($id)
     {
         //get info
-        $data = Course::get($id, 'setting');
+        $data = Course::get($id, 'setting')->getData();
         return $data;
     }
 
@@ -57,45 +53,7 @@ class CourseService extends BaseService
      */
     public function Insert($data, $dataSetting)
     {
-        //make user data
-        
-        $userdata = [
-            'systemid' => 1,
-            'coursecode' => $data['coursecode'],
-            'coursename' => $data['coursename'],
-            'typeid' => $data['typeid'],
-            'courseurl' => $data['courseurl'],
-            'democourseurl' => $data['democourseurl'],
-            'coursehours' => $data['coursehours'],
-            'coursefee' => $data['coursefee'],
-            'isscormcourse' => $data['isscormcourse'],
-            'isopenselection' => $data['isopenselection'],
-            'coursedescription' => $data['coursedescription'],
-            'isrecommand' => 0,
-            'addtime' => datetime(),
-            'status' => 1,
-        ];
-        //insert data
-        $result = Db::name('Course')->insert($userdata);
-
-        if ($result > 0) {
-            //get course id
-            $cid = Db::name('Course')->getLastInsID();
-
-            //make user group info
-            $coursesetting = [
-                'id' => $cid,
-                'isbulletin' => $dataSetting['isbulletin'],
-                'isresource' => $dataSetting['isresource'],
-                'isqa' => $dataSetting['isqa'],
-                'isevaluator' => $dataSetting['isevaluator'],
-                'istest' => $dataSetting['istest'],
-                'ishomework' => $dataSetting['ishomework'],
-            ];
-            //insert course setting info
-            $result = Db::name("coursesetting")->insert($coursesetting);
-        }
-/*
+        //make data
         $coursesetting = new Coursesetting;
         $coursesetting->isbulletin = $dataSetting['isbulletin'];
         $coursesetting->isresource = $dataSetting['isresource'];
@@ -117,10 +75,13 @@ class CourseService extends BaseService
         $course->isopenselection = $data['isopenselection'];
         $course->coursedescription = $data['coursedescription'];
 
-        $course->coursesetting = $coursesetting;
+        //$course->coursesetting = $coursesetting;
 
-        $result = $course->together('coursesetting')->save();
-*/
+        //$result = $course->together('Coursesetting')->save();
+        if($course->save()){
+            $result = $course->setting()->save($coursesetting);
+        }
+
         return $result;
     }
 

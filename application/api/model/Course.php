@@ -36,6 +36,16 @@ class Course extends Model
 
     public function setting()
     {
-        return $this->hasOne('coursesetting','id');
+        return $this->hasOne('Coursesetting','id','id');
+    }
+
+    public function getIsscormcourseAttr($value)
+    {
+        return config('globalConst.YesOrNoDesc')[$value];
+    }
+
+    public function getIsopenselectionAttr($value)
+    {
+        return config('globalConst.YesOrNoDesc')[$value];
     }
 }
