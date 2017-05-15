@@ -219,14 +219,14 @@
      */
     $(function () {
         getUserInfo();
+        //getUnreadMessage();
     });
 
-    function getUserInfo()
-    {
+    function getUserInfo() {
         $.ajax({
             cache: true,
             type: "GET",
-            url: "/api/user/{$uid}" ,
+            url: "/api/user/{$uid}",
             error: function () {
                 alert("连接错误");
             },
@@ -236,6 +236,20 @@
                 $(".mnp-name").html(realname);
 
                 $("#usrImg").attr("src", "/static/img/profile-photos/" + data.avator);
+            }
+        });
+    }
+
+    function getUnreadMessage() {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/user/{$uid}/message/unread",
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (data) {
+
             }
         });
     }

@@ -8,6 +8,8 @@
 
 namespace app\api\service;
 
+use app\api\model\Course;
+use app\api\model\Coursesetting;
 use think\Db;
 
 /**
@@ -42,13 +44,9 @@ class CourseService extends BaseService
      */
     public function Get($id)
     {
-        //get user info
-        $data = Db::name('Course')->where('id', $id)->find();
-        $setting = Db::name('coursesetting')->where('id', $id)->find();
-
-        $returnVal = array('data' => $data, 'setting' => $setting);
-
-        return $returnVal;
+        //get info
+        $data = Course::get($id, 'setting');
+        return $data;
     }
 
     /**
@@ -60,6 +58,7 @@ class CourseService extends BaseService
     public function Insert($data, $dataSetting)
     {
         //make user data
+        
         $userdata = [
             'systemid' => 1,
             'coursecode' => $data['coursecode'],
@@ -96,7 +95,32 @@ class CourseService extends BaseService
             //insert course setting info
             $result = Db::name("coursesetting")->insert($coursesetting);
         }
+/*
+        $coursesetting = new Coursesetting;
+        $coursesetting->isbulletin = $dataSetting['isbulletin'];
+        $coursesetting->isresource = $dataSetting['isresource'];
+        $coursesetting->isqa = $dataSetting['isqa'];
+        $coursesetting->isevaluator = $dataSetting['isevaluator'];
+        $coursesetting->istest = $dataSetting['istest'];
+        $coursesetting->ishomework = $dataSetting['ishomework'];
 
+        $course = new Course;
+        $course->systemid = 1;
+        $course->coursecode = $data['coursecode'];
+        $course->coursename = $data['coursename'];
+        $course->typeid = $data['typeid'];
+        $course->courseurl = $data['courseurl'];
+        $course->democourseurl = $data['democourseurl'];
+        $course->coursehours = $data['coursehours'];
+        $course->coursefee = $data['coursefee'];
+        $course->isscormcourse = $data['isscormcourse'];
+        $course->isopenselection = $data['isopenselection'];
+        $course->coursedescription = $data['coursedescription'];
+
+        $course->coursesetting = $coursesetting;
+
+        $result = $course->together('coursesetting')->save();
+*/
         return $result;
     }
 

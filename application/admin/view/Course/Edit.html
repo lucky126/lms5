@@ -140,7 +140,7 @@
                     alert("连接错误");
                 },
                 success: function (info) {
-                    var data = info.data;
+                    var data = info;
                     var setting = info.setting;
                     $("#coursename").val(data.coursename);
                     $("#typeid").val(data.typeid);
