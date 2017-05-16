@@ -8,6 +8,7 @@
 
 namespace app\api\service;
 
+use app\api\model\System;
 use think\Db;
 
 /**
@@ -22,8 +23,11 @@ class SystemService extends BaseService
      */
     public function GetList()
     {
-        //
-        $data = Db::name('System')->select();
+        //get data
+        $system = new System();
+
+        $data = $system->order('id', 'desc')
+            ->select();
 
         return $data;
     }
@@ -35,9 +39,7 @@ class SystemService extends BaseService
      */
     public function Get($id)
     {
-        $map['status'] = ['<>', '-1'];
-        $map['id'] = ['=', $id];
-        $data = Db::name('System')->where($map)->find();
+        $data = System::get($id)->getData();
 
         return $data;
     }
@@ -49,18 +51,15 @@ class SystemService extends BaseService
      */
     public function Insert($data)
     {
-        //make data
-        $userdata = [
-            'systemname' => $data['systemname'],
-            'memo' => '',
-            'addtime' => datetime(),
-            'status' => 1,
-        ];
+        $system = new System;
+        $system->systemname = $data['systemname'];
+        $system->memo = '';
 
-        //insert
-        $result = Db::name('System')->insert($userdata);
-
-        return $result;
+        if ($system->save()) {
+            return 0;
+        } else {
+            return $system->getError();
+        }
     }
 
     /**
@@ -71,9 +70,14 @@ class SystemService extends BaseService
     public function Update($data)
     {
         //update
-        return Db::name('System')
-            ->where('id', $data['id'])
-            ->update(['systemname' => $data['systemname']]);
+        $system = System::get($data['id']);
+        $system->systemname = $data['systemname'];
+
+        if ($system->save()) {
+            return 0;
+        } else {
+            return $system->getError();
+        }
     }
 
     /**
@@ -84,7 +88,12 @@ class SystemService extends BaseService
     public function Delete($id)
     {
         //delete
-        return Db::name('System')->where('id', $id)->delete();
+        $system = System::get($id);
+        if ($system->delete()) {
+            return 0;
+        } else {
+            return $system->getError();
+        }
     }
 
     /**
@@ -104,5 +113,23 @@ class SystemService extends BaseService
         }
 
         return true;
+    }
+
+    /**
+     * 设置状态
+     * @param $id 系统id
+     * @param $status 目标状态值
+     * @return int|string
+     */
+    public function ChangeStatus($id, $status)
+    {
+        $system = System::get($id);
+        $system->status = $status;
+
+        if ($system->save()) {
+            return 0;
+        } else {
+            return $system->getError();
+        }
     }
 }

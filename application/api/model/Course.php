@@ -8,9 +8,12 @@
 
 namespace app\api\model;
 
-
 use think\Model;
 
+/**
+ * Class Course
+ * @package app\api\model
+ */
 class Course extends Model
 {
     protected $createTime = 'addtime';

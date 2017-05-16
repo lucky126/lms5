@@ -19,6 +19,8 @@ return array(
     'UserTypelNameDesc' => array( "超管","管理员", "教师", "学生" ),
     // 性别文字描述
     'GenderNamDesc' => array( "男", "女" ),
+    // 启用停用文字描述
+    'StatusDesc' => array( "停用", "正常" ),
     // 性别文字描述
     'YesOrNoDesc' => array( "否", "是" ),
     // 版区类型文字表述

@@ -26,13 +26,16 @@ Route::rule('api/student/logout', 'api/login/studentlogout', "POST");
 Route::rule('api/group/:id/rule', 'api/Group/GetRule', "GET");
 Route::rule('api/group/:id/rule', 'api/Group/SaveRule', "PUT");
 //unique check
-Route::rule('api/group/:id/unique', 'api/Group/Unique', "POST");
-Route::rule('api/rule/:id/unique', 'api/Rule/Unique', "POST");
-Route::rule('api/user/:id/unique', 'api/User/Unique', "POST");
-Route::rule('api/system/:id/unique', 'api/System/Unique', "POST");
-Route::rule('api/course/:id/unique', 'api/Course/Unique', "POST");
-Route::rule('api/training/:id/unique', 'api/Training/Unique', "POST");
-Route::rule('api/register/:id/unique', 'api/Register/Unique', "POST");
+Route::post('api/system/:id/unique', 'api/System/Unique');
+Route::post('api/group/:id/unique', 'api/Group/Unique');
+Route::post('api/rule/:id/unique', 'api/Rule/Unique');
+Route::post('api/user/:id/unique', 'api/User/Unique');
+Route::post('api/course/:id/unique', 'api/Course/Unique');
+Route::post('api/training/:id/unique', 'api/Training/Unique');
+Route::post('api/register/:id/unique', 'api/Register/Unique');
+//status change
+Route::put('api/system/:id/activate', 'api/System/ChangeStatus?status=1');
+Route::put('api/system/:id/deactivate', 'api/System/ChangeStatus?status=0');
 //resource
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');

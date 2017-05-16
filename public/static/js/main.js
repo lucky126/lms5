@@ -186,3 +186,67 @@ function deleteInfo(url, id) {
 
     return returnVal;
 }
+
+/**
+ * 启用状态
+ * @param url 启用状态的api地址
+ * @param id 启用状态的id标识
+ */
+function showStartInfo(url, id) {
+
+    var res = statusInfo(url, id, '/activate');
+    if (res.code == 0) {
+        completeMsg("设置成功");
+    }
+    else {
+        errorMsg("设置失败，" + res.msg);
+    }
+    $("#table").bootstrapTable("refresh");
+}
+
+/**
+ * 停用状态
+ * @param msg 停用状态的提示语句
+ * @param url 停用状态的api地址
+ * @param id 停用状态的id标识
+ */
+function showStopInfo(msg, url, id) {
+    bootbox.confirm(msg, function (result) {
+        if (result) {
+            var res = statusInfo(url, id, '/deactivate');
+            if (res.code == 0) {
+                completeMsg("设置成功");
+            }
+            else {
+                errorMsg("设置失败，" + res.msg);
+            }
+            $("#table").bootstrapTable("refresh");
+        }
+    });
+}
+
+/**
+ * 异步设置状态
+ * @param url 设置状态的api地址
+ * @param id 设置态的id标识
+ * @param type 设置状态类型
+ * @returns {*}
+ */
+function statusInfo(url, id, type) {
+    var returnVal = null;
+    //异步put
+    $.ajax({
+        cache: true,
+        type: "PUT",
+        url: url + id + type,
+        async: false,
+        error: function (request) {
+            alert("连接错误");
+        },
+        success: function (data) {
+            returnVal = data;
+        }
+    });
+
+    return returnVal;
+}
