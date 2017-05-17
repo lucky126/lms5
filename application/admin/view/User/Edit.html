@@ -51,7 +51,7 @@
                     $("#loginname").val(data.loginname);
                     $("#RealName").val(data.realname);
                     $("input[name='UserType'][value=" + data.usertype + "]").attr("checked", true);
-                    $("#UserGroup").val(data.usergroup);
+                    $("#UserGroup").val(data.group.group_id);
                 }
             });
         }

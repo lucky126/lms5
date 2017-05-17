@@ -2,6 +2,8 @@
 
 namespace app\api\service;
 
+use app\api\model\AuthGroupAccess;
+use app\api\model\User;
 use think\Db;
 
 /**
@@ -91,16 +93,17 @@ class UserService extends BaseService
      */
     public function GetList($isAdmin)
     {
-        if ($isAdmin) {
-            $map['usertype'] = ['not in', '0,3'];
-        } else {
-            $map['usertype'] = ['=', '3'];
-        }
-        $data = Db::name('user')->where($map)->select();
+        //get data
+        $user = new User();
 
-        //文字转换
-        foreach ($data as $k => $v) {
-            $data[$k]['UseTypeDesc'] = config('globalConst.UserTypelNameDesc')[$v['usertype']];
+        if ($isAdmin) {
+            $data = $user->where('usertype', 'not in', '0,3')
+                ->order('id', 'desc')
+                ->select();
+        } else {
+            $data = $user->where('usertype', '=', '3')
+                ->order('id', 'desc')
+                ->select();
         }
 
         return $data;
@@ -114,11 +117,7 @@ class UserService extends BaseService
     public function Get($uid)
     {
         //get user info
-        $data = Db::name('user')->where('uid', $uid)->find();
-        //get user group info
-        $group = Db::name("AuthGroupAccess")->where('uid', $data['id'])->find();
-        //set user group info into user info
-        $data['usergroup'] = $group == null ? "" : $group['group_id'];
+        $data = User::get(['uid' => $uid], 'group')->getData();
         //return data
         return $data;
     }
@@ -130,32 +129,24 @@ class UserService extends BaseService
      */
     public function Insert($data)
     {
-        //make user data
-        $userdata = [
-            'uid' => getGuid(),
-            'loginname' => $data['loginname'],
-            'realname' => $data['RealName'],
-            'pwd' => getEncPassword($data['Password']),
-            'usertype' => $data['UserType'],
-            'registiontime' => datetime(),
-            'addtime' => datetime(),
-            'systemid' => 1,
-            'status' => 1,
-        ];
-        //insert data
-        $result = Db::name('user')->insert($userdata);
-        //get user id
-        $userId = Db::name('user')->getLastInsID();
+        $user = new User;
+        $user->uid = getGuid();
+        $user->loginname = $data['loginname'];
+        $user->realname = $data['RealName'];
+        $user->pwd = getEncPassword($data['Password']);
+        $user->usertype = $data['UserType'];
+        $user->registiontime = datetime();
+        $user->systemid = 1;
 
-        //make user group info
-        $group = [
-            'uid' => $userId,
-            'group_id' => $data['UserGroup'],
-        ];
-        //insert user group info
-        $result = Db::name("AuthGroupAccess")->insert($group);
+        if ($user->save()) {
+            $userGroup = new AuthGroupAccess;
+            $userGroup->group_id = $data['UserGroup'];
 
-        return $result;
+            $user->group()->save($userGroup);
+            return 0;
+        } else {
+            return $user->getError();
+        }
     }
 
     /**
@@ -165,35 +156,29 @@ class UserService extends BaseService
      */
     public function Update($data)
     {
-        //update user info
-        $result = Db::name('user')
-            ->where('uid', $data['uid'])
-            ->update(['realname' => $data['RealName'], 'usertype' => $data['UserType']]);
-        //get user id
-        $user = Db::name('user')->where('uid', $data['uid'])->find();
-        $id = $user['id'];
-        //update user group info
-        $result = Db::name("AuthGroupAccess")
-            ->where('uid', $id)
-            ->update(['group_id' => $data['UserGroup']]);
+        $user = User::get(['uid' => $data['uid']]);
+        $user->realname = $data['RealName'];
+        $user->usertype = $data['UserType'];
 
-        return $result;
+        if ($user->save()) {
+            $user->group->group_id = $data['UserGroup'];
+
+            $user->group->save();
+            return 0;
+        } else {
+            return $user->getError();
+        }
     }
 
     /**
      * 删除用户数据
      * @param $uid
+     * @return int|string
      */
     public function Delete($uid)
     {
-        //get user id
-        $user = Db::name('user')->where('uid', $uid)->find();
-        $id = $user['id'];
-        //delete user group info
-        Db::name('AuthGroupAccess')->where('uid', $id)->delete();
-
-        //delete user info
-        Db::name('user')->where('uid', $uid)->delete();
+        $user = User::get(['uid' => $uid]);
+        $user->together('group')->delete();
     }
 
     /**
@@ -209,5 +194,23 @@ class UserService extends BaseService
         }
 
         return true;
+    }
+
+    /**
+     * 设置状态
+     * @param $id 用户id
+     * @param $status 目标状态值
+     * @return int|string
+     */
+    public function ChangeStatus($id, $status)
+    {
+        $user = User::get($id);
+        $user->status = $status;
+
+        if ($user->save()) {
+            return 0;
+        } else {
+            return $user->getError();
+        }
     }
 }

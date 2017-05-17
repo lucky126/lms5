@@ -16,5 +16,5 @@ use think\Model;
  */
 class AuthGroupAccess extends Model
 {
-
+    protected $pk = 'uid';
 }

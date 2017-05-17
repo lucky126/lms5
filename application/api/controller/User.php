@@ -43,10 +43,15 @@ class User extends Authority
 
             //call user service
             $service = controller('UserService', 'Service');
-            $service->Insert($data);
+            $result = $service->Insert($data);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
 
             return json(Base::getResult(0, "", null));
-        }
+        } else
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -60,7 +65,7 @@ class User extends Authority
         //call user service
         $service = controller('UserService', 'Service');
         $data = $service->Get($id);
-        if($data == null)
+        if ($data == null)
             return Authority::ResourceNotFound();
 
         //return data
@@ -89,10 +94,16 @@ class User extends Authority
 
             //call user service
             $service = controller('UserService', 'Service');
-            $service->Update($data);
+            $result = $service->Update($data);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
+
 
             return json(Base::getResult(0, "", null));
-        }
+        } else
+            return json(Base::getResult(-100, "", null));
     }
 
     /**
@@ -136,5 +147,28 @@ class User extends Authority
             $result['valid'] = true;
             return json($result);
         }
+    }
+
+    /**
+     * 设置状态
+     * @param $id 用户id
+     * @param $status 目标状态值
+     * @return \think\response\Json
+     */
+    public function ChangeStatus($id, $status)
+    {
+        if (request()->isPut()) {
+            $service = controller('UserService', 'Service');
+
+            $result = $service->ChangeStatus($id, $status);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
+
+            return json(Base::getResult(0, "", null));
+        }
+
+        return json(Base::getResult(-100, "", null));
     }
 }
