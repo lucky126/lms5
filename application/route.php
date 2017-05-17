@@ -18,10 +18,10 @@ Route::rule('admin/login', 'admin/Common/login');
 Route::rule('student/main', 'Student/Index/index');
 Route::rule('admin/main', 'admin/Index/index');
 
-Route::rule('api/admin/login', 'api/login/adminlogin', "POST");
-Route::rule('api/student/login', 'api/login/studentlogin', "POST");
-Route::rule('api/admin/logout', 'api/login/adminlogout', "POST");
-Route::rule('api/student/logout', 'api/login/studentlogout', "POST");
+Route::post('api/admin/login', 'api/login/adminlogin', "POST");
+Route::post('api/student/login', 'api/login/studentlogin', "POST");
+Route::post('api/admin/logout', 'api/login/adminlogout', "POST");
+Route::post('api/student/logout', 'api/login/studentlogout', "POST");
 
 Route::rule('api/group/:id/rule', 'api/Group/GetRule', "GET");
 Route::rule('api/group/:id/rule', 'api/Group/SaveRule', "PUT");
@@ -36,6 +36,8 @@ Route::post('api/register/:id/unique', 'api/Register/Unique');
 //status change
 Route::put('api/system/:id/activate', 'api/System/ChangeStatus?status=1');
 Route::put('api/system/:id/deactivate', 'api/System/ChangeStatus?status=0');
+Route::put('api/group/:id/activate', 'api/Group/ChangeStatus?status=1');
+Route::put('api/group/:id/deactivate', 'api/Group/ChangeStatus?status=0');
 //resource
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');

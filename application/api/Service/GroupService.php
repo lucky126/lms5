@@ -8,6 +8,7 @@
 
 namespace app\api\service;
 
+use app\api\model\AuthGroup;
 use think\Db;
 
 /**
@@ -23,8 +24,10 @@ class GroupService extends BaseService
     public function GetList()
     {
         //get data
-        $map['status'] = ['<>', '-1'];
-        $data = Db::name('AuthGroup')->where($map)->select();
+        $group = new AuthGroup();
+
+        $data = $group->order('id', 'desc')
+            ->select();
 
         //get user group relation
         $userGroup = Db::name('AuthGroupAccess')
@@ -33,15 +36,15 @@ class GroupService extends BaseService
             ->select();
 
         //文字转换
-        foreach ($data as $k => $v) {
-            $data[$k]['isset'] = strlen($v['rules']) == 0 ? '否' : '是';
-            $data[$k]['hasUse'] = 0;
+        foreach ($data as $row) {
+            $row->isset = strlen($row->rules) == 0 ? '否' : '是';
+            $row->hasUse = 0;
             foreach ($userGroup as $ku => $vu) {
-                if ($userGroup[$ku]['group_id'] == $v['id']) {
-                    $data[$k]['hasUse'] = $vu['cnt'];
+                if ($userGroup[$ku]['group_id'] == $row->id) {
+                    $row->hasUse = $vu['cnt'];
                 }
             }
-            $data[$k]['hasUseDesc'] = $data[$k]['hasUse'] == 0 ? '否' : '是';
+            $row->hasUseDesc = $row->hasUse == 0 ? '否' : '是';
         }
 
         return $data;
@@ -54,9 +57,7 @@ class GroupService extends BaseService
      */
     public function Get($id)
     {
-        $map['status'] = ['<>', '-1'];
-        $map['id'] = ['=', $id];
-        $data = Db::name('AuthGroup')->where($map)->find();
+        $data = AuthGroup::get($id)->getData();
 
         return $data;
     }
@@ -69,16 +70,15 @@ class GroupService extends BaseService
     public function Insert($data)
     {
         //make data
-        $userdata = [
-            'title' => $data['title'],
-            'rules' => '',
-            'status' => 1,
-        ];
+        $group = new AuthGroup;
+        $group->title = $data['title'];
+        $group->rules = '';
 
-        //insert
-        $result = Db::name('AuthGroup')->insert($userdata);
-
-        return $result;
+        if ($group->save()) {
+            return 0;
+        } else {
+            return $group->getError();
+        }
     }
 
     /**
@@ -89,9 +89,14 @@ class GroupService extends BaseService
     public function Update($data)
     {
         //update
-        return Db::name('AuthGroup')
-            ->where('id', $data['id'])
-            ->update(['title' => $data['title']]);
+        $group = AuthGroup::get($data['id']);
+        $group->title = $data['title'];
+
+        if ($group->save()) {
+            return 0;
+        } else {
+            return $group->getError();
+        }
     }
 
     /**
@@ -106,8 +111,14 @@ class GroupService extends BaseService
         if (count($userGroup) > 0) {
             return -201;
         }
+
         //delete
-        return Db::name('AuthGroup')->where('id', $id)->delete();
+        $group = AuthGroup::get($id);
+        if ($group->delete()) {
+            return 0;
+        } else {
+            return $group->getError();
+        }
     }
 
     /**
@@ -129,6 +140,23 @@ class GroupService extends BaseService
         return true;
     }
 
+    /**
+     * 设置状态
+     * @param $id 系统id
+     * @param $status 目标状态值
+     * @return int|string
+     */
+    public function ChangeStatus($id, $status)
+    {
+        $system = AuthGroup::get($id);
+        $system->status = $status;
+
+        if ($system->save()) {
+            return 0;
+        } else {
+            return $system->getError();
+        }
+    }
 
     /**
      * 获得角色权限树
