@@ -28,8 +28,8 @@ class RuleService extends BaseService
         $rule = new AuthRule();
 
         $data = $rule->where("pid", "=", $pid)
-                ->order('id', 'desc')
-                ->select();
+            ->order('id', 'desc')
+            ->select();
 
         return $data;
     }
@@ -142,6 +142,14 @@ class RuleService extends BaseService
         $rule->status = $status;
 
         if ($rule->save()) {
+            //单向操作，仅设置为停用时候批量将该id的字节点同步停用
+            if ($status == config('globalConst.STATUS_OFF')) {
+                $subRule = new AuthRule;
+                // save方法第二个参数为更新条件
+                $subRule->save([
+                    'status' => $status,
+                ], ['pid' => $id]);
+            }
             return 0;
         } else {
             return $rule->getError();

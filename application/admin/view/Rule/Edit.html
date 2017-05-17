@@ -27,7 +27,7 @@
 
     <script type="text/javascript">
         $(function () {
-            getInfo('{$id}');
+            getInfo('{$id}', setInfo);
         });
 
         function validField() {
@@ -35,25 +35,13 @@
             $('#addform').data('bootstrapValidator').validate("name");
         }
 
-        //get info
-        function getInfo(id) {
-            $.ajax({
-                cache: true,
-                type: "GET",
-                url: "/api/Rule/" + id,
-                async: false,
-                error: function (request) {
-                    alert("连接错误");
-                },
-                success: function (data) {
-                    $("#title").val(data.title);
-                    $("#name").val(data.name);
-                    $("#icon").val(data.icon);
-                    if (data.isshow == 1) {
-                        $("#isshow").attr("checked", true);
-                    }
-                }
-            });
+        function setInfo(data) {
+            $("#title").val(data.title);
+            $("#name").val(data.name);
+            $("#icon").val(data.icon);
+            if (data.isshow == 1) {
+                $("#isshow").attr("checked", true);
+            }
         }
 
         $("#addform").bootstrapValidator({

@@ -88,7 +88,7 @@ class Basic extends Controller
             $map['id'] = ['in', $data['rules']];
 
         $map['isshow'] = ['=', '1'];
-
+        $map['status'] = ['=', config('globalConst.STATUS_ON')];
         $rule = DB::name('AuthRule')->where($map)->field('id,pid,name,title,icon')->select();
 
         $data = channelLevel($rule, $url);

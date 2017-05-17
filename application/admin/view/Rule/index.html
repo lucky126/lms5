@@ -22,7 +22,7 @@
         <div class="col-xs-12">
             <div class="panel">
                 <div class="panel-heading">
-                    <h3 class="panel-title">权限列表</h3>
+                    <h3 class="panel-title">权限列表<span></span></h3>
                 </div>
 
                 <!--Data Table-->
@@ -89,10 +89,39 @@
             newPid = backpid;
             $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + backpid});
             setButtonShow();
+
+            setTitle(backpid);
         });
 
         setButtonShow();
     });
+
+    //get info
+    function getInfo(id, func) {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/Rule/" + id,
+            async: false,
+            error: function (request) {
+                alert("连接错误");
+            },
+            success: function (data) {
+                func(data);
+            }
+        });
+    }
+
+    function setTitle(id) {
+        if (id > 0)
+            getInfo(id, setPidInfo);
+        else
+            $(".panel-title span").text('');
+    }
+
+    function setPidInfo(data) {
+        $(".panel-title span").text('--' + data.title);
+    }
 
     /**
      * 设置新增和返回按钮显示状态
@@ -233,6 +262,8 @@
         newPid = id;
         pidList.push(pid);
         setButtonShow();
+
+        setTitle(id);
     }
 
 </script>
