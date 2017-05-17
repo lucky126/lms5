@@ -31,7 +31,7 @@ class Rule extends Authority
     /**
      * 显示指定的权限资源
      *
-     * @param  int $id 权限id
+     * @param  $id 权限id
      * @return \think\Response
      */
     public function read($id)
@@ -70,7 +70,11 @@ class Rule extends Authority
             }
 
             $service = controller('RuleService', 'Service');
-            $service->Insert($data);
+            $result = $service->Insert($data);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
 
             return json(Base::getResult(0, "", null));
         }else {
@@ -81,7 +85,7 @@ class Rule extends Authority
     /**
      * 保存更新的权限资源
      *
-     * @param  int $id 权限id
+     * @param  $id 权限id
      * @return \think\Response
      */
     public function update($id)
@@ -106,7 +110,11 @@ class Rule extends Authority
             }
 
             $service = controller('RuleService', 'Service');
-            $service->Update($data);
+            $result = $service->Update($data);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
 
             return json(Base::getResult(0, "", null));
         }else {
@@ -117,7 +125,7 @@ class Rule extends Authority
     /**
      * 删除指定权限资源
      *
-     * @param  int $id 权限id
+     * @param  $id 权限id
      * @return \think\Response
      */
     public function delete($id)
@@ -132,7 +140,7 @@ class Rule extends Authority
     /**
      * 验证角色名称唯一性
      *
-     * @param int $id 角色id
+     * @param $id 权限id
      * @return bool
      */
     public function Unique($id)
@@ -154,6 +162,29 @@ class Rule extends Authority
 
             $result['valid'] = true;
             return json($result);
+        }
+
+        return json(Base::getResult(-100, "", null));
+    }
+
+    /**
+     * 设置状态
+     * @param $id 权限id
+     * @param $status 目标状态值
+     * @return \think\response\Json
+     */
+    public function ChangeStatus($id, $status)
+    {
+        if (request()->isPut()) {
+            $service = controller('RuleService', 'Service');
+
+            $result = $service->ChangeStatus($id, $status);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
+
+            return json(Base::getResult(0, "", null));
         }
 
         return json(Base::getResult(-100, "", null));

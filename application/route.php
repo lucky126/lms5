@@ -38,6 +38,8 @@ Route::put('api/system/:id/activate', 'api/System/ChangeStatus?status=1');
 Route::put('api/system/:id/deactivate', 'api/System/ChangeStatus?status=0');
 Route::put('api/group/:id/activate', 'api/Group/ChangeStatus?status=1');
 Route::put('api/group/:id/deactivate', 'api/Group/ChangeStatus?status=0');
+Route::put('api/rule/:id/activate', 'api/Rule/ChangeStatus?status=1');
+Route::put('api/rule/:id/deactivate', 'api/Rule/ChangeStatus?status=0');
 //resource
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');

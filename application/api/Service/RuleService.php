@@ -8,6 +8,7 @@
 
 namespace app\api\service;
 
+use app\api\model\AuthRule;
 use think\Db;
 
 /**
@@ -23,13 +24,12 @@ class RuleService extends BaseService
      */
     public function GetList($pid)
     {
-        //
-        $data = Db::name('AuthRule')->where("status", "<>", "0")->where("pid", "=", $pid)->select();
+        //get data
+        $rule = new AuthRule();
 
-        //文字转换
-        foreach ($data as $k => $v) {
-            $data[$k]['isshowdesc'] = config('globalConst.YesOrNoDesc')[$v['isshow']];
-        }
+        $data = $rule->where("pid", "=", $pid)
+                ->order('id', 'desc')
+                ->select();
 
         return $data;
     }
@@ -41,9 +41,7 @@ class RuleService extends BaseService
      */
     public function Get($id)
     {
-        $map['status'] = ['<>', '-1'];
-        $map['id'] = ['=', $id];
-        $data = Db::name('AuthRule')->where($map)->find();
+        $data = AuthRule::get($id)->getData();
 
         return $data;
     }
@@ -55,16 +53,18 @@ class RuleService extends BaseService
      */
     public function Insert($data)
     {
-        $userdata = [
-            'pid' => $data['pid'],
-            'name' => $data['name'],
-            'title' => $data['title'],
-            'icon' => $data['icon'],
-            'isshow' => $data['isshow'],
-            'status' => 1,
-        ];
+        $rule = new AuthRule;
+        $rule->pid = $data['pid'];
+        $rule->name = $data['name'];
+        $rule->title = $data['title'];
+        $rule->icon = $data['icon'];
+        $rule->isshow = $data['isshow'];
 
-        $result = Db::name('AuthRule')->insert($userdata);
+        if ($rule->save()) {
+            return 0;
+        } else {
+            return $rule->getError();
+        }
 
         return $result;
     }
@@ -77,13 +77,17 @@ class RuleService extends BaseService
     public function Update($data)
     {
         //update
-        return Db::name('AuthRule')
-            ->where('id', $data['id'])
-            ->update(['title' => $data['title'],
-                'name' => $data['name'],
-                'icon' => $data['icon'],
-                'isshow' => $data['isshow']]);
+        $rule = AuthRule::get($data['id']);
+        $rule->name = $data['name'];
+        $rule->title = $data['title'];
+        $rule->icon = $data['icon'];
+        $rule->isshow = $data['isshow'];
 
+        if ($rule->save()) {
+            return 0;
+        } else {
+            return $rule->getError();
+        }
     }
 
     /**
@@ -94,7 +98,12 @@ class RuleService extends BaseService
     public function Delete($id)
     {
         //delete
-        return Db::name('AuthRule')->where('id', $id)->delete();
+        $rule = AuthRule::get($id);
+        if ($rule->delete()) {
+            return 0;
+        } else {
+            return $rule->getError();
+        }
     }
 
     /**
@@ -119,5 +128,23 @@ class RuleService extends BaseService
         }
 
         return true;
+    }
+
+    /**
+     * 设置状态
+     * @param $id 权限id
+     * @param $status 目标状态值
+     * @return int|string
+     */
+    public function ChangeStatus($id, $status)
+    {
+        $rule = AuthRule::get($id);
+        $rule->status = $status;
+
+        if ($rule->save()) {
+            return 0;
+        } else {
+            return $rule->getError();
+        }
     }
 }

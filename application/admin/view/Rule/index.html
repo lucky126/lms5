@@ -52,7 +52,9 @@
                             <tr>
                                 <th data-field="title" data-sortable="true">规则名称</th>
                                 <th data-field="name" data-sortable="true">规则标识</th>
-                                <th data-field="isshowdesc" data-sortable="true" data-formatter="statusFormatter">是否显示</th>
+                                <th data-field="isshow" data-sortable="true" data-formatter="yesnoFormatter">是否显示
+                                </th>
+                                <th data-field="status" data-sortable="true" data-formatter="statusFormatter">状态</th>
                                 <th data-align="center" data-field="action" data-formatter="actionFormatter"
                                     data-events="actionEvents">操作
                                 </th>
@@ -150,17 +152,23 @@
 
     //bootstrap table操作
     function actionFormatter(value, row, index) {
-        var sub = '<a class="sub ml10" href="javascript:void(0)" title="查看子权限"><i class="glyphicon glyphicon-th"></i></a> ';
-        var edit = '<a class="edit ml10" href="javascript:void(0)" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>';
-        var del = '<a class="remove ml10" href="javascript:void(0)" title="删除"><i class="glyphicon glyphicon-remove"></i></a>';
+        var start = '<a class="start btn-link" href="javascript:void(0)" title="启用">启用</a>';
+        var stop = '<a class="stop btn-link" href="javascript:void(0)" title="停用">停用</a>';
+
+        var sub = '<a class="sub btn-link" href="javascript:void(0)" title="查看子权限">查看子权限</a> ';
+        var edit = '<a class="edit btn-link" href="javascript:void(0)" title="编辑">编辑</a>';
+        var del = '<a class="remove btn-link" href="javascript:void(0)" title="删除">删除</a>';
+
 
         if (row.pid == 0) {
             return sub;
         } else {
-            return sub + edit + del;
+            if (row.status == '停用')
+                return start + " | " + sub + " | " + edit + " | " + del;
+            else
+                return stop + " | " + sub + " | " + edit + " | " + del;
         }
     }
-
 
     /**
      * 状态文字格式化
@@ -170,17 +178,40 @@
      */
     function statusFormatter(value, row) {
         var labelColor;
-        if (value == "是") {
+        if (value == "正常") {
             labelColor = "success";
-        }else if(value == "否"){
+        } else if (value == "停用") {
             labelColor = "danger";
         }
 
-        return '<div class="label label-table label-'+ labelColor+'"> ' + value + '</div>';
+        return '<div class="label label-table label-' + labelColor + '"> ' + value + '</div>';
+    }
+
+    /**
+     * 是否文字格式化
+     * @param value
+     * @param row
+     * @returns {string}
+     */
+    function yesnoFormatter(value, row) {
+        var labelColor;
+        if (value == "是") {
+            labelColor = "success";
+        } else if (value == "否") {
+            labelColor = "danger";
+        }
+
+        return '<div class="label label-table label-' + labelColor + '"> ' + value + '</div>';
     }
 
     //操作事件
     window.actionEvents = {
+        'click .start': function (e, value, row, index) {
+            showStartInfo("/api/Rule/", row.id);
+        },
+        'click .stop': function (e, value, row, index) {
+            showStopInfo("确认停用所选权限？", "/api/Rule/", row.id);
+        },
         'click .sub': function (e, value, row, index) {
             showSubList(row.id, row.pid);
         },
@@ -188,7 +219,7 @@
             showEditInfo(row.id);
         },
         'click .remove': function (e, value, row, index) {
-            showDeleteInfo("确认删除该条数据么", "/api/Rule/", row.id);
+            showDeleteInfo("确认删除该权限么", "/api/Rule/", row.id);
         }
     };
 
