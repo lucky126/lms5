@@ -79,13 +79,14 @@ class Basic extends Controller
      */
     public function getMenu($url, $isAdmin, $id)
     {
-        $data = Db::view('AuthGroupAccess', 'uid')
+        $groupRule = Db::view('AuthGroupAccess', 'uid')
             ->view('AuthGroup', 'rules', 'AuthGroup.id=AuthGroupAccess.group_id')
             ->where('uid', '=', $id)
+            ->where('status', '=', config('globalConst.STATUS_ON'))
             ->find();
 
         if (!$isAdmin)
-            $map['id'] = ['in', $data['rules']];
+            $map['id'] = ['in', $groupRule['rules']];
 
         $map['isshow'] = ['=', '1'];
         $map['status'] = ['=', config('globalConst.STATUS_ON')];
