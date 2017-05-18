@@ -148,13 +148,13 @@ class GroupService extends BaseService
      */
     public function ChangeStatus($id, $status)
     {
-        $system = AuthGroup::get($id);
-        $system->status = $status;
+        $group = AuthGroup::get($id);
+        $group->status = $status;
 
-        if ($system->save()) {
+        if ($group->save()) {
             return 0;
         } else {
-            return $system->getError();
+            return $group->getError();
         }
     }
 
@@ -166,7 +166,7 @@ class GroupService extends BaseService
     public function GetRule($id)
     {
         //get rule list
-        $ruleList = DB::name('AuthRule')->field('id,pid,name,title')->select();
+        $ruleList = DB::name('AuthRule')->field('id,pid,name,title,isshow')->select();
         //get group's rule ids
         $groupAccess = Db::name('AuthGroup')->where('id', '=', $id)->find();
         $groupRule = $groupAccess['rules'];
@@ -187,9 +187,14 @@ class GroupService extends BaseService
             $rule = '1,' . $rule;
         }
 
-        return Db::name('AuthGroup')
-            ->where('id', $id)
-            ->update(['rules' => $rule]);
+        $group = AuthGroup::get($id);
+        $group->rules = $rule;
+
+        if ($group->save()) {
+            return 0;
+        } else {
+            return $group->getError();
+        }
     }
 
     /**
@@ -211,6 +216,10 @@ class GroupService extends BaseService
                 $tmp["text"] = $v["title"];
                 $tmp["id"] = $v["id"];
                 $tmp['state']["checked"] = false;
+                if($v['isshow'] == config('globalConst.STATUS_ON'))
+                    $tmp['icon'] = 'glyphicon glyphicon-bookmark';
+                else
+                    $tmp['icon'] = '';
 
                 if (stripos(',' . $groupRule . ',', ',' . $v["id"] . ',') !== false) {
                     $tmp['state']["checked"] = true;
