@@ -56,4 +56,9 @@ class Course extends Model
     {
         return config('globalConst.YesOrNoDesc')[$value];
     }
+
+    public function getStatusAttr($value)
+    {
+        return config('globalConst.StatusDesc')[$value];
+    }
 }
