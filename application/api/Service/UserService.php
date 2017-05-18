@@ -49,12 +49,12 @@ class UserService extends BaseService
         }
 
         //update logininfo
-        $userup = [
-            'logincount' => $data['logincount'] + 1,
-            'lastlogintime' => $data["currentlogintime"],
-            'currentlogintime' => datetime()
-        ];
-        $result = Db::name('user')->where(['id' => $id])->update($userup);
+        $user = User::get($id);
+        $user->logincount++;
+        $user->lastlogintime = $user->currentlogintime;
+        $user->currentlogintime = datetime();
+
+        $user->save();
 
         //get token
         $token = getToken($uid, $id);
@@ -76,7 +76,7 @@ class UserService extends BaseService
      */
     public function CheckAdmin($id)
     {
-        $user = DB::name('User')->where('id', $id)->find();
+        $user = User::get($id)->getData();
 
         $isAdmin = false;
         if ($user['usertype'] == 0) {
@@ -118,6 +118,7 @@ class UserService extends BaseService
     {
         //get user info
         $data = User::get(['uid' => $uid], 'group')->getData();
+
         //return data
         return $data;
     }
