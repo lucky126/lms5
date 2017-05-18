@@ -50,6 +50,7 @@ Route::resource('api/system', 'api/System');
 Route::resource('api/course', 'api/Course');
 Route::resource('api/training', 'api/Training');
 Route::resource('api/register', 'api/Register');
+Route::resource('api/reguser', 'api/Reguser');
 
 return [
     '__pattern__' => [

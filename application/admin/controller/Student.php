@@ -6,7 +6,7 @@ namespace app\admin\controller;
  *  学员控制器
  * @package app\admin\controller
  */
-class Student extends Controller
+class Student extends Basic
 {
     /**
      * 学员列表
@@ -38,4 +38,16 @@ class Student extends Controller
         $this->assign("id", $id);
         return $this->fetch();
     }
+
+    /**
+     * 注册用户列表
+     *
+     * @return \think\Response
+     */
+    public function RegManager()
+    {
+        //
+        return $this->fetch();
+    }
+
 }
