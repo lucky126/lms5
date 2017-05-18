@@ -8,7 +8,8 @@
 
 namespace app\api\service;
 
-
+use app\api\model\Training;
+use app\api\model\Trainingcourse;
 use think\Db;
 
 /**
@@ -24,7 +25,10 @@ class TrainingService extends BaseService
     public function GetList()
     {
         //
-        $data = Db::name('training')->where("status", "<>", "-1")->select();
+        $training = new Training();
+
+        $data = $training->order('id', 'desc')
+            ->select();
 
         return $data;
     }
@@ -36,14 +40,9 @@ class TrainingService extends BaseService
      */
     public function Get($id)
     {
-        $map['status'] = ['<>', '-1'];
-        $map['id'] = ['=', $id];
-        $data = Db::name('training')->where($map)->find();
-        $course = Db::name('trainingcourse')->where('trainingid', $id)->select();
+        $data = Training::get($id, 'courses')->getData();
 
-        $returnVal = array('data' => $data, 'courses' => $course);
-
-        return $returnVal;
+        return $data;
     }
 
     /**
@@ -54,30 +53,76 @@ class TrainingService extends BaseService
     public function Insert($data)
     {
         //make user data
-        $userdata = [
-            'systemid' => 1,
-            'trainingname' => $data['trainingname'],
-            'trainingcode' => $data['trainingcode'],
-            'traingtype' => 1,
-            'registrationstarttime' => $data['registrationstarttime'],
-            'registrationendtime' => $data['registrationendtime'],
-            'starttime' => $data['starttime'],
-            'endtime' => $data['endtime'],
-            'isopen' => 1,
-            'trainingcost' => $data['trainingcost'],
-            'allownumberofcourses' => $data['allownumberofcourses'],
-            'description' => $data['description'],
-            'content' => $data['content'],
-            'memeber' => '',
-            'notice' => $data['notice'],
-            'addtime' => datetime(),
-            'status' => 1,
-        ];
-        //insert data
-        $result = Db::name('training')->insert($userdata);
-        if ($result > 0) {
-            //get training id
-            $tid = Db::name('training')->getLastInsID();
+        $training = new Training;
+        $training->systemid = 1;
+        $training->trainingname = $data['trainingname'];
+        $training->trainingcode = $data['trainingcode'];
+        $training->traingtype = 1;
+        $training->registrationstarttime = $data['registrationstarttime'];
+        $training->registrationendtime = $data['registrationendtime'];
+        $training->starttime = $data['starttime'];
+        $training->endtime = $data['endtime'];
+        $training->isopen = 1;
+        $training->trainingcost = $data['trainingcost'];
+        $training->allownumberofcourses = $data['allownumberofcourses'];
+        $training->description = $data['description'];
+        $training->content = $data['content'];
+        $training->memeber = '';
+        $training->notice = $data['notice'];
+
+        if ($training->save()) {
+            //get all courses info
+            $courses = explode(",", $data['courses']);
+
+            foreach ($courses as $c) {
+                $c_info = explode("_", $c);
+                $isrequired = 0;
+                if (count($c_info) > 1) {
+                    $isrequired = 1;
+                }
+
+                $trainingcourse = new Trainingcourse;
+                $trainingcourse->systemid = 1;
+                $trainingcourse->scormid = $c_info[0];
+                $trainingcourse->isrequired = $isrequired;
+                $trainingcourse->addtime = datetime();
+                $training->courses()->save($trainingcourse);
+            }
+
+            return 0;
+        } else {
+            return $training->getError();
+        }
+    }
+
+    /**
+     * 更新指定培训班数据
+     * @param $data
+     * @return int|string
+     */
+    public function Update($data)
+    {
+        //update training info
+        $training = Training::get($data['id']);
+        $training->trainingname = $data['trainingname'];
+        $training->trainingcode = $data['trainingcode'];
+        $training->traingtype = 1;
+        $training->registrationstarttime = $data['registrationstarttime'];
+        $training->registrationendtime = $data['registrationendtime'];
+        $training->starttime = $data['starttime'];
+        $training->endtime = $data['endtime'];
+        $training->isopen = 1;
+        $training->trainingcost = $data['trainingcost'];
+        $training->allownumberofcourses = $data['allownumberofcourses'];
+        $training->description = $data['description'];
+        $training->content = $data['content'];
+        $training->memeber = '';
+        $training->notice = $data['notice'];
+
+        $training->save();
+        if (true) {
+            //delete course setting info
+            Db::name("trainingcourse")->where('trainingid', $data['id'])->delete();
 
             //get all courses info
             $courses = explode(",", $data['courses']);
@@ -90,28 +135,21 @@ class TrainingService extends BaseService
                 }
                 $course = [
                     'systemid' => 1,
-                    'trainingid' => $tid,
+                    'trainingid' => $data['id'],
                     'scormid' => $c_info[0],
                     'isrequired' => $isrequired,
                     'addtime' => datetime(),
                 ];
 
                 //insert course setting info
-                $result = Db::name("trainingcourse")->insert($course);
+                Db::name("trainingcourse")->insert($course);
             }
+
+            return 0;
+        } else {
+            return $training->getError();
         }
-
-        return $result;
-    }
-
-    /**
-     * 更新指定培训班数据
-     * @param $data
-     * @return int|string
-     */
-    public function Update($data)
-    {
-        //update training info
+        /*
         $result = Db::name('training')
             ->where('id', $data['id'])
             ->update([
@@ -155,7 +193,7 @@ class TrainingService extends BaseService
             $result = Db::name("trainingcourse")->insert($course);
         }
 
-        return $result;
+        return $result;*/
     }
 
     /**
@@ -165,12 +203,14 @@ class TrainingService extends BaseService
      */
     public function Delete($id)
     {
-        //delete course setting info
-        $result = Db::name("trainingcourse")->where('trainingid', $id)->delete();
-        //delete course info
-        $result = Db::name('training')->where('id', $id)->delete();
-
-        return $result;
+        $training = Training::get($id);
+        if ($training->delete()) {
+            // 删除关联数据
+            $training->courses->delete();
+            return 0;
+        } else {
+            return $training->getError();
+        }
     }
 
     /**
@@ -194,5 +234,23 @@ class TrainingService extends BaseService
         }
 
         return true;
+    }
+
+    /**
+     * 设置状态
+     * @param $id 系统id
+     * @param $status 目标状态值
+     * @return int|string
+     */
+    public function ChangeStatus($id, $status)
+    {
+        $training = Training::get($id);
+        $training->status = $status;
+
+        if ($training->save()) {
+            return 0;
+        } else {
+            return $training->getError();
+        }
     }
 }

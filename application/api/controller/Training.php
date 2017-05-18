@@ -53,8 +53,8 @@ class training extends Authority
             $service = controller('TrainingService', 'Service');
             $result = $service->Insert($data);
 
-            if ($result <= 0) {
-                return json(Base::getResult(-100, "", null));
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
             }
 
             return json(base::getresult(0, "", null));
@@ -73,7 +73,7 @@ class training extends Authority
         //find data
         $service = controller('TrainingService', 'Service');
         $data = $service->Get($id);
-        if ($data == null || $data['data'] == null)
+        if ($data == null || $data['courses'] == null)
             return Authority::ResourceNotFound();
 
         //return data
@@ -103,6 +103,10 @@ class training extends Authority
 
             $service = controller('TrainingService', 'Service');
             $result = $service->Update($data);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
 
             return json(Base::getResult(0, "", null));
         } else
@@ -149,5 +153,28 @@ class training extends Authority
             $result['valid'] = true;
             return json($result);
         }
+    }
+
+    /**
+     * 设置状态
+     * @param $id 培训班id
+     * @param $status 目标状态值
+     * @return \think\response\Json
+     */
+    public function ChangeStatus($id, $status)
+    {
+        if (request()->isPut()) {
+            $service = controller('TrainingService', 'Service');
+
+            $result = $service->ChangeStatus($id, $status);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
+
+            return json(Base::getResult(0, "", null));
+        }
+
+        return json(Base::getResult(-100, "", null));
     }
 }

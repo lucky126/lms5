@@ -280,6 +280,8 @@ CREATE TABLE lms_training
   periodnumbercode      VARCHAR(20)          NOT NULL,
   addtime               DATETIME             NOT NULL
   COMMENT '添加时间',
+  updatetime               DATETIME             NOT NULL
+  COMMENT '修改时间',
   status                INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)
@@ -371,6 +373,8 @@ CREATE TABLE lms_course
   COMMENT '是否热门：0，否；1，是',
   addtime           DATETIME             NOT NULL
   COMMENT '添加时间',
+  updatetime               DATETIME             NOT NULL
+  COMMENT '修改时间',
   status            INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
   PRIMARY KEY (id)

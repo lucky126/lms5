@@ -16,8 +16,9 @@ use think\Model;
  */
 class Course extends Model
 {
+    protected $autoWriteTimestamp = true;
     protected $createTime = 'addtime';
-    protected $updateTime = false;
+    protected $updateTime = 'updatetime';
 
     protected $readonly = ['coursecode'];
 
@@ -34,6 +35,7 @@ class Course extends Model
         'isopenselection' => 'integer',
         'isrecommand' => 'integer',
         'addtime' => 'datetime',
+        'updatetime' => 'datetime',
         'status' => 'integer',
     ];
 

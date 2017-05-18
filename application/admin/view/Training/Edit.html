@@ -135,7 +135,7 @@
                 alert("连接错误");
             },
             success: function (info) {
-                var data = info.data;
+                var data = info;
                 var courses = info.courses;
                 $("#trainingname").val(data.trainingname);
                 $("#trainingcode").val(data.trainingcode);
@@ -288,13 +288,17 @@
             },
             success: function (info) {
                 info.forEach(function (value, index, array) {
-                    var check = "<td><input type='checkbox' id='select_" + value.id + "' name='select_" + value.id + "' value ='" + value.id + "'></td>"
+                    var check = "<td></td>";
+                    var isrequired = "<td></td>";
+                    if (value.status == '正常') {
+                        var check = "<td><input type='checkbox' id='select_" + value.id + "' name='select_" + value.id + "' value ='" + value.id + "'></td>"
+                        var isrequired = "<td><input id='required_" + value.id + "' name='required_" + value.id + "' type='checkbox' value ='" + value.id + "'> </td>";
+                    }
                     var ccode = "<td>" + value.coursecode + "</td>";
                     var name = "<td>" + value.coursename + "</td>";
                     var type = "<td>" + value.typeid + "</td>";
                     var coursefee = "<td>" + value.coursefee + "</td>";
                     var isscormcourse = "<td>" + statusFormatter(value.isscormcoursedesc, null) + "</td>";
-                    var isrequired = "<td><input id='required_" + value.id + "' name='required_" + value.id + "' type='checkbox' value ='" + value.id + "'> </td>";
                     $("#courseTable").children("tbody").append("<tr>" + check + ccode + name + type + coursefee + isscormcourse + isrequired + "</tr>");
                 });
             }

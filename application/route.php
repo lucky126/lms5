@@ -44,6 +44,8 @@ Route::put('api/user/:id/activate', 'api/User/ChangeStatus?status=1');
 Route::put('api/user/:id/deactivate', 'api/User/ChangeStatus?status=0');
 Route::put('api/course/:id/activate', 'api/Course/ChangeStatus?status=1');
 Route::put('api/course/:id/deactivate', 'api/Course/ChangeStatus?status=0');
+Route::put('api/training/:id/activate', 'api/Training/ChangeStatus?status=1');
+Route::put('api/training/:id/deactivate', 'api/Training/ChangeStatus?status=0');
 //resource
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');

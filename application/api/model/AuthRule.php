@@ -17,7 +17,6 @@ use think\Model;
 class AuthRule extends Model
 {
     //protected $resultSetType = 'collection';
-
     protected $createTime = false;
     protected $updateTime = false;
 

@@ -105,6 +105,7 @@ class CourseService extends BaseService
         $course->isopenselection = $data['isopenselection'];
         $course->coursedescription = $data['coursedescription'];
 
+
         if ($course->save()) {
             // 更新关联数据
             $course->setting->isbulletin = $dataSetting['isbulletin'];
