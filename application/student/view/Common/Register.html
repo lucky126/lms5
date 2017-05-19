@@ -30,7 +30,7 @@
     {load href="/static/js/jquery-2.2.4.min.js,/static/js/bootstrap.min.js,/static/js/nifty.min.js"/}
     {load href="/static/plugins/bootstrap-validator/bootstrapValidator.min.js" /}
     {load href="/static/plugins/bootstrap-select/bootstrap-select.min.js" /}
-
+    {load href="/static/js/main.js" /}
     <!--=================================================-->
 
 </head>
@@ -180,8 +180,10 @@
                         alert("连接错误");
                     },
                     success: function (data) {
+                        console.log(data);
                         if (data.code == 0) {
-
+                            completeMsg('注册成功！');
+                            login();
                         } else {
                             errorMsg(data.msg);
                         }
@@ -195,6 +197,36 @@
         valid: 'fa fa-check-circle fa-lg text-success',
         invalid: 'fa fa-times-circle fa-lg',
         validating: 'fa fa-refresh'
+    }
+
+    function login()
+    {
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: "/api/student/Login/",
+            data: {
+                username: $("#loginname").val(),
+                password: $("#pwd").val()
+            },
+            async: false,
+            error: function (request) {
+                alert("连接错误");
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    location.href = "/student/index";
+                } else {
+                    $.niftyNoty({
+                        type: 'danger',
+                        icon: 'pli-cross icon-2x',
+                        message: data.msg,
+                        container: 'floating',
+                        timer: 5000
+                    });
+                }
+            }
+        });
     }
 
     function validField() {
