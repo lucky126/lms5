@@ -10,6 +10,7 @@ namespace app\api\service;
 
 use app\api\model\Course;
 use app\api\model\Coursesetting;
+use app\api\model\Trainingcourse;
 use think\Db;
 
 /**
@@ -130,6 +131,12 @@ class CourseService extends BaseService
      */
     public function Delete($id)
     {
+        //check training use count
+        $trainingCount = Trainingcourse::where(['scormid' => $id])->count();
+        if ($trainingCount > 0) {
+            return -201;
+        }
+
         $course = Course::get($id);
         if ($course->delete()) {
             // 删除关联数据

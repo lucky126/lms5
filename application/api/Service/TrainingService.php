@@ -119,8 +119,7 @@ class TrainingService extends BaseService
         $training->memeber = '';
         $training->notice = $data['notice'];
 
-        $training->save();
-        if (true) {
+        if ($training->save()) {
             //delete course setting info
             Db::name("trainingcourse")->where('trainingid', $data['id'])->delete();
 

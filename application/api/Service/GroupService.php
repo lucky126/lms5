@@ -9,6 +9,7 @@
 namespace app\api\service;
 
 use app\api\model\AuthGroup;
+use app\api\model\AuthGroupAccess;
 use think\Db;
 
 /**
@@ -107,8 +108,8 @@ class GroupService extends BaseService
     public function Delete($id)
     {
         //get user group relation
-        $userGroup = Db::name('AuthGroupAccess')->where('group_id', $id)->select();
-        if (count($userGroup) > 0) {
+        $userCount = AuthGroupAccess::where(['group_id' => $id])->count();
+        if ($userCount > 0) {
             return -201;
         }
 

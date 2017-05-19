@@ -97,6 +97,11 @@ class RuleService extends BaseService
      */
     public function Delete($id)
     {
+        //check sub count
+        $subCount = AuthRule::where(['pid' => $id])->count();
+        if ($subCount > 0) {
+            return -201;
+        }
         //delete
         $rule = AuthRule::get($id);
         if ($rule->delete()) {

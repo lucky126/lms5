@@ -134,6 +134,10 @@ class Rule extends Authority
         $service = controller('RuleService', 'Service');
         $result = $service->Delete($id);
 
+        if($result==-201){
+            return json(Base::getResult(-201, "存在子权限", null));
+        }
+
         return json(Base::getResult(0, "", null));
     }
 

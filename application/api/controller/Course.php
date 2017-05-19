@@ -180,6 +180,10 @@ class Course extends Authority
         $service = controller('CourseService', 'Service');
         $result = $service->Delete($id);
 
+        if($result==-201){
+            return json(Base::getResult(-201, "已有培训班使用", null));
+        }
+
         return json(Base::getResult(0, "", null));
     }
 
