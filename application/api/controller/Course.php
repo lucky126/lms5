@@ -92,7 +92,7 @@ class Course extends Authority
     /**
      * 显示指定的课程资源
      *
-     * @param  int $id 课程id
+     * @param  $id 课程id
      * @return \think\Response
      */
     public function read($id)
@@ -100,7 +100,7 @@ class Course extends Authority
         //get user info
         $service = controller('CourseService', 'Service');
         $returnVal = $service->Get($id);
-        if($returnVal == null)
+        if ($returnVal == null)
             return Authority::ResourceNotFound();
         //return data
         return json($returnVal);
@@ -109,7 +109,7 @@ class Course extends Authority
     /**
      * 保存更新的课程资源
      *
-     * @param int $id 课程id
+     * @param $id 课程id
      * @return \think\Response
      */
     public function update($id)
@@ -172,7 +172,7 @@ class Course extends Authority
     /**
      * 删除指定课程资源
      *
-     * @param  int $id 课程id
+     * @param  $id 课程id
      * @return \think\Response
      */
     public function delete($id)
@@ -186,7 +186,7 @@ class Course extends Authority
     /**
      * 验证唯一性
      *
-     * @param int $id 课程id
+     * @param $id 课程id
      * @return bool
      */
     public function Unique($id)
@@ -209,5 +209,28 @@ class Course extends Authority
             $result['valid'] = true;
             return json($result);
         }
+    }
+
+    /**
+     * 设置状态
+     * @param $id 课程id
+     * @param $status 目标状态值
+     * @return \think\response\Json
+     */
+    public function ChangeStatus($id, $status)
+    {
+        if (request()->isPut()) {
+            $service = controller('CourseService', 'Service');
+
+            $result = $service->ChangeStatus($id, $status);
+
+            if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
+
+            return json(Base::getResult(0, "", null));
+        }
+
+        return json(Base::getResult(-100, "", null));
     }
 }

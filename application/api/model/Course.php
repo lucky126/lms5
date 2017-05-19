@@ -16,8 +16,9 @@ use think\Model;
  */
 class Course extends Model
 {
+    protected $autoWriteTimestamp = true;
     protected $createTime = 'addtime';
-    protected $updateTime = false;
+    protected $updateTime = 'updatetime';
 
     protected $readonly = ['coursecode'];
 
@@ -34,6 +35,7 @@ class Course extends Model
         'isopenselection' => 'integer',
         'isrecommand' => 'integer',
         'addtime' => 'datetime',
+        'updatetime' => 'datetime',
         'status' => 'integer',
     ];
 
@@ -55,5 +57,10 @@ class Course extends Model
     public function getIsopenselectionAttr($value)
     {
         return config('globalConst.YesOrNoDesc')[$value];
+    }
+
+    public function getStatusAttr($value)
+    {
+        return config('globalConst.StatusDesc')[$value];
     }
 }

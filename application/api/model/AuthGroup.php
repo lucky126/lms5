@@ -17,7 +17,7 @@ use think\Model;
 class AuthGroup extends Model
 {
     //protected $resultSetType = 'collection';
-
+    protected $autoWriteTimestamp = true;
     protected $createTime = false;
     protected $updateTime = false;
 

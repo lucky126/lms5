@@ -35,7 +35,7 @@ class CourseService extends BaseService
 
     /**
      * 获取指定课程数据
-     * @param $id
+     * @param $id 课程id
      * @return array|false|\PDOStatement|string|\think\Model
      */
     public function Get($id)
@@ -105,6 +105,7 @@ class CourseService extends BaseService
         $course->isopenselection = $data['isopenselection'];
         $course->coursedescription = $data['coursedescription'];
 
+
         if ($course->save()) {
             // 更新关联数据
             $course->setting->isbulletin = $dataSetting['isbulletin'];
@@ -124,7 +125,7 @@ class CourseService extends BaseService
 
     /**
      * 删除指定课程数据
-     * @param $id
+     * @param $id 课程id
      * @return int
      */
     public function Delete($id)
@@ -161,5 +162,23 @@ class CourseService extends BaseService
         }
 
         return true;
+    }
+
+    /**
+     * 设置状态
+     * @param $id 课程id
+     * @param $status 目标状态值
+     * @return int|string
+     */
+    public function ChangeStatus($id, $status)
+    {
+        $course = Course::get($id);
+        $course->status = $status;
+
+        if ($course->save()) {
+            return 0;
+        } else {
+            return $course->getError();
+        }
     }
 }

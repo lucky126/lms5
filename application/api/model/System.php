@@ -16,6 +16,7 @@ use think\Model;
  */
 class System extends Model
 {
+    protected $autoWriteTimestamp = true;
     protected $createTime = 'addtime';
     protected $updateTime = false;
 
