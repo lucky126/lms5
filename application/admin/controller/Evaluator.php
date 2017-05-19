@@ -1,30 +1,27 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: lucky
+ * Date: 2017/5/19
+ * Time: 17:13
+ */
 
 namespace app\admin\controller;
 
 /**
- * 激活码控制器
+ * 投票控制器
  * @package app\admin\controller
  */
-class Activationcode extends Basic
+class Evaluator extends Basic
 {
     /**
-     * 激活码列表
+     * 投票列表
      *
      * @return \think\Response
      */
     public function index()
     {
         //
-        return $this->fetch();
-    }
-
-    /**
-     * 撤销激活码
-     * @return mixed
-     */
-    public function Revoke()
-    {
         return $this->fetch();
     }
 }

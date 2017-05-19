@@ -18,4 +18,26 @@ class Finance extends Basic
         //
         return $this->fetch();
     }
+
+    /**
+     * 离线交费确认
+     *
+     * @return \think\Response
+     */
+    public function OfflineConfirm()
+    {
+        //
+        return $this->fetch();
+    }
+
+    /**
+     * 财务统计
+     *
+     * @return \think\Response
+     */
+    public function Stat()
+    {
+        //
+        return $this->fetch();
+    }
 }

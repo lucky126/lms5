@@ -50,4 +50,15 @@ class Student extends Basic
         return $this->fetch();
     }
 
+    /**
+     * 导入学员账号
+     *
+     * @return \think\Response
+     */
+    public function Import()
+    {
+        //
+        return $this->fetch();
+    }
+
 }
