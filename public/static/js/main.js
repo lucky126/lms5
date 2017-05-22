@@ -70,6 +70,34 @@ function ValidateAddInfo() {
 function showEditPage(url, title, func, id) {
     return showEditPageDefault(url, title, func, id, true);
 }
+
+/**
+ * 显示详细信息页面
+ * @param url 调用的html页面
+ * @param title 操作框标题
+ */
+function showDetail(url, title) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function (data) {
+
+            bootbox.dialog({
+                title: title,
+                message: data,
+                buttons: {
+                    cancel: {
+                        label: "关闭",
+                        className: "btn-primary",
+                        callback: function () {
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
+
 /**
  * 显示新增或者编辑页面
  * @param url 调用新增或者编辑的html页面

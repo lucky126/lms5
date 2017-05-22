@@ -23,4 +23,13 @@ class Training extends Basic
         return $this->fetch();
     }
 
+    /**
+     * 培训班详细
+     * @return mixed
+     */
+    public function detail($id)
+    {
+        $this->assign("id", $id);
+        return $this->fetch();
+    }
 }

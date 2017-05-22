@@ -1,3 +1,109 @@
 {extend name="base" /}
-{block name="title"}reg{/block}
-{block name="main"}{/block}
+{block name="css"}
+{load href="/static/plugins/bootstrap-table/bootstrap-table.min.css,/static/plugins/x-editable/css/bootstrap-editable.css" /}
+{load href="/static/plugins/animate-css/animate.min.css,/static/plugins/bootstrap-validator/bootstrapValidator.min.css" /}
+{/block}
+
+{block name="js"}
+{load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js,/static/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{load href="/static/plugins/bootbox/bootbox.min.js,/static/plugins/bootstrap-validator/bootstrapValidator.min.js" /}
+
+{load href="/static/js/main.js" /}
+<script type="text/javascript">
+    //设置bootstrap table为中文
+    $('#table').bootstrapTable({locale: 'zh-CN'});
+</script>
+{/block}
+
+{block name="title"}培训班报名{/block}
+{block name="main"}
+<div id="page-content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">培训班列表</h3>
+                </div>
+
+                <!--Data Table-->
+                <!--===================================================-->
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table data-toggle="table"
+                               data-url="/api/Selectcourse/getAllowRegTrainingList?uid={$uid}"
+                               data-search="true"
+                               data-sort-name="id"
+                               data-pagination="false" id="table">
+                            <thead>
+                            <tr>
+                                <th data-field="trainingname" data-formatter="detailFormatter">培训班名称</th>
+                                <th data-field="starttime" data-formatter="dateFormatter">培训开始时间
+                                </th>
+                                <th data-field="endtime" data-formatter="dateFormatter">
+                                    培训结束时间
+                                </th>
+                                <th data-field="trainingcost" data-formatter="costFormatter">
+                                    培训费
+                                </th>
+                                <th data-align="center" data-field="action" data-formatter="actionFormatter"
+                                    data-events="actionEvents">报名
+                                </th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!--===================================================-->
+                <!--End Data Table-->
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{/block}
+
+{block name="modal"}
+<script type="text/javascript">
+    $(function () {
+
+    });
+
+    /**
+     * 详细内容格式化
+     * @param value
+     * @param row
+     * @returns {string}
+     */
+    function detailFormatter(value, row) {
+        return '<a class="btn-link" href="javascript:showDetail(\'/student/Training/detail?id=' + row.id + '\',\'培训班介绍\');"> ' + value + '</a>';
+    }
+
+    /**
+     * 金额格式化
+     * @param value
+     * @param row
+     * @returns {string}
+     */
+    function costFormatter(value, row) {
+        return '<span class="text-muted"> ' + value + ' 元</span>';
+    }
+
+
+    //bootstrap table操作
+    function actionFormatter(value, row, index) {
+        var signup = '<a class="start btn btn-primary" href="javascript:void(0)" title="报名">报 名</a>';
+
+        return signup;
+    }
+
+    //操作事件
+    window.actionEvents = {
+        'click .signup': function (e, value, row, index) {
+
+        }
+    };
+
+</script>
+{/block}

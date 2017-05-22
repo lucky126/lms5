@@ -47,4 +47,31 @@ class StudenttraningService extends BaseService
 
         return Array('studying' => $studying, 'needPay' => $needPay);
     }
+
+
+    /**
+     * 获取可以报名的培训计划
+     * @param $uid
+     * @param $sysid
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function GetAllowRegTrainingList($uid, $sysid)
+    {
+        //get data
+        $subQuery = Db::name('studenttraining')
+            ->field('trainingid')
+            ->where('studentid', '=', $uid)
+            ->buildSql();
+
+        $map['systemid'] = ['=', $sysid];
+        $map['starttime'] = ['<=', datetime()];
+        $map['endtime'] = ['>=', datetime()];
+        $map['id'] = ['not in', $subQuery];
+
+        $data = Db::name('training')
+            ->where($map)
+            ->select();
+
+        return $data;
+    }
 }

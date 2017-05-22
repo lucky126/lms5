@@ -3,26 +3,30 @@
  * Created by PhpStorm.
  * User: lucky
  * Date: 2017/5/22
- * Time: 13:06
+ * Time: 17:08
  */
 
-namespace app\student\service;
+namespace app\api\controller;
 
 /**
- * Class SelectcourseService
- * @package app\api\service
+ * 选课api控制器
+ * @package app\api\controller
  */
-class SelectcourseService extends BaseService
+class Selectcourse extends Authority
 {
-    public function getStudentMainPage($uid)
+    /**
+     * @param $uid
+     * @return array
+     */
+    public function checkStudentAuth($uid)
     {
         //获取默认系统信息
-        $sysService = controller('api/SystemService', 'Service');
+        $sysService = controller('SystemService', 'Service');
         $system = $sysService->GetDefault();
 
         //培训班逻辑：报名（插入记录），缴费（ispayment=1），学习（isallowlearning=1），终止（超出培训班起止时间）
         //获取学生培训计划列表
-        $stuTrainingService = controller('api/StudenttraningService', 'Service');
+        $stuTrainingService = controller('StudenttraningService', 'Service');
         $stuTraining = $stuTrainingService->GetTrainingInfo($uid, $system['id']);
 
         $returnPage = '';
@@ -40,6 +44,22 @@ class SelectcourseService extends BaseService
             $returnPage = 'Finance/Pay';
         }
 
-        return BaseService::getResult('0', '', $returnPage);
+        return Base::getResult('0', '', $returnPage);
+    }
+
+    /**
+     * @param $uid
+     * @return array
+     */
+    public function getAllowRegTrainingList($uid)
+    {
+        //获取默认系统信息
+        $sysService = controller('SystemService', 'Service');
+        $system = $sysService->GetDefault();
+
+        $stuTrainingService = controller('StudenttraningService', 'Service');
+        $list = $stuTrainingService->GetAllowRegTrainingList($uid, $system['id']);
+
+        return $list;
     }
 }

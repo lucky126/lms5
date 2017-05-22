@@ -20,8 +20,8 @@ class Index extends Basic
      */
     public function index()
     {
-        $service = controller('SelectcourseService', 'Service');
-        $data = $service->getStudentMainPage($this->uid);
+        $service = controller('api/Selectcourse', 'controller');
+        $data = $service->checkStudentAuth($this->uid);
 
         if($data['data'] == 'main')
             return $this->fetch();
