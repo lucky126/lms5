@@ -25,6 +25,8 @@ class Index extends Basic
 
         if($data['data'] == 'main')
             return $this->fetch();
+        else if($data['data'] == '')
+            return $this->error();
         else
             return $this->redirect($data['data']);
     }

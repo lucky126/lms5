@@ -261,7 +261,7 @@
                     var name = "<td>" + value.coursename + "</td>";
                     var type = "<td>" + value.typeid + "</td>";
                     var coursefee = "<td>" + value.coursefee + "</td>";
-                    var isscormcourse = "<td>" + statusFormatter(value.isscormcoursedesc, null) + "</td>";
+                    var isscormcourse = "<td>" + yesnoFormatter(value.isscormcourse, null) + "</td>";
                     $("#courseTable").children("tbody").append("<tr>" + check + ccode + name + type + coursefee + isscormcourse + isrequired + "</tr>");
                 });
             }
