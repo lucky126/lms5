@@ -45,6 +45,15 @@ class SystemService extends BaseService
     }
 
     /**
+     * 获得默认系统
+     * @return array|false|\PDOStatement|string|\think\Model
+     */
+    public function GetDefault()
+    {
+        return $this->Get(1);
+    }
+
+    /**
      * 新增系统数据
      * @param $data
      * @return int|string

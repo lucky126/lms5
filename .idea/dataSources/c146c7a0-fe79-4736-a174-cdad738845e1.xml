@@ -81,7 +81,7 @@
     <table id="33" parent="2" name="lms_studentextinfo">
       <Comment>学员扩展信息</Comment>
     </table>
-    <table id="34" parent="2" name="lms_stuenttraning">
+    <table id="34" parent="2" name="lms_studenttraining">
       <Comment>学生培训计划</Comment>
     </table>
     <table id="35" parent="2" name="lms_system">

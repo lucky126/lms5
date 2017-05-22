@@ -791,10 +791,10 @@ CREATE TABLE lms_teachercourse
 
 
 /*==============================================================*/
-/* Table: lms_stuenttraning                                     */
+/* Table: lms_studenttraining                                     */
 /*==============================================================*/
-DROP TABLE IF EXISTS lms_stuenttraning;
-CREATE TABLE lms_stuenttraning
+DROP TABLE IF EXISTS lms_studenttraining;
+CREATE TABLE lms_studenttraining
 (
   trainingid       INT           NOT NULL
   COMMENT '培训班ID',

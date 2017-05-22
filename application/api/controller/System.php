@@ -8,8 +8,6 @@
 
 namespace app\api\controller;
 
-use think\Db;
-
 /**
  * 系统api控制器
  * @package app\api\controller

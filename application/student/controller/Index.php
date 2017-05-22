@@ -8,7 +8,10 @@
 
 namespace app\student\controller;
 
-
+/**
+ * Class Index
+ * @package app\student\controller
+ */
 class Index extends Basic
 {
     /**
@@ -17,7 +20,13 @@ class Index extends Basic
      */
     public function index()
     {
-        return $this->fetch();
+        $service = controller('SelectcourseService', 'Service');
+        $data = $service->getStudentMainPage($this->uid);
+
+        if($data['data'] == 'main')
+            return $this->fetch();
+        else
+            return $this->redirect($data['data']);
     }
 
     /**
