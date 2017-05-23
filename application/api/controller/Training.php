@@ -65,7 +65,7 @@ class training extends Authority
     /**
      * 显示指定的培训班资源
      *
-     * @param  int $id 培训班id
+     * @param  $id 培训班id
      * @return \think\Response
      */
     public function read($id)
@@ -81,9 +81,27 @@ class training extends Authority
     }
 
     /**
+     * 显示指定的培训班课程资源
+     *
+     * @param  $id 培训班id
+     * @return \think\Response
+     */
+    public function Courses($id)
+    {
+        //find data
+        $service = controller('TrainingService', 'Service');
+        $data = $service->GetCourses($id);
+        if ($data == null)
+            return Authority::ResourceNotFound();
+
+        //return data
+        return json($data);
+    }
+
+    /**
      * 保存更新的培训班资源
      *
-     * @param int $id 培训班id
+     * @param $id 培训班id
      * @return \think\Response
      */
     public function update($id)
@@ -116,7 +134,7 @@ class training extends Authority
     /**
      * 删除指定培训班资源
      *
-     * @param  int $id 培训班id
+     * @param  $id 培训班id
      * @return \think\Response
      */
     public function delete($id)
@@ -131,7 +149,7 @@ class training extends Authority
     /**
      * 验证唯一性
      *
-     * @param int $id 培训班id
+     * @param $id 培训班id
      * @return bool
      */
     public function Unique($id)

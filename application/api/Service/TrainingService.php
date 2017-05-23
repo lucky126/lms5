@@ -46,6 +46,21 @@ class TrainingService extends BaseService
     }
 
     /**
+     * 获取指定培训班课程数据
+     * @param $id
+     * @return array|false|\PDOStatement|string|\think\Model
+     */
+    public function GetCourses($id)
+    {
+        $data = Db::view('trainingcourse', 'trainingid,isrequired')
+            ->view('course', 'coursecode,coursename,coursefee', 'course.id=trainingcourse.scormid AND course.systemid=trainingcourse.systemid', 'LEFT')
+            ->where('trainingid', '=', $id)
+            ->select();
+
+        return $data;
+    }
+
+    /**
      * 新增培训班数据
      * @param $data
      * @return int|string
