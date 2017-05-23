@@ -8,13 +8,14 @@
 
 namespace app\api\service;
 
+use app\api\model\Studenttraining;
 use think\Db;
 
 /**
  * 学生培训计划服务类
  * @package app\api\service
  */
-class StudenttraningService extends BaseService
+class SelectcourseService extends BaseService
 {
     /**
      * 获取学生培训计划列表
@@ -73,5 +74,37 @@ class StudenttraningService extends BaseService
             ->select();
 
         return $data;
+    }
+
+    /**
+     * 新增培训计划报名信息
+     * @param $data
+     * @return int
+     */
+    public function Signin($data)
+    {
+        $existInfo = Studenttraining::get(['systemid' => $data['sysid'], 'studentid' => $data['uid'], 'trainingid' => $data['id']]);
+        //存在报名信息
+
+        if ($existInfo != null) {
+            return -201;
+        }
+
+        //新增报名信息
+        $studenttraining = new Studenttraining();
+        $studenttraining->trainingid = $data['id'];
+        $studenttraining->systemid = $data['sysid'];
+        $studenttraining->studentid = $data['uid'];
+        $studenttraining->certificatecode = '';
+
+        if ($studenttraining->save()) {
+
+            Db::execute("INSERT INTO lms_studentcourse (trainingid,systemid,studentid,courseid,selecttime,type) SELECT trainingid,:systemid,:studentid,scormid,now(),2 FROM lms_trainingcourse WHERE trainingid=:trainingid",
+                ['trainingid' => $data['id'],'systemid' => $data['sysid'],'studentid' => $data['uid']]);
+
+            return 0;
+        } else {
+            return $studenttraining->getError();
+        }
     }
 }

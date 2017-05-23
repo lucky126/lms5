@@ -32,4 +32,14 @@ class Training extends Basic
         $this->assign("id", $id);
         return $this->fetch();
     }
+
+    /**
+     * 培训班报名
+     * @return mixed
+     */
+    public function Signup($id)
+    {
+        $this->assign("id", $id);
+        return $this->fetch();
+    }
 }

@@ -15,7 +15,8 @@ namespace app\api\controller;
 class Selectcourse extends Authority
 {
     /**
-     * @param $uid
+     * 检查学生培训班权限
+     * @param $uid 学生uuid
      * @return array
      */
     public function checkStudentAuth($uid)
@@ -26,12 +27,11 @@ class Selectcourse extends Authority
 
         $returnPage = '';
 
-        if($system != null)
-        {
+        if ($system != null) {
             //培训班逻辑：报名（插入记录），缴费（ispayment=1），学习（isallowlearning=1），终止（超出培训班起止时间）
             //获取学生培训计划列表
-            $stuTrainingService = controller('api/StudenttraningService', 'Service');
-            $stuTraining = $stuTrainingService->GetTrainingInfo($uid, $system['id']);
+            $service = controller('api/SelectcourseService', 'Service');
+            $stuTraining = $service->GetTrainingInfo($uid, $system['id']);
 
             //没有报名任何培训班或者没有可以学习的培训班
             if ($stuTraining['studying'] == 0 && $stuTraining['needPay'] == 0) {
@@ -52,7 +52,8 @@ class Selectcourse extends Authority
     }
 
     /**
-     * @param $uid
+     * 获取指定学生可以报名的培训计划列表
+     * @param $uid 学生uuid
      * @return array
      */
     public function getAllowRegTrainingList($uid)
@@ -61,9 +62,42 @@ class Selectcourse extends Authority
         $sysService = controller('api/SystemService', 'Service');
         $system = $sysService->GetDefault();
 
-        $stuTrainingService = controller('api/StudenttraningService', 'Service');
-        $list = $stuTrainingService->GetAllowRegTrainingList($uid, $system['id']);
+        $service = controller('api/SelectcourseService', 'Service');
+        $list = $service->GetAllowRegTrainingList($uid, $system['id']);
 
         return $list;
+    }
+
+    /**
+     * 报名培训计划
+     * @return \think\response\Json
+     */
+    public function Signin()
+    {
+        if (request()->isPost()) {
+            $data = input('post.');
+
+            if ($data == null || $data['uid'] == '' || $data['id'] == '') {
+                // 验证失败 输出错误信息
+                return json(Base::getResult(-101, '', null));
+            }
+
+            //获取默认系统信息
+            $sysService = controller('api/SystemService', 'Service');
+            $system = $sysService->GetDefault();
+            $data['sysid'] = $system['id'];
+
+            $service = controller('api/SelectcourseService', 'Service');
+            $result = $service->Signin($data);
+
+            if ($result == -201) {
+                return json(Base::getResult(-201, '', null));
+            } else if ($result != 0) {
+                return json(Base::getResult(-100, $result, null));
+            }
+
+            return json(Base::getResult(0, "", null));
+        } else
+            return json(Base::getResult(-100, "", null));
     }
 }

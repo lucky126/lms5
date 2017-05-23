@@ -163,51 +163,6 @@ class TrainingService extends BaseService
         } else {
             return $training->getError();
         }
-        /*
-        $result = Db::name('training')
-            ->where('id', $data['id'])
-            ->update([
-                'trainingname' => $data['trainingname'],
-                'traingtype' => 1,
-                'registrationstarttime' => $data['registrationstarttime'],
-                'registrationendtime' => $data['registrationendtime'],
-                'starttime' => $data['starttime'],
-                'endtime' => $data['endtime'],
-                'isopen' => 1,
-                'trainingcost' => $data['trainingcost'],
-                'allownumberofcourses' => $data['allownumberofcourses'],
-                'description' => $data['description'],
-                'content' => $data['content'],
-                'memeber' => '',
-                'notice' => $data['notice'],
-            ]);
-
-
-        //delete course setting info
-        Db::name("trainingcourse")->where('trainingid', $data['id'])->delete();
-
-        //get all courses info
-        $courses = explode(",", $data['courses']);
-
-        foreach ($courses as $c) {
-            $c_info = explode("_", $c);
-            $isrequired = 0;
-            if (count($c_info) > 1) {
-                $isrequired = 1;
-            }
-            $course = [
-                'systemid' => 1,
-                'trainingid' => $data['id'],
-                'scormid' => $c_info[0],
-                'isrequired' => $isrequired,
-                'addtime' => datetime(),
-            ];
-
-            //insert course setting info
-            $result = Db::name("trainingcourse")->insert($course);
-        }
-
-        return $result;*/
     }
 
     /**

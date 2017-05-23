@@ -93,7 +93,7 @@
 
     //bootstrap table操作
     function actionFormatter(value, row, index) {
-        var signup = '<a class="start btn btn-primary" href="javascript:void(0)" title="报名">报 名</a>';
+        var signup = '<a class="signup btn btn-primary" href="javascript:void(0)" title="报名">报 名</a>';
 
         return signup;
     }
@@ -101,9 +101,91 @@
     //操作事件
     window.actionEvents = {
         'click .signup': function (e, value, row, index) {
-
+            showSignUpInfo(row.id);
         }
     };
+
+    /**
+     * 显示报名培训班
+     * @param id
+     */
+    function showSignUpInfo(id) {
+        var title = "培训班报名确认";
+        var url = "/student/Training/Signup?id=" + id;
+
+        showSignUpPage(url, title, saveSigninInfo, id);
+    }
+
+    /**
+     * 显示报名培训班页面
+     * @param url 调用新增或者编辑的html页面
+     * @param title 操作框标题
+     * @param func 保存操作返回函数
+     * @param id 操作数据ID，用于编辑保存用
+     */
+    function showSignUpPage(url, title, func, id) {
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+
+                bootbox.dialog({
+                    title: title,
+                    message: data,
+                    buttons: {
+                        success: {
+                            label: "我要报名",
+                            className: "btn-primary",
+                            callback: function () {
+                                func(id);
+                            }
+                        },
+                        cancel: {
+                            label: "放弃报名",
+                            className: "btn-danger",
+                            callback: function () {
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 保存报名培训班
+     * @param id
+     */
+    function saveSigninInfo(id) {
+        //如果是新增
+        var method = "POST";
+        var url = "/api/Selectcourse/Signin";
+
+        //异步保存
+        $.ajax({
+            cache: true,
+            type: method,
+            url: url,
+            data: {
+                'uid': '{$uid}',
+                'id': id
+            },
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    completeMsg("报名成功");
+                    location.href = '/student';
+                } else if (data.code == -201) {
+                    errorMsg('您已报名过该培训班！如需交费，请点击\"交费信息-我要交费\"！');
+                } else {
+                    errorMsg('报名失败！请稍候再试或联系技术支持！错误信息：' + data.msg);
+                }
+            }
+        });
+    }
 
 </script>
 {/block}
