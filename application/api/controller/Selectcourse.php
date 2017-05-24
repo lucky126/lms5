@@ -35,7 +35,7 @@ class Selectcourse extends Authority
 
             //没有报名任何培训班或者没有可以学习的培训班
             if ($stuTraining['studying'] == 0 && $stuTraining['needPay'] == 0) {
-                $returnPage = 'Training/RegPayment';
+                $returnPage = 'Training/reglist';
             }
 
             if ($stuTraining['studying'] > 0) {
@@ -44,7 +44,7 @@ class Selectcourse extends Authority
 
             //有培训班，但是存在未缴费的
             if ($stuTraining['needPay'] > 0) {
-                $returnPage = 'Finance/Pay';
+                $returnPage = 'Finance/paylist';
             }
         }
 
@@ -52,10 +52,10 @@ class Selectcourse extends Authority
     }
 
     /**
-     * 获取指定学生可以报名的培训计划列表
-     * @param $uid 学生uuid
-     * @return array
-     */
+ * 获取指定学生可以报名的培训计划列表
+ * @param $uid 学生uuid
+ * @return array
+ */
     public function getAllowRegTrainingList($uid)
     {
         //获取默认系统信息
@@ -99,5 +99,22 @@ class Selectcourse extends Authority
             return json(Base::getResult(0, "", null));
         } else
             return json(Base::getResult(-100, "", null));
+    }
+
+    /**
+     * 获取指定学生需要交费的培训计划列表
+     * @param $uid 学生uuid
+     * @return array
+     */
+    public function getNeedPayTrainingList($uid)
+    {
+        //获取默认系统信息
+        $sysService = controller('api/SystemService', 'Service');
+        $system = $sysService->GetDefault();
+
+        $service = controller('api/SelectcourseService', 'Service');
+        $list = $service->GetNeedPayTrainingList($uid, $system['id']);
+
+        return $list;
     }
 }

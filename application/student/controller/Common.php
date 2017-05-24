@@ -6,12 +6,20 @@ use think\Controller;
 
 class Common extends Controller
 {
-    public function Login()
+    /**
+     * 学生登录
+     * @return mixed
+     */
+    public function login()
     {
         return $this->fetch();
     }
 
-    public function Register()
+    /**
+     * 学生注册
+     * @return mixed
+     */
+    public function register()
     {
         return $this->fetch();
     }

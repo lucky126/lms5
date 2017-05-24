@@ -14,8 +14,7 @@
     $('#table').bootstrapTable({locale: 'zh-CN'});
 </script>
 {/block}
-
-{block name="title"}培训班报名{/block}
+{block name="title"}我要交费{/block}
 {block name="main"}
 <div id="page-content">
 
@@ -23,7 +22,7 @@
         <div class="col-xs-12">
             <div class="panel">
                 <div class="panel-heading">
-                    <h3 class="panel-title">培训班列表</h3>
+                    <h3 class="panel-title">需要交费的培训班</h3>
                 </div>
 
                 <!--Data Table-->
@@ -31,7 +30,7 @@
                 <div class="panel-body">
                     <div class="table-responsive">
                         <table data-toggle="table"
-                               data-url="/api/Selectcourse/getAllowRegTrainingList?uid={$uid}"
+                               data-url="/api/Selectcourse/getNeedPayTrainingList?uid={$uid}"
                                data-search="true"
                                data-sort-name="id"
                                data-pagination="false" id="table">
@@ -47,7 +46,7 @@
                                     培训费
                                 </th>
                                 <th data-align="center" data-field="action" data-formatter="actionFormatter"
-                                    data-events="actionEvents">报名
+                                    data-events="actionEvents">交费
                                 </th>
                             </tr>
                             </thead>
@@ -93,37 +92,37 @@
 
     //bootstrap table操作
     function actionFormatter(value, row, index) {
-        var signup = '<a class="signup btn btn-primary" href="javascript:void(0)" title="报名">报 名</a>';
+        var signup = '<a class="pay btn btn-primary" href="javascript:void(0)" title="交费">交 费</a>';
 
         return signup;
     }
 
     //操作事件
     window.actionEvents = {
-        'click .signup': function (e, value, row, index) {
-            showSignUpInfo(row.id);
+        'click .pay': function (e, value, row, index) {
+            showPayInfo(row.id);
         }
     };
 
     /**
-     * 显示报名培训班
+     * 显示培训班
      * @param id
      */
-    function showSignUpInfo(id) {
+    function showPayInfo(id) {
         var title = "培训班报名确认";
-        var url = "/student/Training/Signup?id=" + id;
+        var url = "/student/Finance/paytype?id=" + id;
 
-        showSignUpPage(url, title, saveSigninInfo, id);
+        showPayinfoPage(url, title, saveSigninInfo, id);
     }
 
     /**
-     * 显示报名培训班页面
+     * 显示培训班缴费类型页面
      * @param url 调用新增或者编辑的html页面
      * @param title 操作框标题
      * @param func 保存操作返回函数
      * @param id 操作数据ID，用于编辑保存用
      */
-    function showSignUpPage(url, title, func, id) {
+    function showPayinfoPage(url, title, func, id) {
         $.ajax({
             type: "GET",
             url: url,
@@ -134,14 +133,14 @@
                     message: data,
                     buttons: {
                         success: {
-                            label: "我要报名",
+                            label: "确定",
                             className: "btn-primary",
                             callback: function () {
                                 func(id);
                             }
                         },
                         cancel: {
-                            label: "放弃报名",
+                            label: "放弃交费",
                             className: "btn-danger",
                             callback: function () {
                             }

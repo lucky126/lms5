@@ -1,0 +1,66 @@
+<form method="post" action="" class="form-horizontal" id="addform">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">培训班：</label>
+        <div class="col-sm-6">
+            <span id="trainingname" name="trainingname"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">学习时间：</label>
+        <div class="col-sm-6">
+            <span id="studyTime" name="studyTime"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">简介：</label>
+        <div class="col-sm-6">
+            <span id="description" name="description"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">培训费用：</label>
+        <div class="col-sm-6">
+            <span id="trainingcost" name="trainingcost"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">缴费类型：</label>
+        <div class="col-sm-6">
+            <div class="radio ">
+                <input id="paytype-1" class="magic-radio" type="radio"
+                       name="paytype">
+                <label for="paytype-1">离线缴费，获取激活码</label>
+                <input id="paytype-2" class="magic-radio" type="radio"
+                       name="paytype">
+                <label for="paytype-2">在线支付</label>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        getInfo('{$id}');
+    });
+
+    //get info
+    function getInfo(id) {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/training/" + id,
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                var data = info;
+
+                $("#trainingname").text(data.trainingname);
+                $("#studyTime").text(data.starttime + ' 至 ' + data.endtime);
+                $("#description").text(data.description);
+                $('#trainingcost').text('￥ ' + data.trainingcost + ' 元')
+            }
+        });
+    }
+</script>

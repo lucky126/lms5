@@ -18,13 +18,14 @@ class Training extends Basic
      * 报名培训班
      * @return mixed
      */
-    public function RegPayment()
+    public function reglist()
     {
         return $this->fetch();
     }
 
     /**
      * 培训班详细
+     * @param $id
      * @return mixed
      */
     public function detail($id)
@@ -35,9 +36,10 @@ class Training extends Basic
 
     /**
      * 培训班报名
+     * @param $id
      * @return mixed
      */
-    public function Signup($id)
+    public function signup($id)
     {
         $this->assign("id", $id);
         return $this->fetch();

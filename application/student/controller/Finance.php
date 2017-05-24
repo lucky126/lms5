@@ -15,12 +15,22 @@ namespace app\student\controller;
 class Finance extends Basic
 {
     /**
-     * 缴费
+     * 缴费培训计划列表
      * @return mixed
      */
-    public function Pay()
+    public function paylist()
     {
         return $this->fetch();
     }
 
+    /**
+     * 缴费类型选择
+     * @param $id
+     * @return mixed
+     */
+    public function paytype($id)
+    {
+        $this->assign("id", $id);
+        return $this->fetch();
+    }
 }

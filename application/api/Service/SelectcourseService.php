@@ -107,4 +107,34 @@ class SelectcourseService extends BaseService
             return $studenttraining->getError();
         }
     }
+
+
+    /**
+     * 获取需要交费的培训计划
+     * @param $uid
+     * @param $sysid
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function GetNeedPayTrainingList($uid, $sysid)
+    {
+        //get data
+        $subQuery = Db::name('studenttraining')
+            ->field('trainingid')
+            ->where('studentid', '=', $uid)
+            ->where('systemid', '=', $sysid)
+            ->where('isallowlearning', '=', 0)
+            ->where('ispayment', '=', 0)
+            ->buildSql();
+
+        $map['systemid'] = ['=', $sysid];
+        $map['starttime'] = ['<=', datetime()];
+        $map['endtime'] = ['>=', datetime()];
+        $map['id'] = ['not in', $subQuery];
+
+        $data = Db::name('training')
+            ->where($map)
+            ->select();
+
+        return $data;
+    }
 }
