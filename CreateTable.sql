@@ -280,7 +280,7 @@ CREATE TABLE lms_training
   periodnumbercode      VARCHAR(20)          NOT NULL,
   addtime               DATETIME             NOT NULL
   COMMENT '添加时间',
-  updatetime               DATETIME             NOT NULL
+  updatetime            DATETIME             NOT NULL
   COMMENT '修改时间',
   status                INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
@@ -373,7 +373,7 @@ CREATE TABLE lms_course
   COMMENT '是否热门：0，否；1，是',
   addtime           DATETIME             NOT NULL
   COMMENT '添加时间',
-  updatetime               DATETIME             NOT NULL
+  updatetime        DATETIME             NOT NULL
   COMMENT '修改时间',
   status            INT                  NOT NULL DEFAULT 1
   COMMENT '状态：0，禁用；1，正常；-1，删除',
@@ -1002,8 +1002,8 @@ CREATE TABLE lms_removelactivatecode
   COMMENT '学生ID',
   activatecode VARCHAR(50)           NOT NULL
   COMMENT '激活码',
-  userid       INT                   NOT NULL
-  COMMENT '操作用户',
+  userid       VARCHAR(36)           NOT NULL
+  COMMENT '操作用户uuid',
   operatorip   VARCHAR(50) COMMENT '操作IP',
   operatordate DATETIME              NOT NULL
   COMMENT '操作日期',
@@ -1016,6 +1016,57 @@ CREATE TABLE lms_removelactivatecode
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8
   COMMENT = '取消激活码日志';
+
+/*==============================================================*/
+/* Table: lms_operatelog                               */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_operatelog;
+CREATE TABLE lms_operatelog
+(
+  id                 INT                   NOT NULL AUTO_INCREMENT,
+  userid             VARCHAR(36)           NOT NULL
+  COMMENT '操作用户uuid',
+  usertype           INT                   NOT NULL
+  COMMENT '用户类型',
+  operatorip         VARCHAR(50) COMMENT '操作IP',
+  operatordate       DATETIME              NOT NULL
+  COMMENT '操作日期',
+  operateurl         NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '操作url',
+  operateresult      NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '操作结果',
+  operatedescription NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '操作描述',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '操作日志';
+
+/*==============================================================*/
+/* Table: lms_systemmessage                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_systemmessage;
+CREATE TABLE lms_systemmessage
+(
+  id       INT                   NOT NULL AUTO_INCREMENT,
+  userid   VARCHAR(36)           NOT NULL
+  COMMENT '用户uuid',
+  usertype INT                   NOT NULL
+  COMMENT '用户类型',
+  readflag INT                   NOT NULL DEFAULT 0
+  COMMENT '是否阅读：0，未阅读；1，已阅读',
+  addtime  DATETIME              NOT NULL
+  COMMENT '添加日期',
+  title    NATIONAL VARCHAR(100) NOT NULL
+  COMMENT '消息标题',
+  content  NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '消息',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '系统消息';
 
 
 
