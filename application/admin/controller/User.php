@@ -21,7 +21,7 @@ class User extends Basic
      * 用户新增页
      * @return mixed
      */
-    public function Add()
+    public function add()
     {
         $this->assign('userLevelHtml', $this->getUserTypeOption());
         return $this->fetch();
@@ -32,7 +32,7 @@ class User extends Basic
      * @param $id
      * @return mixed
      */
-    public function Edit($id)
+    public function edit($id)
     {
         $this->assign('userLevelHtml', $this->getUserTypeOption());
         $this->assign("id", $id);

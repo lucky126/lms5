@@ -88,7 +88,7 @@
      */
     function showAddInfo() {
         var title = "新增用户";
-        var url = "/admin/User/Add";
+        var url = "/admin/User/add";
         showEditPage(url, title, saveAddInfo, null);
     }
 
@@ -98,7 +98,7 @@
      */
     function showEditInfo(id) {
         var title = "修改用户";
-        var url = "/admin/User/Edit?id=" + id;
+        var url = "/admin/User/edit?id=" + id;
         showEditPage(url, title, saveEditInfo, id);
     }
 

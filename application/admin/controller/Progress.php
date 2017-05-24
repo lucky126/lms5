@@ -30,7 +30,7 @@ class Progress extends Basic
      *
      * @return \think\Response
      */
-    public function Stat()
+    public function stat()
     {
         //
         return $this->fetch();

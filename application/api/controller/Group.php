@@ -24,7 +24,7 @@ class Group extends Authority
     public function index()
     {
         $service = controller('GroupService', 'Service');
-        $data = $service->GetList();
+        $data = $service->getList();
 
         return json($data);
     }
@@ -38,9 +38,9 @@ class Group extends Authority
     public function read($id)
     {
         $service = controller('GroupService', 'Service');
-        $data = $service->Get($id);
+        $data = $service->get($id);
         if($data == null)
-            return Authority::ResourceNotFound();
+            return Authority::resourceNotFound();
 
         return json($data);
     }
@@ -61,19 +61,19 @@ class Group extends Authority
             $result = $this->validate($data, 'Group');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             $service = controller('GroupService', 'Service');
-            $result = $service->Insert($data);
+            $result = $service->insert($data);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         } else {
-            return json(Base::getResult(-100, "", null));
+            return json(Base::setResult(-100, "", null));
         }
     }
 
@@ -94,19 +94,19 @@ class Group extends Authority
             $result = $this->validate($data, 'Group.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             $service = controller('GroupService', 'Service');
-            $result = $service->Update($data);
+            $result = $service->update($data);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         } else {
-            return json(Base::getResult(-100, "", null));
+            return json(Base::setResult(-100, "", null));
         }
     }
 
@@ -119,13 +119,13 @@ class Group extends Authority
     public function delete($id)
     {
         $service = controller('GroupService', 'Service');
-        $result = $service->Delete($id);
+        $result = $service->delete($id);
 
         if ($result < 0) {
-            return json(Base::getResult(-201, "存在关联用户", null));
+            return json(Base::setResult(-201, "存在关联用户", null));
         }
 
-        return json(Base::getResult(0, "", null));
+        return json(Base::setResult(0, "", null));
     }
 
     /**
@@ -134,7 +134,7 @@ class Group extends Authority
      * @param $id 角色id
      * @return bool
      */
-    public function Unique($id)
+    public function unique($id)
     {
         //must post
         if (request()->isPost()) {
@@ -146,7 +146,7 @@ class Group extends Authority
             //call user service
             $service = controller('GroupService', 'Service');
 
-            if (!$service->CheckUnique($data, $id)) {
+            if (!$service->checkUnique($data, $id)) {
                 return json($result);
             }
 
@@ -154,7 +154,7 @@ class Group extends Authority
             return json($result);
         }
 
-        return json(Base::getResult(-100, "", null));
+        return json(Base::setResult(-100, "", null));
     }
 
     /**
@@ -163,10 +163,10 @@ class Group extends Authority
      * @param $id 角色id
      * @return \think\response\Json
      */
-    public function GetRule($id)
+    public function getRule($id)
     {
         $service = controller('GroupService', 'Service');
-        $data = $service->GetRule($id);
+        $data = $service->getRule($id);
 
         return json($data);
     }
@@ -177,22 +177,22 @@ class Group extends Authority
      * @param $id 角色id
      * @return \think\response\Json
      */
-    public function SaveRule($id)
+    public function saveRule($id)
     {
         if (Request::instance()->put()) {
             $data = input('put.');
             $rule = $data['rules'];
 
             $service = controller('GroupService', 'Service');
-            $result = $service->SaveRule($id,$rule);
+            $result = $service->saveRule($id,$rule);
 
             if ($result < 0) {
-                return json(Base::getResult(-100, "", null));
+                return json(Base::setResult(-100, "", null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         } else
-            return json(Base::getResult(-100, "", null));
+            return json(Base::setResult(-100, "", null));
     }
 
     /**
@@ -201,20 +201,20 @@ class Group extends Authority
      * @param $status 目标状态值
      * @return \think\response\Json
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         if (request()->isPut()) {
             $service = controller('GroupService', 'Service');
 
-            $result = $service->ChangeStatus($id, $status);
+            $result = $service->changeStatus($id, $status);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }
 
-        return json(Base::getResult(-100, "", null));
+        return json(Base::setResult(-100, "", null));
     }
 }

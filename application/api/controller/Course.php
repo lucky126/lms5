@@ -23,7 +23,7 @@ class Course extends Authority
     {
         //
         $service = controller('CourseService', 'Service');
-        $data = $service->GetList();
+        $data = $service->getList();
 
         return json($data);
     }
@@ -44,7 +44,7 @@ class Course extends Authority
             $result = $this->validate($data, 'Course');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             $data['isopenselection'] = 0;
@@ -83,9 +83,9 @@ class Course extends Authority
             }
 
             $service = controller('CourseService', 'Service');
-            $result = $service->Insert($data, $dataSetting);
+            $result = $service->insert($data, $dataSetting);
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }
     }
 
@@ -99,9 +99,9 @@ class Course extends Authority
     {
         //get user info
         $service = controller('CourseService', 'Service');
-        $returnVal = $service->Get($id);
+        $returnVal = $service->get($id);
         if ($returnVal == null)
-            return Authority::ResourceNotFound();
+            return Authority::resourceNotFound();
         //return data
         return json($returnVal);
     }
@@ -124,7 +124,7 @@ class Course extends Authority
             $result = $this->validate($data, 'Course.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             $data['isopenselection'] = 0;
@@ -163,9 +163,9 @@ class Course extends Authority
             }
 
             $service = controller('CourseService', 'Service');
-            $result = $service->Update($data, $dataSetting);
+            $result = $service->update($data, $dataSetting);
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }
     }
 
@@ -178,13 +178,13 @@ class Course extends Authority
     public function delete($id)
     {
         $service = controller('CourseService', 'Service');
-        $result = $service->Delete($id);
+        $result = $service->delete($id);
 
         if($result==-201){
-            return json(Base::getResult(-201, "已有培训班使用", null));
+            return json(Base::setResult(-201, "已有培训班使用", null));
         }
 
-        return json(Base::getResult(0, "", null));
+        return json(Base::setResult(0, "", null));
     }
 
     /**
@@ -193,7 +193,7 @@ class Course extends Authority
      * @param $id 课程id
      * @return bool
      */
-    public function Unique($id)
+    public function unique($id)
     {
         //must post
         if (request()->isPost()) {
@@ -206,7 +206,7 @@ class Course extends Authority
             //call user service
             $service = controller('CourseService', 'Service');
 
-            if (!$service->CheckUnique($data, $id)) {
+            if (!$service->checkUnique($data, $id)) {
                 return json($result);
             }
 
@@ -221,20 +221,20 @@ class Course extends Authority
      * @param $status 目标状态值
      * @return \think\response\Json
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         if (request()->isPut()) {
             $service = controller('CourseService', 'Service');
 
-            $result = $service->ChangeStatus($id, $status);
+            $result = $service->changeStatus($id, $status);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }
 
-        return json(Base::getResult(-100, "", null));
+        return json(Base::setResult(-100, "", null));
     }
 }

@@ -31,7 +31,7 @@ class Selectcourse extends Authority
             //培训班逻辑：报名（插入记录），缴费（ispayment=1），学习（isallowlearning=1），终止（超出培训班起止时间）
             //获取学生培训计划列表
             $service = controller('api/SelectcourseService', 'Service');
-            $stuTraining = $service->GetTrainingInfo($uid, $system['id']);
+            $stuTraining = $service->getTrainingInfo($uid, $system['id']);
 
             //没有报名任何培训班或者没有可以学习的培训班
             if ($stuTraining['studying'] == 0 && $stuTraining['needPay'] == 0) {
@@ -48,7 +48,7 @@ class Selectcourse extends Authority
             }
         }
 
-        return Base::getResult('0', '', $returnPage);
+        return Base::setResult('0', '', $returnPage);
     }
 
     /**
@@ -63,7 +63,7 @@ class Selectcourse extends Authority
         $system = $sysService->GetDefault();
 
         $service = controller('api/SelectcourseService', 'Service');
-        $list = $service->GetAllowRegTrainingList($uid, $system['id']);
+        $list = $service->getAllowRegTrainingList($uid, $system['id']);
 
         return $list;
     }
@@ -72,14 +72,14 @@ class Selectcourse extends Authority
      * 报名培训计划
      * @return \think\response\Json
      */
-    public function Signin()
+    public function signIn()
     {
         if (request()->isPost()) {
             $data = input('post.');
 
             if ($data == null || $data['uid'] == '' || $data['id'] == '') {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, '', null));
+                return json(Base::setResult(-101, '', null));
             }
 
             //获取默认系统信息
@@ -88,17 +88,17 @@ class Selectcourse extends Authority
             $data['sysid'] = $system['id'];
 
             $service = controller('api/SelectcourseService', 'Service');
-            $result = $service->Signin($data);
+            $result = $service->signIn($data);
 
             if ($result == -201) {
-                return json(Base::getResult(-201, '', null));
+                return json(Base::setResult(-201, '', null));
             } else if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         } else
-            return json(Base::getResult(-100, "", null));
+            return json(Base::setResult(-100, "", null));
     }
 
     /**
@@ -113,7 +113,7 @@ class Selectcourse extends Authority
         $system = $sysService->GetDefault();
 
         $service = controller('api/SelectcourseService', 'Service');
-        $list = $service->GetNeedPayTrainingList($uid, $system['id']);
+        $list = $service->getNeedPayTrainingList($uid, $system['id']);
 
         return $list;
     }

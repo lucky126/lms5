@@ -23,31 +23,31 @@ Route::post('api/student/login', 'api/login/studentlogin', "POST");
 Route::post('api/admin/logout', 'api/login/adminlogout', "POST");
 Route::post('api/student/logout', 'api/login/studentlogout', "POST");
 
-Route::rule('api/group/:id/rule', 'api/Group/GetRule', "GET");
-Route::rule('api/group/:id/rule', 'api/Group/SaveRule', "PUT");
+Route::rule('api/group/:id/rule', 'api/Group/getRule', "GET");
+Route::rule('api/group/:id/rule', 'api/Group/saveRule', "PUT");
 //unique check
-Route::post('api/system/:id/unique', 'api/System/Unique');
-Route::post('api/group/:id/unique', 'api/Group/Unique');
-Route::post('api/rule/:id/unique', 'api/Rule/Unique');
-Route::post('api/user/:id/unique', 'api/User/Unique');
-Route::post('api/course/:id/unique', 'api/Course/Unique');
-Route::post('api/training/:id/unique', 'api/Training/Unique');
-Route::post('api/register/:id/unique', 'api/Register/Unique');
+Route::post('api/system/:id/unique', 'api/System/unique');
+Route::post('api/group/:id/unique', 'api/Group/unique');
+Route::post('api/rule/:id/unique', 'api/Rule/unique');
+Route::post('api/user/:id/unique', 'api/User/unique');
+Route::post('api/course/:id/unique', 'api/Course/unique');
+Route::post('api/training/:id/unique', 'api/Training/unique');
+Route::post('api/register/:id/unique', 'api/Register/unique');
 //status change
-Route::put('api/system/:id/activate', 'api/System/ChangeStatus?status=1');
-Route::put('api/system/:id/deactivate', 'api/System/ChangeStatus?status=0');
-Route::put('api/group/:id/activate', 'api/Group/ChangeStatus?status=1');
-Route::put('api/group/:id/deactivate', 'api/Group/ChangeStatus?status=0');
-Route::put('api/rule/:id/activate', 'api/Rule/ChangeStatus?status=1');
-Route::put('api/rule/:id/deactivate', 'api/Rule/ChangeStatus?status=0');
-Route::put('api/user/:id/activate', 'api/User/ChangeStatus?status=1');
-Route::put('api/user/:id/deactivate', 'api/User/ChangeStatus?status=0');
-Route::put('api/course/:id/activate', 'api/Course/ChangeStatus?status=1');
-Route::put('api/course/:id/deactivate', 'api/Course/ChangeStatus?status=0');
-Route::put('api/training/:id/activate', 'api/Training/ChangeStatus?status=1');
-Route::put('api/training/:id/deactivate', 'api/Training/ChangeStatus?status=0');
+Route::put('api/system/:id/activate', 'api/System/changeStatus?status=1');
+Route::put('api/system/:id/deactivate', 'api/System/changeStatus?status=0');
+Route::put('api/group/:id/activate', 'api/Group/changeStatus?status=1');
+Route::put('api/group/:id/deactivate', 'api/Group/changeStatus?status=0');
+Route::put('api/rule/:id/activate', 'api/Rule/changeStatus?status=1');
+Route::put('api/rule/:id/deactivate', 'api/Rule/changeStatus?status=0');
+Route::put('api/user/:id/activate', 'api/User/changeStatus?status=1');
+Route::put('api/user/:id/deactivate', 'api/User/changeStatus?status=0');
+Route::put('api/course/:id/activate', 'api/Course/changeStatus?status=1');
+Route::put('api/course/:id/deactivate', 'api/Course/changeStatus?status=0');
+Route::put('api/training/:id/activate', 'api/Training/changeStatus?status=1');
+Route::put('api/training/:id/deactivate', 'api/Training/changeStatus?status=0');
 //other
-Route::get('api/training/:id/courses', 'api/Training/Courses');
+Route::get('api/training/:id/courses', 'api/Training/courses');
 //resource
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule');

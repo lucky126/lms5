@@ -22,7 +22,7 @@ class RuleService extends BaseService
      * @param int $pid 父权限id
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetList($pid)
+    public function getList($pid)
     {
         //get data
         $rule = new AuthRule();
@@ -39,7 +39,7 @@ class RuleService extends BaseService
      * @param $id
      * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function Get($id)
+    public function get($id)
     {
         $data = AuthRule::get($id)->getData();
 
@@ -51,7 +51,7 @@ class RuleService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Insert($data)
+    public function insert($data)
     {
         $rule = new AuthRule;
         $rule->pid = $data['pid'];
@@ -74,7 +74,7 @@ class RuleService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Update($data)
+    public function update($data)
     {
         //update
         $rule = AuthRule::get($data['id']);
@@ -95,7 +95,7 @@ class RuleService extends BaseService
      * @param $id
      * @return int
      */
-    public function Delete($id)
+    public function delete($id)
     {
         //check sub count
         $subCount = AuthRule::where(['pid' => $id])->count();
@@ -117,7 +117,7 @@ class RuleService extends BaseService
      * @param $id
      * @return bool
      */
-    public function CheckUnique($data, $id)
+    public function checkUnique($data, $id)
     {
         if (input('?post.title'))
             $map['title'] = $data['title'];
@@ -141,7 +141,7 @@ class RuleService extends BaseService
      * @param $status 目标状态值
      * @return int|string
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         $rule = AuthRule::get($id);
         $rule->status = $status;

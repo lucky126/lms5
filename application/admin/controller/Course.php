@@ -23,7 +23,7 @@ class Course extends Basic
      * 课程新增页
      * @return mixed
      */
-    public function Add()
+    public function add()
     {
         return $this->fetch();
     }
@@ -33,7 +33,7 @@ class Course extends Basic
      * @param $id
      * @return mixed
      */
-    public function Edit($id)
+    public function edit($id)
     {
         $this->assign("id", $id);
         return $this->fetch();

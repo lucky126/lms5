@@ -23,7 +23,7 @@ class Rule extends Basic
      * 权限新增页
      * @return mixed
      */
-    public function Add($pid = 0)
+    public function add($pid = 0)
     {
         $this->assign("pid", $pid);
         return $this->fetch();
@@ -34,7 +34,7 @@ class Rule extends Basic
      * @param $id
      * @return mixed
      */
-    public function Edit($id)
+    public function edit($id)
     {
         $this->assign("id", $id);
         return $this->fetch();
@@ -55,7 +55,7 @@ class Rule extends Basic
      * 角色新增页
      * @return mixed
      */
-    public function Addgroup()
+    public function addgroup()
     {
         return $this->fetch();
     }
@@ -65,7 +65,7 @@ class Rule extends Basic
      * @param $id
      * @return mixed
      */
-    public function Editgroup($id)
+    public function editgroup($id)
     {
         $this->assign("id", $id);
         return $this->fetch();
@@ -76,7 +76,7 @@ class Rule extends Basic
      * @param $id
      * @return mixed
      */
-    public function Grouprule($id)
+    public function grouprule($id)
     {
         $this->assign("id", $id);
         return $this->fetch();

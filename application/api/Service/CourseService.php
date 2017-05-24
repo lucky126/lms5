@@ -23,7 +23,7 @@ class CourseService extends BaseService
      * 获取课程列表
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetList()
+    public function getList()
     {
         //get data
         $course = new Course();
@@ -39,7 +39,7 @@ class CourseService extends BaseService
      * @param $id 课程id
      * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function Get($id)
+    public function get($id)
     {
         //get info
         $data = Course::get($id, 'setting')->getData();
@@ -52,7 +52,7 @@ class CourseService extends BaseService
      * @param $dataSetting
      * @return int|string
      */
-    public function Insert($data, $dataSetting)
+    public function insert($data, $dataSetting)
     {
         //make data
         $coursesetting = new Coursesetting;
@@ -93,7 +93,7 @@ class CourseService extends BaseService
      * @param $dataSetting
      * @return int|string
      */
-    public function Update($data, $dataSetting)
+    public function update($data, $dataSetting)
     {
         $course = Course::get($data['id']);
         $course->coursename = $data['coursename'];
@@ -129,7 +129,7 @@ class CourseService extends BaseService
      * @param $id 课程id
      * @return int
      */
-    public function Delete($id)
+    public function delete($id)
     {
         //check training use count
         $trainingCount = Trainingcourse::where(['scormid' => $id])->count();
@@ -153,7 +153,7 @@ class CourseService extends BaseService
      * @param $id
      * @return bool
      */
-    public function CheckUnique($data, $id)
+    public function checkUnique($data, $id)
     {
         if (input('?post.coursename'))
             $map['coursename'] = $data['coursename'];
@@ -177,7 +177,7 @@ class CourseService extends BaseService
      * @param $status 目标状态值
      * @return int|string
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         $course = Course::get($id);
         $course->status = $status;

@@ -15,7 +15,7 @@ class Common extends Controller
     /**
      * @return mixed
      */
-    public function Login()
+    public function login()
     {
         return $this->fetch();
     }

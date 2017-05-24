@@ -24,7 +24,7 @@ class Finance extends Basic
      *
      * @return \think\Response
      */
-    public function OfflineConfirm()
+    public function offlineconfirm()
     {
         //
         return $this->fetch();
@@ -35,7 +35,7 @@ class Finance extends Basic
      *
      * @return \think\Response
      */
-    public function Stat()
+    public function stat()
     {
         //
         return $this->fetch();

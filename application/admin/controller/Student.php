@@ -23,7 +23,7 @@ class Student extends Basic
      * 学员新增页
      * @return mixed
      */
-    public function Add()
+    public function add()
     {
         return $this->fetch();
     }
@@ -33,7 +33,7 @@ class Student extends Basic
      * @param $id
      * @return mixed
      */
-    public function Edit($id)
+    public function edit($id)
     {
         $this->assign("id", $id);
         return $this->fetch();
@@ -44,7 +44,7 @@ class Student extends Basic
      *
      * @return \think\Response
      */
-    public function RegManager()
+    public function regmanager()
     {
         //
         return $this->fetch();
@@ -55,7 +55,7 @@ class Student extends Basic
      *
      * @return \think\Response
      */
-    public function Import()
+    public function import()
     {
         //
         return $this->fetch();

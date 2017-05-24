@@ -32,7 +32,7 @@ class Register extends Base
             $result = $this->validate($data, 'Student');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             //make user data
@@ -71,7 +71,7 @@ class Register extends Base
 
             $result = Db::name("studentbasicinfo")->insert($student);
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }
     }
 
@@ -81,7 +81,7 @@ class Register extends Base
      * @param $id
      * @return bool
      */
-    public function Unique($id)
+    public function unique($id)
     {
         //must post
         if (request()->isPost()) {

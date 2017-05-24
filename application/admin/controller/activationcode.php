@@ -23,7 +23,7 @@ class Activationcode extends Basic
      * 撤销激活码
      * @return mixed
      */
-    public function Revoke()
+    public function revoke()
     {
         return $this->fetch();
     }

@@ -23,7 +23,7 @@ class Base extends Controller
      * @param $data
      * @return array
      */
-    protected function getResult($code, $msg, $data)
+    protected function setResult($code, $msg, $data)
     {
         $result = array(
             'code' => $code,

@@ -17,7 +17,7 @@ class User extends Authority
     {
         //
         $service = controller('UserService', 'Service');
-        $data = $service->GetList(true);
+        $data = $service->getList(true);
 
         return json($data);
     }
@@ -38,20 +38,20 @@ class User extends Authority
             $result = $this->validate($data, 'User');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             //call user service
             $service = controller('UserService', 'Service');
-            $result = $service->Insert($data);
+            $result = $service->insert($data);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         } else
-            return json(Base::getResult(-100, "", null));
+            return json(Base::setResult(-100, "", null));
     }
 
     /**
@@ -64,9 +64,9 @@ class User extends Authority
     {
         //call user service
         $service = controller('UserService', 'Service');
-        $data = $service->Get($id);
+        $data = $service->get($id);
         if ($data == null)
-            return Authority::ResourceNotFound();
+            return Authority::resourceNotFound();
 
         //return data
         return json($data);
@@ -89,21 +89,21 @@ class User extends Authority
             $result = $this->validate($data, 'User.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             //call user service
             $service = controller('UserService', 'Service');
-            $result = $service->Update($data);
+            $result = $service->update($data);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         } else
-            return json(Base::getResult(-100, "", null));
+            return json(Base::setResult(-100, "", null));
     }
 
     /**
@@ -116,9 +116,9 @@ class User extends Authority
     {
         //call user service
         $service = controller('UserService', 'Service');
-        $service->Delete($id);
+        $service->delete($id);
 
-        return json(Base::getResult(0, "", null));
+        return json(Base::setResult(0, "", null));
     }
 
     /**
@@ -127,7 +127,7 @@ class User extends Authority
      * @param $id
      * @return bool
      */
-    public function Unique($id)
+    public function unique($id)
     {
         //must post
         if (request()->isPost()) {
@@ -140,7 +140,7 @@ class User extends Authority
             //call user service
             $service = controller('UserService', 'Service');
 
-            if (!$service->CheckUnique($data)) {
+            if (!$service->checkUnique($data)) {
                 return json($result);
             }
 
@@ -155,20 +155,20 @@ class User extends Authority
      * @param $status 目标状态值
      * @return \think\response\Json
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         if (request()->isPut()) {
             $service = controller('UserService', 'Service');
 
-            $result = $service->ChangeStatus($id, $status);
+            $result = $service->changeStatus($id, $status);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }
 
-        return json(Base::getResult(-100, "", null));
+        return json(Base::setResult(-100, "", null));
     }
 }

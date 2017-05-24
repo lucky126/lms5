@@ -22,7 +22,7 @@ class GroupService extends BaseService
      * 获取角色列表
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetList()
+    public function getList()
     {
         //get data
         $group = new AuthGroup();
@@ -56,7 +56,7 @@ class GroupService extends BaseService
      * @param $id
      * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function Get($id)
+    public function get($id)
     {
         $data = AuthGroup::get($id)->getData();
 
@@ -68,7 +68,7 @@ class GroupService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Insert($data)
+    public function insert($data)
     {
         //make data
         $group = new AuthGroup;
@@ -87,7 +87,7 @@ class GroupService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Update($data)
+    public function update($data)
     {
         //update
         $group = AuthGroup::get($data['id']);
@@ -105,7 +105,7 @@ class GroupService extends BaseService
      * @param $id
      * @return int -201表示存在关联数据无法删除
      */
-    public function Delete($id)
+    public function delete($id)
     {
         //get user group relation
         $userCount = AuthGroupAccess::where(['group_id' => $id])->count();
@@ -128,7 +128,7 @@ class GroupService extends BaseService
      * @param $id
      * @return bool
      */
-    public function CheckUnique($data, $id)
+    public function checkUnique($data, $id)
     {
         $map['title'] = $data['title'];
         if ($id != 0) {
@@ -147,7 +147,7 @@ class GroupService extends BaseService
      * @param $status 目标状态值
      * @return int|string
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         $group = AuthGroup::get($id);
         $group->status = $status;
@@ -164,7 +164,7 @@ class GroupService extends BaseService
      * @param $id 角色id
      * @return array
      */
-    public function GetRule($id)
+    public function getRule($id)
     {
         //get rule list
         $ruleList = DB::name('AuthRule')->field('id,pid,name,title,isshow')->select();
@@ -182,7 +182,7 @@ class GroupService extends BaseService
      * @param $rule
      * @return int|string
      */
-    public function SaveRule($id, $rule)
+    public function saveRule($id, $rule)
     {
         if (stripos(',' . $rule . ',', ',1,') === false) {
             $rule = '1,' . $rule;

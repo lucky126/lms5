@@ -22,7 +22,7 @@ class TrainingService extends BaseService
      * 获取培训班列表
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetList()
+    public function getList()
     {
         //
         $training = new Training();
@@ -38,7 +38,7 @@ class TrainingService extends BaseService
      * @param $id
      * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function Get($id)
+    public function get($id)
     {
         $data = Training::get($id, 'courses')->getData();
 
@@ -65,7 +65,7 @@ class TrainingService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Insert($data)
+    public function insert($data)
     {
         //make user data
         $training = new Training;
@@ -115,7 +115,7 @@ class TrainingService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Update($data)
+    public function update($data)
     {
         //update training info
         $training = Training::get($data['id']);
@@ -170,7 +170,7 @@ class TrainingService extends BaseService
      * @param $id
      * @return int
      */
-    public function Delete($id)
+    public function delete($id)
     {
         $training = Training::get($id);
         if ($training->delete()) {
@@ -188,7 +188,7 @@ class TrainingService extends BaseService
      * @param $id
      * @return bool
      */
-    public function CheckUnique($data, $id)
+    public function checkUnique($data, $id)
     {
         if (input('?post.trainingname'))
             $map['trainingname'] = $data['trainingname'];
@@ -211,7 +211,7 @@ class TrainingService extends BaseService
      * @param $status 目标状态值
      * @return int|string
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         $training = Training::get($id);
         $training->status = $status;

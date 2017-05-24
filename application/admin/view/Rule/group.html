@@ -86,7 +86,7 @@
      */
     function showAddInfo() {
         var title = "新增角色";
-        var url = "/admin/Rule/Addgroup";
+        var url = "/admin/Rule/addgroup";
 
         showEditPage(url, title, saveAddInfo, null);
     }
@@ -97,7 +97,7 @@
      */
     function showEditInfo(id) {
         var title = "修改角色";
-        var url = "/admin/Rule/Editgroup?id=" + id;
+        var url = "/admin/Rule/editgroup?id=" + id;
 
         showEditPage(url, title, saveEditInfo, id);
     }
@@ -108,7 +108,7 @@
      */
     function showRuleInfo(id) {
         var title = "编辑角色权限";
-        var url = "/admin/Rule/Grouprule?id=" + id;
+        var url = "/admin/Rule/grouprule?id=" + id;
 
         showEditPageDefault(url, title, saveRuleInfo, id, false);
     }

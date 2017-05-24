@@ -24,7 +24,7 @@ class Reguser extends Authority
     {
         //
         $service = controller('UserService', 'Service');
-        $data = $service->GetList(false);
+        $data = $service->getList(false);
 
         return json($data);
     }

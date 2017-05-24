@@ -44,7 +44,7 @@ class Basic extends Controller
         //check admin
         $id = getTokenInfo($token, 'id');
         $service = controller('api/UserService', 'Service');
-        $isAdmin = $service->CheckAdmin($id);
+        $isAdmin = $service->checkAdmin($id);
         //check auth
         if (!$isAdmin && !$this::checkAuth($url, $id)) {
             $this->error('您没有权限访问');

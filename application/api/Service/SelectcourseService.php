@@ -21,7 +21,7 @@ class SelectcourseService extends BaseService
      * 获取学生培训计划列表
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetTrainingInfo($uid, $sysid)
+    public function getTrainingInfo($uid, $sysid)
     {
         //init param
         $studying = 0;
@@ -56,7 +56,7 @@ class SelectcourseService extends BaseService
      * @param $sysid
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetAllowRegTrainingList($uid, $sysid)
+    public function getAllowRegTrainingList($uid, $sysid)
     {
         //get data
         $subQuery = Db::name('studenttraining')
@@ -81,7 +81,7 @@ class SelectcourseService extends BaseService
      * @param $data
      * @return int
      */
-    public function Signin($data)
+    public function signIn($data)
     {
         $existInfo = Studenttraining::get(['systemid' => $data['sysid'], 'studentid' => $data['uid'], 'trainingid' => $data['id']]);
         //存在报名信息
@@ -115,7 +115,7 @@ class SelectcourseService extends BaseService
      * @param $sysid
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetNeedPayTrainingList($uid, $sysid)
+    public function getNeedPayTrainingList($uid, $sysid)
     {
         //get data
         $subQuery = Db::name('studenttraining')

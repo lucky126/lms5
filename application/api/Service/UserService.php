@@ -32,11 +32,11 @@ class UserService extends BaseService
         $data = Db::name('user')->where($map)->find();
 
         if ($data == null) {
-            return json(BaseService::getResult(-201, "用户不存在！", null));
+            return BaseService::setResult(-201, "用户不存在！", null);
         }
 
         if ($data['status'] == 0) {
-            return json(BaseService::getResult(-202, "用户已被禁用！", null));
+            return BaseService::setResult(-202, "用户已被禁用！", null);
         }
 
         //get id
@@ -45,7 +45,7 @@ class UserService extends BaseService
 
         //check password
         if ($data['pwd'] <> getEncPassword($password)) {
-            return json(BaseService::getResult(-203, "密码错误！", null));
+            return BaseService::setResult(-203, "密码错误！", null);
         }
 
         //update logininfo
@@ -66,7 +66,7 @@ class UserService extends BaseService
         );
 
         //return success data
-        return BaseService::getResult(0, "", $userInfo);
+        return BaseService::setResult(0, "", $userInfo);
     }
 
     /**
@@ -74,7 +74,7 @@ class UserService extends BaseService
      * @param $id 用户ID
      * @return bool
      */
-    public function CheckAdmin($id)
+    public function checkAdmin($id)
     {
         $user = User::get($id)->getData();
 
@@ -91,7 +91,7 @@ class UserService extends BaseService
      * @param $isAdmin 是否管理员
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetList($isAdmin)
+    public function getList($isAdmin)
     {
         //get data
         $user = new User();
@@ -114,7 +114,7 @@ class UserService extends BaseService
      * @param $uid
      * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function Get($uid)
+    public function get($uid)
     {
         //get user info
         $data = User::get(['uid' => $uid], 'group')->getData();
@@ -128,7 +128,7 @@ class UserService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Insert($data)
+    public function insert($data)
     {
         $user = new User;
         $user->uid = getGuid();
@@ -155,7 +155,7 @@ class UserService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Update($data)
+    public function update($data)
     {
         $user = User::get(['uid' => $data['uid']]);
         $user->realname = $data['RealName'];
@@ -176,7 +176,7 @@ class UserService extends BaseService
      * @param $uid
      * @return int|string
      */
-    public function Delete($uid)
+    public function delete($uid)
     {
         $user = User::get(['uid' => $uid]);
         $user->together('group')->delete();
@@ -187,7 +187,7 @@ class UserService extends BaseService
      * @param $data
      * @return bool
      */
-    public function CheckUnique($data)
+    public function checkUnique($data)
     {
         $map['loginname'] = $data['loginname'];
         if (Db::name('user')->where($map)->find() != null) {
@@ -203,7 +203,7 @@ class UserService extends BaseService
      * @param $status 目标状态值
      * @return int|string
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         $user = User::get($id);
         $user->status = $status;

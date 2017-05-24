@@ -93,7 +93,7 @@
      */
     function showAddInfo() {
         var title = "新增课程";
-        var url = "/admin/Course/Add";
+        var url = "/admin/Course/add";
 
         showEditPage(url, title, saveAddInfo, null);
     }
@@ -104,7 +104,7 @@
      */
     function showEditInfo(id) {
         var title = "修改课程";
-        var url = "/admin/Course/Edit?id=" + id;
+        var url = "/admin/Course/edit?id=" + id;
 
         showEditPage(url, title, saveEditInfo, id);
     }

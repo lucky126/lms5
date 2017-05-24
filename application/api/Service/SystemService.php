@@ -21,7 +21,7 @@ class SystemService extends BaseService
      * 获取系统列表
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function GetList()
+    public function getList()
     {
         //get data
         $system = new System();
@@ -37,7 +37,7 @@ class SystemService extends BaseService
      * @param $id
      * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function Get($id)
+    public function get($id)
     {
         $data = System::get($id)->getData();
 
@@ -50,7 +50,7 @@ class SystemService extends BaseService
      */
     public function GetDefault()
     {
-        return $this->Get(1);
+        return $this->get(1);
     }
 
     /**
@@ -58,7 +58,7 @@ class SystemService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Insert($data)
+    public function insert($data)
     {
         $system = new System;
         $system->systemname = $data['systemname'];
@@ -76,7 +76,7 @@ class SystemService extends BaseService
      * @param $data
      * @return int|string
      */
-    public function Update($data)
+    public function update($data)
     {
         //update
         $system = System::get($data['id']);
@@ -94,7 +94,7 @@ class SystemService extends BaseService
      * @param $id
      * @return int
      */
-    public function Delete($id)
+    public function delete($id)
     {
         //delete
         $system = System::get($id);
@@ -111,7 +111,7 @@ class SystemService extends BaseService
      * @param $id
      * @return bool
      */
-    public function CheckUnique($data, $id)
+    public function checkUnique($data, $id)
     {
         $map['systemname'] = $data['systemname'];
         if ($id != 0) {
@@ -130,7 +130,7 @@ class SystemService extends BaseService
      * @param $status 目标状态值
      * @return int|string
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         $system = System::get($id);
         $system->status = $status;

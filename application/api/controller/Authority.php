@@ -25,8 +25,8 @@ class Authority extends Base
     public function _initialize()
     {
         if (!Cookie::has('admin') && !Cookie::has('student')) {
-            //$this->result("error","401","","json");
-            $result = $this->getResult(401, "invalid token", null);
+            //$this->setResult("error","401","","json");
+            $result = $this->setResult(401, "invalid token", null);
             $response = Response::create($result, "json", 401)->header([]);
             throw new HttpResponseException($response);
         }
@@ -35,9 +35,9 @@ class Authority extends Base
     /**
      * 404
      */
-    public function ResourceNotFound()
+    public function resourceNotFound()
     {
-        $result = $this->getResult(404, "not found", null);
+        $result = $this->setResult(404, "not found", null);
         $response = Response::create($result, "json", 404)->header([]);
         throw new HttpResponseException($response);
     }

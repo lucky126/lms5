@@ -27,10 +27,15 @@ class Login extends Base
     {
         $service = controller('UserService', 'Service');
         $result = $service->login($username, $password, true);
-        $userInfo = $result['data'];
 
-        Cookie::set('admin', $userInfo['token']);
-        return json(Base::getResult($result['code'], $result['msg'], null));
+        if($result['code'] == 0)
+        {
+            $userInfo = $result['data'];
+
+            Cookie::set('admin', $userInfo['token']);
+        }
+
+        return json(Base::setResult($result['code'], $result['msg'], null));
     }
 
     /**
@@ -43,10 +48,15 @@ class Login extends Base
     {
         $service = controller('UserService', 'Service');
         $result = $service->login($username, $password, false);
-        $userInfo = $result['data'];
 
-        Cookie::set('student', $userInfo['token']);
-        return json(Base::getResult($result['code'], $result['msg'], null));
+        if($result['code'] == 0)
+        {
+            $userInfo = $result['data'];
+
+            Cookie::set('student', $userInfo['token']);
+        }
+
+        return json(Base::setResult($result['code'], $result['msg'], null));
     }
 
     /**
@@ -75,6 +85,6 @@ class Login extends Base
      */
     private function logout()
     {
-        return json(Base::getResult(0, "", null));
+        return json(Base::setResult(0, "", null));
     }
 }

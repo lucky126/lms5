@@ -23,7 +23,7 @@ class Rule extends Authority
     {
         //
         $service = controller('RuleService', 'Service');
-        $data = $service->GetList($pid);
+        $data = $service->getList($pid);
 
         return json($data);
     }
@@ -38,9 +38,9 @@ class Rule extends Authority
     {
         //
         $service = controller('RuleService', 'Service');
-        $data = $service->Get($id);
+        $data = $service->get($id);
         if($data == null)
-            return Authority::ResourceNotFound();
+            return Authority::resourceNotFound();
 
         return json($data);
     }
@@ -66,19 +66,19 @@ class Rule extends Authority
 
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             $service = controller('RuleService', 'Service');
-            $result = $service->Insert($data);
+            $result = $service->insert($data);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }else {
-            return json(Base::getResult(-100, "", null));
+            return json(Base::setResult(-100, "", null));
         }
     }
 
@@ -106,19 +106,19 @@ class Rule extends Authority
 
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(Base::getResult(-101, $result, null));
+                return json(Base::setResult(-101, $result, null));
             }
 
             $service = controller('RuleService', 'Service');
-            $result = $service->Update($data);
+            $result = $service->update($data);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }else {
-            return json(Base::getResult(-100, "", null));
+            return json(Base::setResult(-100, "", null));
         }
     }
 
@@ -132,13 +132,13 @@ class Rule extends Authority
     {
         //
         $service = controller('RuleService', 'Service');
-        $result = $service->Delete($id);
+        $result = $service->delete($id);
 
         if($result==-201){
-            return json(Base::getResult(-201, "存在子权限", null));
+            return json(Base::setResult(-201, "存在子权限", null));
         }
 
-        return json(Base::getResult(0, "", null));
+        return json(Base::setResult(0, "", null));
     }
 
     /**
@@ -147,7 +147,7 @@ class Rule extends Authority
      * @param $id 权限id
      * @return bool
      */
-    public function Unique($id)
+    public function unique($id)
     {
         //must post
         if (request()->isPost()) {
@@ -160,7 +160,7 @@ class Rule extends Authority
             //call user service
             $service = controller('RuleService', 'Service');
 
-            if (!$service->CheckUnique($data, $id)) {
+            if (!$service->checkUnique($data, $id)) {
                 return json($result);
             }
 
@@ -168,7 +168,7 @@ class Rule extends Authority
             return json($result);
         }
 
-        return json(Base::getResult(-100, "", null));
+        return json(Base::setResult(-100, "", null));
     }
 
     /**
@@ -177,20 +177,20 @@ class Rule extends Authority
      * @param $status 目标状态值
      * @return \think\response\Json
      */
-    public function ChangeStatus($id, $status)
+    public function changeStatus($id, $status)
     {
         if (request()->isPut()) {
             $service = controller('RuleService', 'Service');
 
-            $result = $service->ChangeStatus($id, $status);
+            $result = $service->changeStatus($id, $status);
 
             if ($result != 0) {
-                return json(Base::getResult(-100, $result, null));
+                return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getResult(0, "", null));
+            return json(Base::setResult(0, "", null));
         }
 
-        return json(Base::getResult(-100, "", null));
+        return json(Base::setResult(-100, "", null));
     }
 }
