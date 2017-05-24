@@ -1028,7 +1028,8 @@ CREATE TABLE lms_operatelog
   COMMENT '操作用户uuid',
   usertype           INT                   NOT NULL
   COMMENT '用户类型',
-  operatorip         VARCHAR(50) COMMENT '操作IP',
+  operatorip         VARCHAR(50)           NOT NULL
+  COMMENT '操作IP',
   operatordate       DATETIME              NOT NULL
   COMMENT '操作日期',
   operateurl         NATIONAL VARCHAR(500) NOT NULL
