@@ -113,6 +113,7 @@ function showEditPageDefault(url, title, func, id, isValid) {
         success: function (data) {
 
             bootbox.dialog({
+                size: 'large',
                 title: title,
                 message: data,
                 buttons: {
@@ -176,6 +177,7 @@ function saveInfo(method, url, data) {
  * @param id 删除的id标识
  */
 function showDeleteInfo(msg, url, id) {
+    bootbox.setDefaults("locale", "zh_CN");
     bootbox.confirm(msg, function (result) {
         if (result) {
             var res = deleteInfo(url, id);
@@ -239,6 +241,7 @@ function showStartInfo(url, id) {
  * @param id 停用状态的id标识
  */
 function showStopInfo(msg, url, id) {
+    bootbox.setDefaults("locale", "zh_CN");
     bootbox.confirm(msg, function (result) {
         if (result) {
             var res = statusInfo(url, id, '/deactivate');
