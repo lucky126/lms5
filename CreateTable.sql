@@ -1032,20 +1032,20 @@ CREATE TABLE lms_removelactivatecode
 DROP TABLE IF EXISTS lms_operatelog;
 CREATE TABLE lms_operatelog
 (
-  id                 INT                   NOT NULL AUTO_INCREMENT,
-  userid             VARCHAR(36)           NOT NULL
+  id                 INT                    NOT NULL AUTO_INCREMENT,
+  userid             VARCHAR(36)            NOT NULL
   COMMENT '操作用户uuid',
-  usertype           INT                   NOT NULL
+  usertype           INT                    NOT NULL
   COMMENT '用户类型：0，admin；1，student',
-  operatorip         VARCHAR(50)           NOT NULL
+  operatorip         VARCHAR(50)            NOT NULL
   COMMENT '操作IP',
-  operatordate       DATETIME              NOT NULL
+  operatordate       DATETIME               NOT NULL
   COMMENT '操作日期',
-  operateurl         NATIONAL VARCHAR(500) NOT NULL
+  operateurl         NATIONAL VARCHAR(500)  NOT NULL
   COMMENT '操作url',
   operatememo        NATIONAL VARCHAR(5000) NOT NULL
   COMMENT '操作内容',
-  operatedescription NATIONAL VARCHAR(500) NOT NULL
+  operatedescription NATIONAL VARCHAR(500)  NOT NULL
   COMMENT '操作描述',
   PRIMARY KEY (id)
 )
@@ -1089,8 +1089,6 @@ CREATE TABLE lms_systemmessage
   id       INT                   NOT NULL AUTO_INCREMENT,
   userid   VARCHAR(36)           NOT NULL
   COMMENT '用户uuid',
-  usertype INT                   NOT NULL
-  COMMENT '用户类型',
   readflag INT                   NOT NULL DEFAULT 0
   COMMENT '是否阅读：0，未阅读；1，已阅读',
   addtime  DATETIME              NOT NULL
@@ -1099,6 +1097,8 @@ CREATE TABLE lms_systemmessage
   COMMENT '消息标题',
   content  NATIONAL VARCHAR(500) NOT NULL
   COMMENT '消息',
+  url      NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '消息url',
   PRIMARY KEY (id)
 )
   ENGINE = MyISAM
