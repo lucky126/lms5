@@ -65,6 +65,12 @@ class SystemService extends BaseService
         $system->memo = '';
 
         if ($system->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $memo = '新增系统名称为 '.$data['systemname'].' 的系统';
+            $logService->insert($memo, '新增系统数据');
+
             return 0;
         } else {
             return $system->getError();
@@ -83,6 +89,12 @@ class SystemService extends BaseService
         $system->systemname = $data['systemname'];
 
         if ($system->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $memo = '更新系统ID为 '.$data['id'].' 的系统';
+            $logService->insert($memo, '更新系统数据');
+
             return 0;
         } else {
             return $system->getError();
@@ -98,7 +110,14 @@ class SystemService extends BaseService
     {
         //delete
         $system = System::get($id);
+
         if ($system->delete()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $memo = '删除系统ID为 '.$id.' 的系统';
+            $logService->insert($memo, '删除系统数据');
+
             return 0;
         } else {
             return $system->getError();

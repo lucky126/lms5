@@ -1027,15 +1027,15 @@ CREATE TABLE lms_operatelog
   userid             VARCHAR(36)           NOT NULL
   COMMENT '操作用户uuid',
   usertype           INT                   NOT NULL
-  COMMENT '用户类型',
+  COMMENT '用户类型：0，admin；1，student',
   operatorip         VARCHAR(50)           NOT NULL
   COMMENT '操作IP',
   operatordate       DATETIME              NOT NULL
   COMMENT '操作日期',
   operateurl         NATIONAL VARCHAR(500) NOT NULL
   COMMENT '操作url',
-  operateresult      NATIONAL VARCHAR(500) NOT NULL
-  COMMENT '操作结果',
+  operatememo      NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '操作内容',
   operatedescription NATIONAL VARCHAR(500) NOT NULL
   COMMENT '操作描述',
   PRIMARY KEY (id)

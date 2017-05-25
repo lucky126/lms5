@@ -65,8 +65,6 @@ class RuleService extends BaseService
         } else {
             return $rule->getError();
         }
-
-        return $result;
     }
 
     /**
