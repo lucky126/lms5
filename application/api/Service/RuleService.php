@@ -61,6 +61,11 @@ class RuleService extends BaseService
         $rule->isshow = $data['isshow'];
 
         if ($rule->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('新增权限： ' . json_encode($rule), '新增权限');
+
             return 0;
         } else {
             return $rule->getError();
@@ -82,6 +87,11 @@ class RuleService extends BaseService
         $rule->isshow = $data['isshow'];
 
         if ($rule->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('更新权限： ' . json_encode($rule), '更新权限');
+
             return 0;
         } else {
             return $rule->getError();
@@ -103,6 +113,11 @@ class RuleService extends BaseService
         //delete
         $rule = AuthRule::get($id);
         if ($rule->delete()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('删除权限： ' . json_encode($rule), '删除权限');
+
             return 0;
         } else {
             return $rule->getError();
@@ -153,6 +168,12 @@ class RuleService extends BaseService
                     'status' => $status,
                 ], ['pid' => $id]);
             }
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $memo = '更新权限ID为 ' . $id . ' 的状态为' . $status;
+            $logService->insert($memo, '更新权限状态');
+
             return 0;
         } else {
             return $rule->getError();

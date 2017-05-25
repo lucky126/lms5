@@ -81,6 +81,11 @@ class CourseService extends BaseService
         //$result = $course->together('Coursesetting')->save();
         if ($course->save()) {
             $course->setting()->save($coursesetting);
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('新增课程： ' . json_encode($course) .' & '. json_encode($coursesetting), '新增课程');
+
             return 0;
         } else {
             return $course->getError();
@@ -118,6 +123,10 @@ class CourseService extends BaseService
 
             $course->setting->save();
 
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('更新课程： ' . json_encode($course), '更新课程');
+
             return 0;
         } else {
             return $course->getError();
@@ -141,6 +150,11 @@ class CourseService extends BaseService
         if ($course->delete()) {
             // 删除关联数据
             $course->setting->delete();
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('删除课程： ' . json_encode($course), '删除课程');
+
             return 0;
         } else {
             return $course->getError();
@@ -183,6 +197,12 @@ class CourseService extends BaseService
         $course->status = $status;
 
         if ($course->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $memo = '更新课程ID为 ' . $id . ' 的状态为' . $status;
+            $logService->insert($memo, '更新课程状态');
+
             return 0;
         } else {
             return $course->getError();

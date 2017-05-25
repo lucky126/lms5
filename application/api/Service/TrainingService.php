@@ -104,6 +104,10 @@ class TrainingService extends BaseService
                 $training->courses()->save($trainingcourse);
             }
 
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('新增培训班： ' . json_encode($training) .' & '. json_encode($data['courses']), '新增培训班');
+
             return 0;
         } else {
             return $training->getError();
@@ -159,6 +163,10 @@ class TrainingService extends BaseService
                 Db::name("trainingcourse")->insert($course);
             }
 
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('更新培训班： ' . json_encode($training) .' & '. json_encode($data['courses']), '更新培训班');
+
             return 0;
         } else {
             return $training->getError();
@@ -176,6 +184,11 @@ class TrainingService extends BaseService
         if ($training->delete()) {
             // 删除关联数据
             $training->courses->delete();
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('删除培训班： ' . json_encode($training), '删除培训班');
+
             return 0;
         } else {
             return $training->getError();
@@ -207,7 +220,7 @@ class TrainingService extends BaseService
 
     /**
      * 设置状态
-     * @param $id 系统id
+     * @param $id 培训班id
      * @param $status 目标状态值
      * @return int|string
      */
@@ -217,6 +230,12 @@ class TrainingService extends BaseService
         $training->status = $status;
 
         if ($training->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $memo = '更新培训班ID为 ' . $id . ' 的状态为' . $status;
+            $logService->insert($memo, '更新培训班状态');
+
             return 0;
         } else {
             return $training->getError();

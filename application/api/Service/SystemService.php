@@ -68,8 +68,7 @@ class SystemService extends BaseService
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            $memo = '新增系统名称为 ' . $data['systemname'] . ' 的系统';
-            $logService->insert($memo, '新增系统');
+            $logService->insert('新增系统： ' . json_encode($system), '新增系统');
 
             return 0;
         } else {
@@ -92,8 +91,7 @@ class SystemService extends BaseService
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            $memo = '更新系统ID为 ' . $data['id'] . ' 的系统';
-            $logService->insert($memo, '更新系统');
+            $logService->insert('更新系统： ' . json_encode($system), '更新系统');
 
             return 0;
         } else {
@@ -115,8 +113,7 @@ class SystemService extends BaseService
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            $memo = '删除系统ID为 ' . $id . ' 的系统';
-            $logService->insert($memo, '删除系统');
+            $logService->insert('删除系统： ' . json_encode($system), '删除系统');
 
             return 0;
         } else {

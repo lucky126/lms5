@@ -920,7 +920,7 @@ group_id</ColNames>
     <column id="180" parent="27" name="operatememo">
       <Position>7</Position>
       <Comment>操作内容</Comment>
-      <DataType>varchar(500)|0</DataType>
+      <DataType>varchar(5000)|0</DataType>
       <NotNull>1</NotNull>
     </column>
     <key id="181" parent="27" name="PRIMARY">

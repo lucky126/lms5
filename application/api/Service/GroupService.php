@@ -76,6 +76,11 @@ class GroupService extends BaseService
         $group->rules = '';
 
         if ($group->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('新增角色： ' . json_encode($group), '新增角色');
+
             return 0;
         } else {
             return $group->getError();
@@ -94,6 +99,11 @@ class GroupService extends BaseService
         $group->title = $data['title'];
 
         if ($group->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('更新角色： ' . json_encode($group), '更新角色');
+
             return 0;
         } else {
             return $group->getError();
@@ -116,6 +126,11 @@ class GroupService extends BaseService
         //delete
         $group = AuthGroup::get($id);
         if ($group->delete()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('删除角色： ' . json_encode($group), '删除角色');
+
             return 0;
         } else {
             return $group->getError();
@@ -143,7 +158,7 @@ class GroupService extends BaseService
 
     /**
      * 设置状态
-     * @param $id 系统id
+     * @param $id 角色id
      * @param $status 目标状态值
      * @return int|string
      */
@@ -153,6 +168,12 @@ class GroupService extends BaseService
         $group->status = $status;
 
         if ($group->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $memo = '更新角色ID为 ' . $id . ' 的状态为' . $status;
+            $logService->insert($memo, '更新角色状态');
+
             return 0;
         } else {
             return $group->getError();
@@ -192,6 +213,11 @@ class GroupService extends BaseService
         $group->rules = $rule;
 
         if ($group->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('保存角色权限： ' . json_encode($group), '保存角色权限');
+
             return 0;
         } else {
             return $group->getError();

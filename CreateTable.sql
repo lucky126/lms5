@@ -1043,7 +1043,7 @@ CREATE TABLE lms_operatelog
   COMMENT '操作日期',
   operateurl         NATIONAL VARCHAR(500) NOT NULL
   COMMENT '操作url',
-  operatememo        NATIONAL VARCHAR(500) NOT NULL
+  operatememo        NATIONAL VARCHAR(5000) NOT NULL
   COMMENT '操作内容',
   operatedescription NATIONAL VARCHAR(500) NOT NULL
   COMMENT '操作描述',

@@ -165,6 +165,11 @@ class UserService extends BaseService
             $userGroup->group_id = $data['UserGroup'];
 
             $user->group()->save($userGroup);
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('新增用户： ' . json_encode($user) . ' & ' . json_encode($userGroup), '新增用户');
+
             return 0;
         } else {
             return $user->getError();
@@ -186,6 +191,11 @@ class UserService extends BaseService
             $user->group->group_id = $data['UserGroup'];
 
             $user->group->save();
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('更新用户： ' . json_encode($user), '更新用户');
+
             return 0;
         } else {
             return $user->getError();
@@ -201,6 +211,10 @@ class UserService extends BaseService
     {
         $user = User::get(['uid' => $uid]);
         $user->together('group')->delete();
+
+        //保存操作日志
+        $logService = controller('OperatelogService', 'Service');
+        $logService->insert('删除用户： ' . json_encode($user), '删除用户');
     }
 
     /**
@@ -230,6 +244,12 @@ class UserService extends BaseService
         $user->status = $status;
 
         if ($user->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $memo = '更新用户ID为 ' . $id . ' 的状态为' . $status;
+            $logService->insert($memo, '更新用户状态');
+
             return 0;
         } else {
             return $user->getError();
