@@ -167,6 +167,15 @@ VALUES ('923', '9', 'Admin/Rule/editgroup', '修改角色', '1', '1', '', '', '0
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('924', '9', 'Admin/Rule/grouprule', '角色权限', '1', '1', '', '', '0');
 
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('10', '1', 'log', '日志管理', '1', '1', '', 'fa fa-edit', '1');
+
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('1010', '10', 'Admin/Log/adminloginlog', '管理端登录日志', '1', '1', '', '', '1');
+
+INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
+VALUES ('1020', '10', 'Admin/Log/adminoperatelog', '管理端操作日志', '1', '1', '', '', '1');
+
 -- ----------------------------
 -- Table structure for lms_auth_group_access
 -- ----------------------------
@@ -1034,7 +1043,7 @@ CREATE TABLE lms_operatelog
   COMMENT '操作日期',
   operateurl         NATIONAL VARCHAR(500) NOT NULL
   COMMENT '操作url',
-  operatememo      NATIONAL VARCHAR(500) NOT NULL
+  operatememo        NATIONAL VARCHAR(500) NOT NULL
   COMMENT '操作内容',
   operatedescription NATIONAL VARCHAR(500) NOT NULL
   COMMENT '操作描述',
@@ -1043,6 +1052,33 @@ CREATE TABLE lms_operatelog
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8
   COMMENT = '操作日志';
+
+
+/*==============================================================*/
+/* Table: lms_loginlog                                          */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_loginlog;
+CREATE TABLE lms_loginlog
+(
+  id            INT                   NOT NULL AUTO_INCREMENT,
+  usertype      INT                   NOT NULL
+  COMMENT '用户类型',
+  loginname     NATIONAL VARCHAR(50)  NOT NULL
+  COMMENT '用户名',
+  pwd           VARCHAR(50)           NOT NULL
+  COMMENT '密码',
+  operatorip    VARCHAR(50)           NOT NULL
+  COMMENT '操作IP',
+  operatordate  DATETIME              NOT NULL
+  COMMENT '操作日期',
+  operateresult NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '操作结果',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '登录日志';
+
 
 /*==============================================================*/
 /* Table: lms_systemmessage                              */

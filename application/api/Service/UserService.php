@@ -23,20 +23,29 @@ class UserService extends BaseService
     {
         if ($isadmin) {
             $map['usertype'] = ['<>', 3];
+            $usertype = 0;
         } else {
             $map['usertype'] = ['=', 3];
+            $usertype = 1;
         }
+
+        $login_success = true;
+        $result = BaseService::setResult(0, "登录成功", null);
 
         //check loginname
         $map['loginname'] = ['=', $username];
         $data = Db::name('user')->where($map)->find();
 
         if ($data == null) {
-            return BaseService::setResult(-201, "用户不存在！", null);
+            $login_success = false;
+            $result['code'] = -201;
+            $result['msg'] = '用户不存在！';
         }
 
         if ($data['status'] == 0) {
-            return BaseService::setResult(-202, "用户已被禁用！", null);
+            $login_success = false;
+            $result['code'] = -202;
+            $result['msg'] = '用户已被禁用！';
         }
 
         //get id
@@ -45,28 +54,40 @@ class UserService extends BaseService
 
         //check password
         if ($data['pwd'] <> getEncPassword($password)) {
-            return BaseService::setResult(-203, "密码错误！", null);
+            $login_success = false;
+            $result['code'] = -203;
+            $result['msg'] = '密码错误！';
         }
 
-        //update logininfo
-        $user = User::get($id);
-        $user->logincount++;
-        $user->lastlogintime = $user->currentlogintime;
-        $user->currentlogintime = datetime();
+        if ($login_success) {
+            //reset $password
+            $password = '******';
+            //update logininfo
+            $user = User::get($id);
+            $user->logincount++;
+            $user->lastlogintime = $user->currentlogintime;
+            $user->currentlogintime = datetime();
 
-        $user->save();
+            $user->save();
 
-        //get token
-        $token = getToken($uid, $id);
-        //set userinfo
-        $userInfo = array(
-            'uid' => $uid,
-            'id' => $id,
-            'token' => $token
-        );
+            //get token
+            $token = getToken($uid, $id);
+            //set userinfo
+            $userInfo = array(
+                'uid' => $uid,
+                'id' => $id,
+                'token' => $token
+            );
+
+            $result['data'] = $userInfo;
+        }
+
+        //保存登录日志
+        $logService = controller('LoginlogService', 'Service');
+        $logService->insert($username, $password, $result['msg'], $usertype);
 
         //return success data
-        return BaseService::setResult(0, "", $userInfo);
+        return $result;
     }
 
     /**

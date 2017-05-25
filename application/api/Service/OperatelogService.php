@@ -12,13 +12,13 @@ use app\api\model\Operatelog;
 use think\Cookie;
 
 /**
- * 日志服务类
+ * 操作日志服务类
  * @package api\Service
  */
 class OperatelogService extends BaseService
 {
     /**
-     * 新增日志数据
+     * 新增操作日志数据
      * @param $memo
      * @param $desc
      * @return int|string
@@ -48,6 +48,22 @@ class OperatelogService extends BaseService
         } else {
             return $log->getError();
         }
+    }
+
+    /**
+     * 获取列表
+     * @param $usertype
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getList($usertype)
+    {
+        //get data
+        $log = new Operatelog();
+
+        $data = $log->where('usertype', $usertype)->order('operatordate', 'desc')
+            ->select();
+
+        return $data;
     }
 
 }
