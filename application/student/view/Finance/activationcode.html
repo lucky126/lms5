@@ -1,0 +1,52 @@
+{extend name="base" /}
+{block name="css"}
+{load href="/static/plugins/animate-css/animate.min.css" /}
+{/block}
+
+{block name="js"}
+{load href="/static/plugins/bootbox/bootbox.min.js" /}
+
+{load href="/static/js/main.js" /}
+{/block}
+{block name="title"}通过激活码报名{/block}
+{block name="main"}
+<div id="page-content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">请输入您的激活码</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" id="ActivateCode" name="ActivateCode" class="form-control"
+                                   placeholder="请输入激活码">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" id="btnActivete" name="btnActivete" class="btn btn-primary"
+                                   value="激活账户">
+                            <input type="button" id="btnBack" name="btnBack" class="btn btn-danger"
+                                   value="返回">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{/block}
+
+{block name="modal"}
+<script type="text/javascript">
+    $(function () {
+        $("#btnBack").click(function () {
+            location.href = "/student/finance/paylist";
+        });
+    });
+
+
+</script>
+{/block}

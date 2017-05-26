@@ -152,38 +152,16 @@
     }
 
     /**
-     * 保存报名培训班
+     * 跳转培训班支付模式
      * @param id
      */
     function saveSigninInfo(id) {
-        //如果是新增
-        var method = "POST";
-        var url = "/api/Selectcourse/signIn";
-
-        //异步保存
-        $.ajax({
-            cache: true,
-            type: method,
-            url: url,
-            data: {
-                'uid': '{$uid}',
-                'id': id
-            },
-            async: false,
-            error: function () {
-                alert("连接错误");
-            },
-            success: function (data) {
-                if (data.code == 0) {
-                    completeMsg("报名成功");
-                    location.href = '/student';
-                } else if (data.code == -201) {
-                    errorMsg('您已报名过该培训班！如需交费，请点击\"交费信息-我要交费\"！');
-                } else {
-                    errorMsg('报名失败！请稍候再试或联系技术支持！错误信息：' + data.msg);
-                }
-            }
-        });
+        var type = $("input[name='paytype']:checked").val();
+        if (type == 0) {
+            location.href='/student/Finance/activationcode?id=' + id;
+        } else {
+            location.href='/student/Finance/onlinepay?id=' + id;
+        }
     }
 
 </script>

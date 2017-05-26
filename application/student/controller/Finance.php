@@ -33,4 +33,26 @@ class Finance extends Basic
         $this->assign("id", $id);
         return $this->fetch();
     }
+
+    /**
+     * 激活码页面
+     * @param $id
+     * @return mixed
+     */
+    public function activationcode($id)
+    {
+        $this->assign("id", $id);
+        return $this->fetch();
+    }
+
+    /**
+     * 在线支付页面
+     * @param $id
+     * @return mixed
+     */
+    public function onlinepay($id)
+    {
+        $this->assign("id", $id);
+        return $this->fetch();
+    }
 }
