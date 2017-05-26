@@ -1079,7 +1079,6 @@ CREATE TABLE lms_loginlog
   DEFAULT CHARSET = utf8
   COMMENT = '登录日志';
 
-
 /*==============================================================*/
 /* Table: lms_systemmessage                              */
 /*==============================================================*/
@@ -1104,6 +1103,197 @@ CREATE TABLE lms_systemmessage
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8
   COMMENT = '系统消息';
+
+/*==============================================================*/
+/* Table: lms_onlinepayinfo                                     */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_onlinepayinfo;
+CREATE TABLE lms_onlinepayinfo
+(
+  orderno     VARCHAR(20)            NOT NULL
+  COMMENT '订单号码',
+  orderamount NUMERIC(9, 2)          NOT NULL
+  COMMENT '订单金额',
+  userid      INT                    NOT NULL
+  COMMENT '用户ID',
+  addtime     DATETIME               NOT NULL
+  COMMENT '添加日期',
+  txntime     VARCHAR(14)            NOT NULL
+  COMMENT '订单发送时间',
+  settledate  VARCHAR(4)             NOT NULL
+  COMMENT '清算日期',
+  respcode    VARCHAR(2)             NOT NULL
+  COMMENT '响应码',
+  orderstatus INT                    NOT NULL DEFAULT 0
+  COMMENT '支付状态(0，未支付；1，支付成功；2，支付失败)',
+  status      INT                    NOT NULL DEFAULT 0
+  COMMENT '系统状态(0：未交费；1，已交费；2，单据撤销)',
+  signature   VARCHAR(2000)          NOT NULL
+  COMMENT '签名',
+  memo        NATIONAL VARCHAR(2000) NOT NULL
+  COMMENT '备注',
+  feetype     INT                    NOT NULL DEFAULT 1
+  COMMENT '交费类型（1-培训费，2-选课费）',
+  ischeck     INT                    NOT NULL DEFAULT 0
+  COMMENT '是否对账',
+  payobjectid INT                    NOT NULL
+  COMMENT '交费对象ID（培训班ID或课程ID）',
+  systemid    INT                    NOT NULL
+  COMMENT '系统ID',
+  queryid     VARCHAR(30)            NOT NULL
+  COMMENT '交易查询流水号',
+  PRIMARY KEY (orderno)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '在线支付订单';
+
+/*==============================================================*/
+/* Table: lms_onlinepaylog                                      */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_onlinepaylog;
+CREATE TABLE lms_onlinepaylog
+(
+  id          INT         NOT NULL AUTO_INCREMENT,
+  orderno     VARCHAR(20) NOT NULL
+  COMMENT '订单号',
+  userid      INT         NOT NULL
+  COMMENT '用户ID',
+  addtime     DATETIME    NOT NULL
+  COMMENT '添加时间',
+  orderamount NUMERIC(9, 2) COMMENT '订单金额',
+  indbtype    INT         NOT NULL
+  COMMENT '入库类型',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '在线支付日志';
+
+/*==============================================================*/
+/* Table: lms_payresultinfo                                     */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_payresultinfo;
+CREATE TABLE lms_payresultinfo
+(
+  code        VARCHAR(2)            NOT NULL
+  COMMENT '返回值',
+  information NATIONAL VARCHAR(200) NOT NULL
+  COMMENT '说明',
+  PRIMARY KEY (code)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '在线支付返回值说明';
+
+/*==============================================================*/
+/* Table: lms_payment                                             */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_payment;
+CREATE TABLE lms_payment
+(
+  id            INT           NOT NULL AUTO_INCREMENT,
+  userid        INT           NOT NULL
+  COMMENT '用户ID（如果非用户交费或批量交费则为0）',
+  payobjectid   INT           NOT NULL
+  COMMENT '交费对象ID（培训班ID或课程ID，非用户交费则为0）',
+  payobjecttype INT           NOT NULL
+  COMMENT '交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）',
+  paymoney      DECIMAL(9, 1) NOT NULL
+  COMMENT '交费金额',
+  paytype       SMALLINT      NOT NULL
+  COMMENT '交费类型（1-用户在线交费、2-用户离线交费、3-批量生成用户交费）',
+  paydate       DATETIME      NOT NULL
+  COMMENT '交费时间',
+  systemid      INT           NOT NULL
+  COMMENT '系统ID',
+  orderno       VARCHAR(20)   NOT NULL
+  COMMENT '订单号',
+  memo          VARCHAR(200)  NOT NULL
+  COMMENT '备注',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '财务信息';
+
+
+/*==============================================================*/
+/* Table: lms_paymentlog                                        */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_paymentlog;
+CREATE TABLE lms_paymentlog
+(
+  id                INT           NOT NULL AUTO_INCREMENT,
+  paymentid         INT           NOT NULL
+  COMMENT '财务ID',
+  userid            INT           NOT NULL
+  COMMENT '用户ID（如果非用户交费或批量交费则为0）',
+  paymentobjectid   INT           NOT NULL
+  COMMENT '交费对象ID（培训班ID或课程ID，非用户交费则为0）',
+  paymentobjecttype INT           NOT NULL
+  COMMENT '交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）',
+  paymentmoney      DECIMAL(8, 1) NOT NULL
+  COMMENT '交费金额',
+  paymenttype       SMALLINT      NOT NULL
+  COMMENT '交费类型（1-用户在线交费、2-用户离线交费、3-生成用户交费、4-售出课程费）',
+  paymentdate       DATETIME      NOT NULL
+  COMMENT '交费时间',
+  operatoruserid    INT           NOT NULL
+  COMMENT '操作人用户ID',
+  operatorip        VARCHAR(50)   NOT NULL
+  COMMENT '操作人IP',
+  systemid          INT           NOT NULL
+  COMMENT '系统ID',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '财务日志';
+
+
+/*==============================================================*/
+/* Table: lms_cancelpaymentlog                                  */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_cancelpaymentlog;
+CREATE TABLE lms_cancelpaymentlog
+(
+  id                INT            NOT NULL AUTO_INCREMENT,
+  paymentid         INT            NOT NULL
+  COMMENT '财务ID',
+  userid            INT            NOT NULL
+  COMMENT '用户ID（如果非用户交费或批量交费则为0）',
+  paymentobjectid   INT            NOT NULL
+  COMMENT '交费对象ID（培训班ID或课程ID，非用户交费则为0）',
+  paymentobjecttype INT            NOT NULL
+  COMMENT '交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）',
+  paymentmoney      DECIMAL(8, 1)  NOT NULL
+  COMMENT '交费金额',
+  paymenttype       SMALLINT       NOT NULL
+  COMMENT '交费类型（1-用户在线交费、2-用户离线交费、3-生成用户交费、4-售出课程费）',
+  paymentdate       DATETIME       NOT NULL
+  COMMENT '交费时间',
+  operatoruserid    INT            NOT NULL
+  COMMENT '操作人用户ID',
+  operatorip        VARCHAR(50)    NOT NULL
+  COMMENT '操作人IP',
+  systemid          INT            NOT NULL
+  COMMENT '系统ID',
+  canceldate        DATETIME       NOT NULL
+  COMMENT '撤销日期',
+  cancelreason      VARBINARY(200) NOT NULL
+  COMMENT '撤销原因',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '撤销财务信息日志';
+
+
+
+
+
+
 
 
 
