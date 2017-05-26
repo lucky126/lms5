@@ -130,9 +130,9 @@ VALUES ('603', '6', 'Admin/Finance/stat', '财务统计', '1', '1', '', '', '1')
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('7', '1', 'ActivationCode', '激活码管理', '1', '1', '', 'fa fa-barcode', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('700', '7', 'Admin/ActivationCode/index', '查询激活码', '1', '1', '', '', '1');
+VALUES ('700', '7', 'Admin/ActivationCode/add', '新增激活码', '1', '1', '', '', '1');
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
-VALUES ('701', '7', 'Admin/ActivationCode/revoke', '撤销激活码', '1', '1', '', '', '1');
+VALUES ('701', '7', 'Admin/ActivationCode/index', '查询激活码', '1', '1', '', '', '1');
 
 INSERT INTO `lms_auth_rule` (`id`, `pid`, `name`, `title`, `status`, `type`, `condition`, `icon`, `isshow`)
 VALUES ('8', '1', 'Progress', '学习情况', '1', '1', '', 'fa fa-line-chart', '1');
@@ -1201,6 +1201,8 @@ CREATE TABLE lms_payment
   COMMENT '交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）',
   paymoney      DECIMAL(9, 1) NOT NULL
   COMMENT '交费金额',
+  account      INT NOT NULL
+  COMMENT '交费个数',
   paytype       SMALLINT      NOT NULL
   COMMENT '交费类型（1-用户在线交费、2-用户离线交费、3-批量生成用户交费）',
   paydate       DATETIME      NOT NULL

@@ -20,6 +20,15 @@ class Activationcode extends Basic
     }
 
     /**
+     * 激活码新增页
+     * @return mixed
+     */
+    public function add()
+    {
+        return $this->fetch();
+    }
+
+    /**
      * 撤销激活码
      * @return mixed
      */

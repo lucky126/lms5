@@ -1,0 +1,178 @@
+{extend name="base" /}
+{block name="css"}
+{load href="/static/plugins/animate-css/animate.min.css,/static/plugins/bootstrap-validator/bootstrapValidator.min.css" /}
+{/block}
+
+{block name="js"}
+{load href="/static/plugins/bootbox/bootbox.min.js,/static/plugins/bootstrap-validator/bootstrapValidator.min.js" /}
+{/block}
+
+{block name="title"}新增激活码{/block}
+{block name="main"}
+<div id="page-content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">新增激活码</h3>
+                </div>
+                <div class="panel-body">
+                    <form method="post" action="" class="form-horizontal" id="addform">
+                        <div id="step1">
+                            <div class="form-group">
+                                <label for="trainingclass" class="col-sm-2 control-label">所报培训班：</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="trainingclass" name="trainingclass">
+                                        <option value=''>请选择</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentmoney" class="col-sm-2 control-label">交费金额：</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="paymentmoney" name="paymentmoney" class="form-control"
+                                           placeholder="请输入交费金额">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="account" class="col-sm-2 control-label">生成数量：</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="account" name="account" class="form-control"
+                                           placeholder="请输入生成数量">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="memo" class="col-sm-2 control-label">备注：</label>
+                                <div class="col-sm-4">
+                            <textarea id="memo" name="memo" rows="3" class="form-control"
+                                      placeholder="请输入备注"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="button" id="btnNext" name="btnNext"
+                                       class="btn btn-info col-md-offset-2 col-md-2"
+                                       value="下一步">
+                            </div>
+                        </div>
+                        <div id="step2" style="display: none;">
+                            <div class="form-group">
+                                <label for="trainingclass" class="col-sm-2 control-label">所报培训班：</label>
+                                <div class="col-sm-4">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentmoney" class="col-sm-2 control-label">交费金额：</label>
+                                <div class="col-sm-2">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="account" class="col-sm-2 control-label">生成数量：</label>
+                                <div class="col-sm-2">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="memo" class="col-sm-2 control-label">备注：</label>
+                                <div class="col-sm-4">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="button" id="btnPrev" name="btnPrev"
+                                       class="btn btn-info col-md-offset-2 col-md-2"
+                                       value="上一步">
+                                <input type="button" id="btnFinish" name="btnFinish"
+                                       class="btn btn-primary col-md-offset-2 col-md-2"
+                                       value="确认交费">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="modal"}
+<script type="text/javascript">
+    $(function () {
+        getTrainingList();
+        $("#btnNext").click(function () {
+            if (ValidateAddInfo()) {
+                $("#step1").hide();
+                $("#step2").show();
+            }
+        });
+        $("#btnPrev").click(function () {
+            $("#step1").show();
+            $("#step2").hide();
+        });
+        $("#btnFinish").click(function () {
+
+        });
+    });
+
+    //get training list
+    function getTrainingList() {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/training/",
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                info.forEach(function (value, index, array) {
+                    $("#trainingclass").append("<option value='" + value.id + "'>" + value.trainingname + "</option>");
+                });
+            }
+        });
+    }
+
+    $("#addform").bootstrapValidator({
+        message: 'This value is not valid',
+        //反馈图标
+        feedbackIcons: faIcon,
+        fields: {
+            trainingclass: {
+                message: '培训班无效',
+                validators: {
+                    notEmpty: {
+                        message: '请选择培训班'
+                    },
+                }
+            },
+            paymentmoney: {
+                message: '交费金额无效',
+                validators: {
+                    notEmpty: {
+                        message: '交费金额不能为空'
+                    },
+                    regexp: {
+                        regexp: /^[0-9]+$/,
+                        message: '交费金额只能由数字组成'
+                    }
+                }
+            },
+            account: {
+                message: '生成数量无效',
+                validators: {
+                    notEmpty: {
+                        message: '生成数量不能为空'
+                    },
+                    regexp: {
+                        regexp: /^[0-9]+$/,
+                        message: '生成数量只能由数字组成'
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+{/block}

@@ -1,3 +1,86 @@
 {extend name="base" /}
-{block name="title"}ac index{/block}
-{block name="main"}{/block}
+{block name="css"}
+{load href="/static/plugins/bootstrap-table/bootstrap-table.min.css,/static/plugins/x-editable/css/bootstrap-editable.css" /}
+{load href="/static/plugins/animate-css/animate.min.css,/static/plugins/bootstrap-validator/bootstrapValidator.min.css" /}
+{/block}
+
+{block name="js"}
+{load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js,/static/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{load href="/static/plugins/bootbox/bootbox.min.js,/static/plugins/bootstrap-validator/bootstrapValidator.min.js,/static/plugins/bootstrap-treeview/js/bootstrap-treeview.js" /}
+<script type="text/javascript">
+    //设置bootstrap table为中文
+    $('#table').bootstrapTable({locale: 'zh-CN'});
+</script>
+{/block}
+
+{block name="title"}激活码管理{/block}
+{block name="main"}
+<div id="page-content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">激活码列表</h3>
+                </div>
+
+                <!--Data Table-->
+                <!--===================================================-->
+                <div class="panel-body">
+
+                    <div class="table-responsive">
+                        <table data-toggle="table"
+                               data-url="/api/activatecode"
+                               data-search="true"
+                               data-sort-name="activatecode"
+                               data-page-list="[10, 20, 50]"
+                               data-page-size="10"
+                               data-pagination="true" data-show-pagination-switch="true" id="table">
+                            <thead>
+                            <tr>
+                                <th data-field="activatecode" data-sortable="true">激活码</th>
+                                <th data-field="activatecode" data-sortable="true">学生姓名</th>
+                                <th data-field="classname" data-sortable="true">培训班</th>
+                                <th data-field="adddate" data-sortable="true">生成时间</th>
+                                <th data-field="batchcode" data-sortable="true">激活序号</th>
+                                <th data-align="center" data-field="action" data-formatter="actionFormatter"
+                                    data-events="actionEvents">操作
+                                </th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!--===================================================-->
+                <!--End Data Table-->
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{/block}
+
+{block name="modal"}
+<script type="text/javascript">
+
+    $(function () {
+
+    });
+
+    //bootstrap table操作
+    function actionFormatter(value, row, index) {
+        var revoke = '<a class="revoke btn-link" href="javascript:void(0)" title="编辑">撤销激活码</a>';
+
+        return revoke;
+    }
+
+    //操作事件
+    window.actionEvents = {
+        'click .revoke': function (e, value, row, index) {
+            showRevokeInfo("/api/Activationcode/", row.id);
+        },
+    };
+
+</script>
+{/block}
