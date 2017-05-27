@@ -58,27 +58,19 @@
                         <div id="step2" style="display: none;">
                             <div class="form-group">
                                 <label for="trainingclass" class="col-sm-2 control-label">所报培训班：</label>
-                                <div class="col-sm-4">
-
-                                </div>
+                                <label id="txttrainingclass" class="col-sm-4"></label>
                             </div>
                             <div class="form-group">
                                 <label for="paymentmoney" class="col-sm-2 control-label">交费金额：</label>
-                                <div class="col-sm-2">
-
-                                </div>
+                                <label id="txtpaymentmoney" class="col-sm-4"></label>
                             </div>
                             <div class="form-group">
                                 <label for="account" class="col-sm-2 control-label">生成数量：</label>
-                                <div class="col-sm-2">
-
-                                </div>
+                                <label id="txtaccount" class="col-sm-4"></label>
                             </div>
                             <div class="form-group">
                                 <label for="memo" class="col-sm-2 control-label">备注：</label>
-                                <div class="col-sm-4">
-
-                                </div>
+                                <label id="txtmemo" class="col-sm-4"></label>
                             </div>
                             <div class="form-group">
                                 <input type="button" id="btnPrev" name="btnPrev"
@@ -103,6 +95,11 @@
         getTrainingList();
         $("#btnNext").click(function () {
             if (ValidateAddInfo()) {
+                $("#txttrainingclass").text($("#trainingclass  option:selected").text());
+                $("#txtpaymentmoney").text($("#paymentmoney").val());
+                $("#txtaccount").text($("#account").val());
+                $("#txtmemo").text($("#memo").val());
+
                 $("#step1").hide();
                 $("#step2").show();
             }
@@ -112,7 +109,24 @@
             $("#step2").hide();
         });
         $("#btnFinish").click(function () {
-
+            //异步保存
+            $.ajax({
+                cache: true,
+                type: 'POST',
+                url: '/api/activationcode',
+                data: $('#addform').serialize(),
+                async: false,
+                error: function () {
+                    alert("连接错误");
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        completeMsg("保存成功");
+                    } else {
+                        errorMsg(data.msg);
+                    }
+                }
+            });
         });
     });
 
