@@ -64,14 +64,8 @@ class SelectcourseService extends BaseService
             ->where('studentid', '=', $uid)
             ->buildSql();
 
-        $map['systemid'] = ['=', $sysid];
-        $map['starttime'] = ['<=', datetime()];
-        $map['endtime'] = ['>=', datetime()];
-        $map['id'] = ['not in', $subQuery];
-
-        $data = Db::name('training')
-            ->where($map)
-            ->select();
+        $service = controller('TrainingService', 'Service');
+        $data = $service->getOpenList($sysid, $subQuery);
 
         return $data;
     }

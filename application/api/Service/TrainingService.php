@@ -34,6 +34,26 @@ class TrainingService extends BaseService
     }
 
     /**
+     * 获取未结束的培训班列表
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getOpenList($systemid, $id_map)
+    {
+        //
+        $map['systemid'] = ['=', $systemid];
+        $map['isopen'] = ['=', 1];
+        $map['starttime'] = ['<=', datetime()];
+        $map['endtime'] = ['>=', datetime()];
+
+        if ($id_map != '')
+            $map['id'] = ['not in', $id_map];
+
+        $data = Db::name('training')->where($map)->select();
+
+        return $data;
+    }
+
+    /**
      * 获取指定培训班数据
      * @param $id
      * @return array|false|\PDOStatement|string|\think\Model
@@ -106,7 +126,7 @@ class TrainingService extends BaseService
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            $logService->insert('新增培训班： ' . json_encode($training) .' & '. json_encode($data['courses']), '新增培训班');
+            $logService->insert('新增培训班： ' . json_encode($training) . ' & ' . json_encode($data['courses']), '新增培训班');
 
             return 0;
         } else {
@@ -165,7 +185,7 @@ class TrainingService extends BaseService
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            $logService->insert('更新培训班： ' . json_encode($training) .' & '. json_encode($data['courses']), '更新培训班');
+            $logService->insert('更新培训班： ' . json_encode($training) . ' & ' . json_encode($data['courses']), '更新培训班');
 
             return 0;
         } else {

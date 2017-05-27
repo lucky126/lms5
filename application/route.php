@@ -23,38 +23,38 @@ Route::post('api/student/login', 'api/login/studentlogin', "POST");
 Route::post('api/admin/logout', 'api/login/adminlogout', "POST");
 Route::post('api/student/logout', 'api/login/studentlogout', "POST");
 
-Route::rule('api/group/:id/rule', 'api/Group/getRule', "GET");
-Route::rule('api/group/:id/rule', 'api/Group/saveRule', "PUT");
+Route::rule('api/group/:id/rule', 'api/Group/getRule', "GET", [], ['id' => '\d+']);
+Route::rule('api/group/:id/rule', 'api/Group/saveRule', "PUT", [], ['id' => '\d+']);
 //unique check
-Route::post('api/system/:id/unique', 'api/System/unique');
-Route::post('api/group/:id/unique', 'api/Group/unique');
-Route::post('api/rule/:id/unique', 'api/Rule/unique');
+Route::post('api/system/:id/unique', 'api/System/unique', [], ['id' => '\d+']);
+Route::post('api/group/:id/unique', 'api/Group/unique', [], ['id' => '\d+']);
+Route::post('api/rule/:id/unique', 'api/Rule/unique', [], ['id' => '\d+']);
 Route::post('api/user/:id/unique', 'api/User/unique');
-Route::post('api/course/:id/unique', 'api/Course/unique');
-Route::post('api/training/:id/unique', 'api/Training/unique');
+Route::post('api/course/:id/unique', 'api/Course/unique', [], ['id' => '\d+']);
+Route::post('api/training/:id/unique', 'api/Training/unique', [], ['id' => '\d+']);
 Route::post('api/register/:id/unique', 'api/Register/unique');
 //status change
-Route::put('api/system/:id/activate', 'api/System/changeStatus?status=1');
-Route::put('api/system/:id/deactivate', 'api/System/changeStatus?status=0');
-Route::put('api/group/:id/activate', 'api/Group/changeStatus?status=1');
-Route::put('api/group/:id/deactivate', 'api/Group/changeStatus?status=0');
-Route::put('api/rule/:id/activate', 'api/Rule/changeStatus?status=1');
-Route::put('api/rule/:id/deactivate', 'api/Rule/changeStatus?status=0');
+Route::put('api/system/:id/activate', 'api/System/changeStatus?status=1', [], ['id' => '\d+']);
+Route::put('api/system/:id/deactivate', 'api/System/changeStatus?status=0', [], ['id' => '\d+']);
+Route::put('api/group/:id/activate', 'api/Group/changeStatus?status=1', [], ['id' => '\d+']);
+Route::put('api/group/:id/deactivate', 'api/Group/changeStatus?status=0', [], ['id' => '\d+']);
+Route::put('api/rule/:id/activate', 'api/Rule/changeStatus?status=1', [], ['id' => '\d+']);
+Route::put('api/rule/:id/deactivate', 'api/Rule/changeStatus?status=0', [], ['id' => '\d+']);
 Route::put('api/user/:id/activate', 'api/User/changeStatus?status=1');
 Route::put('api/user/:id/deactivate', 'api/User/changeStatus?status=0');
-Route::put('api/course/:id/activate', 'api/Course/changeStatus?status=1');
-Route::put('api/course/:id/deactivate', 'api/Course/changeStatus?status=0');
-Route::put('api/training/:id/activate', 'api/Training/changeStatus?status=1');
-Route::put('api/training/:id/deactivate', 'api/Training/changeStatus?status=0');
+Route::put('api/course/:id/activate', 'api/Course/changeStatus?status=1', [], ['id' => '\d+']);
+Route::put('api/course/:id/deactivate', 'api/Course/changeStatus?status=0', [], ['id' => '\d+']);
+Route::put('api/training/:id/activate', 'api/Training/changeStatus?status=1', [], ['id' => '\d+']);
+Route::put('api/training/:id/deactivate', 'api/Training/changeStatus?status=0', [], ['id' => '\d+']);
 //other
-Route::get('api/training/:id/courses', 'api/Training/courses');
+Route::get('api/training/:id/courses', 'api/Training/courses', [], ['id' => '\d+']);
 //resource
 Route::resource('api/user', 'api/User');
-Route::resource('api/rule', 'api/Rule');
-Route::resource('api/group', 'api/Group');
-Route::resource('api/system', 'api/System');
-Route::resource('api/course', 'api/Course');
-Route::resource('api/training', 'api/Training');
+Route::resource('api/rule', 'api/Rule', [], ['id' => '\d+']);
+Route::resource('api/group', 'api/Group', [], ['id' => '\d+']);
+Route::resource('api/system', 'api/System', [], ['id' => '\d+']);
+Route::resource('api/course', 'api/Course', [], ['id' => '\d+']);
+Route::resource('api/training', 'api/Training', [], ['id' => '\d+']);
 Route::resource('api/register', 'api/Register');
 Route::resource('api/reguser', 'api/Reguser');
 

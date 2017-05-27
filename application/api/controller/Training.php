@@ -15,7 +15,7 @@ use think\Db;
  * 培训班api控制器
  * @package app\api\controller
  */
-class training extends Authority
+class Training extends Authority
 {
     /**
      * 显示培训班资源列表
@@ -27,6 +27,20 @@ class training extends Authority
         //
         $service = controller('TrainingService', 'Service');
         $data = $service->getList();
+
+        return json($data);
+    }
+
+    /**
+     * 获取未结束的培训班列表
+     *
+     * @return \think\Response
+     */
+    public function open()
+    {
+        //
+        $service = controller('TrainingService', 'Service');
+        $data = $service->getOpenList(1, '');
 
         return json($data);
     }
@@ -47,7 +61,7 @@ class training extends Authority
             $result = $this->validate($data, 'training');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getresult(-101, $result, null));
+                return json(Base::getresult(-101, $result, null));
             }
 
             $service = controller('TrainingService', 'Service');
@@ -57,7 +71,7 @@ class training extends Authority
                 return json(Base::setResult(-100, $result, null));
             }
 
-            return json(base::getresult(0, "", null));
+            return json(Base::getresult(0, "", null));
         } else
             return json(Base::setResult(-100, "", null));
     }
@@ -116,7 +130,7 @@ class training extends Authority
             $result = $this->validate($data, 'training.edit');
             if (true !== $result) {
                 // 验证失败 输出错误信息
-                return json(base::getresult(-101, $result, null));
+                return json(Base::getresult(-101, $result, null));
             }
 
             $service = controller('TrainingService', 'Service');
@@ -143,7 +157,7 @@ class training extends Authority
         $service = controller('TrainingService', 'Service');
         $result = $service->delete($id);
 
-        return json(base::getresult(0, "", null));
+        return json(Base::getresult(0, "", null));
     }
 
     /**
