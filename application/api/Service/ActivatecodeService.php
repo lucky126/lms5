@@ -30,8 +30,10 @@ class ActivatecodeService extends BaseService
             $code->batchcode = '';
             $code->systemid = 1;
             $code->studentid = '';
+            $code->objectid = $data['trainingclass'];
+            $code->objecttype = 1;
 
-            $code->save();
+            //$code->save();
         }
 
         //保存财务信息
@@ -41,7 +43,7 @@ class ActivatecodeService extends BaseService
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            $logService->insert('生成激活码： ' . json_encode($code), '生成激活码');
+            //$logService->insert('生成激活码： ' . json_encode($code), '生成激活码');
 
             return 0;
         } else {

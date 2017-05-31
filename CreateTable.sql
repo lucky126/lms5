@@ -932,6 +932,10 @@ CREATE TABLE lms_activatecode
   COMMENT '系统ID',
   studentid    VARCHAR(36) NOT NULL
   COMMENT '学生UUID',
+  objectid     INT         NOT NULL
+  COMMENT '对象id',
+  objecttype     INT         NOT NULL
+  COMMENT '对象类型',
   PRIMARY KEY (activatecode)
 )
   ENGINE = MyISAM
@@ -958,6 +962,10 @@ CREATE TABLE lms_activatecodehistory
   COMMENT '系统ID',
   studentid     VARCHAR(36) NOT NULL
   COMMENT '学生UUID',
+  objectid     INT         NOT NULL
+  COMMENT '对象id',
+  objecttype     INT         NOT NULL
+  COMMENT '对象类型',
   backupdate DATETIME    NOT NULL
   COMMENT '备份时间',
   PRIMARY KEY (id)
@@ -983,6 +991,10 @@ CREATE TABLE lms_activatecodelog
   COMMENT '批次代码',
   systemid     INT           NOT NULL
   COMMENT '系统ID',
+  objectid     INT         NOT NULL
+  COMMENT '对象id',
+  objecttype     INT         NOT NULL
+  COMMENT '对象类型',
   paymentmoney DECIMAL(9, 1) NOT NULL
   COMMENT '交费金额',
   userid       INT           NOT NULL
@@ -1016,6 +1028,10 @@ CREATE TABLE lms_removelactivatecode
   COMMENT '操作日期',
   systemid     INT                   NOT NULL
   COMMENT '系统ID',
+  objectid     INT         NOT NULL
+  COMMENT '对象id',
+  objecttype     INT         NOT NULL
+  COMMENT '对象类型',
   removereason NATIONAL VARCHAR(200) NOT NULL
   COMMENT '撤销原因',
   PRIMARY KEY (id)
