@@ -112,16 +112,38 @@
             $("#step2").hide();
         });
         $("#btnFinish").click(function () {
-
+            saveInfo();
         });
     });
+
+    //save activation code
+    function saveInfo()
+    {
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: "/api/activatecode",
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                if (data.code == 0) {
+                    completeMsg("保存成功");
+
+                } else {
+                    errorMsg(data.msg);
+                }
+            }
+        });
+    }
 
     //get training list
     function getTrainingList() {
         $.ajax({
             cache: true,
             type: "GET",
-            url: "/api/training/",
+            url: "/api/Training/open",
             async: false,
             error: function () {
                 alert("连接错误");
@@ -156,6 +178,13 @@
                     regexp: {
                         regexp: /^[0-9]+$/,
                         message: '交费金额只能由数字组成'
+                    },
+                    greaterThan: {
+                        inclusive:true,
+                        //If true, the input value must be greater than or equal to the comparison one.
+                        //If false, the input value must be greater than the comparison one
+                        value: 1,
+                        message: '交费金额必须大于等于1'
                     }
                 }
             },
@@ -168,6 +197,13 @@
                     regexp: {
                         regexp: /^[0-9]+$/,
                         message: '生成数量只能由数字组成'
+                    },
+                    greaterThan: {
+                        inclusive:true,
+                        //If true, the input value must be greater than or equal to the comparison one.
+                        //If false, the input value must be greater than the comparison one
+                        value: 1,
+                        message: '生成数量必须大于等于1'
                     }
                 }
             }
