@@ -934,7 +934,7 @@ CREATE TABLE lms_activatecode
   COMMENT '学生UUID',
   objectid     INT         NOT NULL
   COMMENT '对象id',
-  objecttype     INT         NOT NULL
+  objecttype   INT         NOT NULL
   COMMENT '对象类型',
   PRIMARY KEY (activatecode)
 )
@@ -949,24 +949,24 @@ CREATE TABLE lms_activatecode
 DROP TABLE IF EXISTS lms_activatecodehistory;
 CREATE TABLE lms_activatecodehistory
 (
-  id            INT         NOT NULL AUTO_INCREMENT
+  id           INT         NOT NULL AUTO_INCREMENT
   COMMENT 'id',
-  activatecode  VARCHAR(50) NOT NULL
+  activatecode VARCHAR(50) NOT NULL
   COMMENT '激活码',
-  activatedate  DATETIME COMMENT '激活日期',
-  adddate       DATETIME    NOT NULL
+  activatedate DATETIME COMMENT '激活日期',
+  adddate      DATETIME    NOT NULL
   COMMENT '添加日期',
-  batchcode     VARCHAR(20) NOT NULL
+  batchcode    VARCHAR(20) NOT NULL
   COMMENT '批次代码',
-  systemid      INT         NOT NULL
+  systemid     INT         NOT NULL
   COMMENT '系统ID',
-  studentid     VARCHAR(36) NOT NULL
+  studentid    VARCHAR(36) NOT NULL
   COMMENT '学生UUID',
   objectid     INT         NOT NULL
   COMMENT '对象id',
-  objecttype     INT         NOT NULL
+  objecttype   INT         NOT NULL
   COMMENT '对象类型',
-  backupdate DATETIME    NOT NULL
+  backupdate   DATETIME    NOT NULL
   COMMENT '备份时间',
   PRIMARY KEY (id)
 )
@@ -991,13 +991,13 @@ CREATE TABLE lms_activatecodelog
   COMMENT '批次代码',
   systemid     INT           NOT NULL
   COMMENT '系统ID',
-  objectid     INT         NOT NULL
+  objectid     INT           NOT NULL
   COMMENT '对象id',
-  objecttype     INT         NOT NULL
+  objecttype   INT           NOT NULL
   COMMENT '对象类型',
   paymentmoney DECIMAL(9, 1) NOT NULL
   COMMENT '交费金额',
-  userid       INT           NOT NULL
+  userid       VARCHAR(36)   NOT NULL
   COMMENT '操作用户',
   operatorip   VARCHAR(50)   NOT NULL
   COMMENT '操作IP',
@@ -1028,9 +1028,9 @@ CREATE TABLE lms_removelactivatecode
   COMMENT '操作日期',
   systemid     INT                   NOT NULL
   COMMENT '系统ID',
-  objectid     INT         NOT NULL
+  objectid     INT                   NOT NULL
   COMMENT '对象id',
-  objecttype     INT         NOT NULL
+  objecttype   INT                   NOT NULL
   COMMENT '对象类型',
   removereason NATIONAL VARCHAR(200) NOT NULL
   COMMENT '撤销原因',
@@ -1207,15 +1207,15 @@ DROP TABLE IF EXISTS lms_payment;
 CREATE TABLE lms_payment
 (
   id            INT           NOT NULL AUTO_INCREMENT,
-  userid        INT           NOT NULL
-  COMMENT '用户ID（如果非用户交费或批量交费则为0）',
+  userid        VARCHAR(36)   NOT NULL
+  COMMENT '用户ID（如果非用户交费或批量交费则为空）',
   payobjectid   INT           NOT NULL
   COMMENT '交费对象ID（培训班ID或课程ID，非用户交费则为0）',
   payobjecttype INT           NOT NULL
   COMMENT '交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）',
   paymoney      DECIMAL(9, 1) NOT NULL
   COMMENT '交费金额',
-  account      INT NOT NULL
+  account       INT           NOT NULL
   COMMENT '交费个数',
   paytype       SMALLINT      NOT NULL
   COMMENT '交费类型（1-用户在线交费、2-用户离线交费、3-批量生成用户交费）',
@@ -1243,19 +1243,19 @@ CREATE TABLE lms_paymentlog
   id                INT           NOT NULL AUTO_INCREMENT,
   paymentid         INT           NOT NULL
   COMMENT '财务ID',
-  userid            INT           NOT NULL
-  COMMENT '用户ID（如果非用户交费或批量交费则为0）',
+  userid            VARCHAR(36)   NOT NULL
+  COMMENT '用户ID（如果非用户交费或批量交费则为空）',
   paymentobjectid   INT           NOT NULL
   COMMENT '交费对象ID（培训班ID或课程ID，非用户交费则为0）',
   paymentobjecttype INT           NOT NULL
   COMMENT '交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）',
-  paymentmoney      DECIMAL(8, 1) NOT NULL
+  paymoney          DECIMAL(8, 1) NOT NULL
   COMMENT '交费金额',
-  paymenttype       SMALLINT      NOT NULL
+  paytype           SMALLINT      NOT NULL
   COMMENT '交费类型（1-用户在线交费、2-用户离线交费、3-生成用户交费、4-售出课程费）',
-  paymentdate       DATETIME      NOT NULL
+  paytdate          DATETIME      NOT NULL
   COMMENT '交费时间',
-  operatoruserid    INT           NOT NULL
+  operatoruserid    VARCHAR(36)   NOT NULL
   COMMENT '操作人用户ID',
   operatorip        VARCHAR(50)   NOT NULL
   COMMENT '操作人IP',
@@ -1277,8 +1277,8 @@ CREATE TABLE lms_cancelpaymentlog
   id                INT            NOT NULL AUTO_INCREMENT,
   paymentid         INT            NOT NULL
   COMMENT '财务ID',
-  userid            INT            NOT NULL
-  COMMENT '用户ID（如果非用户交费或批量交费则为0）',
+  userid            VARCHAR(36)    NOT NULL
+  COMMENT '用户ID（如果非用户交费或批量交费则为空）',
   paymentobjectid   INT            NOT NULL
   COMMENT '交费对象ID（培训班ID或课程ID，非用户交费则为0）',
   paymentobjecttype INT            NOT NULL
@@ -1289,7 +1289,7 @@ CREATE TABLE lms_cancelpaymentlog
   COMMENT '交费类型（1-用户在线交费、2-用户离线交费、3-生成用户交费、4-售出课程费）',
   paymentdate       DATETIME       NOT NULL
   COMMENT '交费时间',
-  operatoruserid    INT            NOT NULL
+  operatoruserid    VARCHAR(36)    NOT NULL
   COMMENT '操作人用户ID',
   operatorip        VARCHAR(50)    NOT NULL
   COMMENT '操作人IP',

@@ -23,20 +23,25 @@ class ActivatecodeService extends BaseService
      */
     public function insert($data)
     {
+        $loginfo = '';
         //1、根据数量生成指定数量的激活码
         for ($i = 0; $i < $data['account']; $i++) {
             $code = new Activatecode();
-            $code->activatecode = getGuid();
-            $code->batchcode = '';
+            $code->activatecode = str_replace('-', '', getGuid());
+            $code->batchcode = $data['batchcode'];
             $code->systemid = 1;
             $code->studentid = '';
             $code->objectid = $data['trainingclass'];
             $code->objecttype = 1;
 
+            $loginfo += json_encode($code) . '|';
             //$code->save();
         }
 
         //保存财务信息
+        $paymentService = controller('PaymentService', 'Service');
+        $paymentService->insert($data);
+
         //保存激活码日志
 
         if (false) {

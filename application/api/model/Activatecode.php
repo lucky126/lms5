@@ -29,9 +29,4 @@ class Activatecode extends Model
         'activatedate' => 'datetime',
         'systemid' => 'integer',
     ];
-
-    protected function base($query)
-    {
-
-    }
 }
