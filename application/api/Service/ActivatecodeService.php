@@ -7,6 +7,7 @@
  */
 
 namespace app\api\service;
+
 use api\model\Activatecode;
 
 /**
@@ -22,11 +23,21 @@ class ActivatecodeService extends BaseService
      */
     public function insert($data)
     {
-        //make data
-        $code = new Activatecode();
-        //$code->title = $data['title'];
+        //1、根据数量生成指定数量的激活码
+        for ($i = 0; $i < $data['account']; $i++) {
+            $code = new Activatecode();
+            $code->activatecode = getGuid();
+            $code->batchcode = '';
+            $code->systemid = 1;
+            $code->studentid = '';
 
-        if ($code->save()) {
+            $code->save();
+        }
+
+        //保存财务信息
+        //保存激活码日志
+
+        if (false) {
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');

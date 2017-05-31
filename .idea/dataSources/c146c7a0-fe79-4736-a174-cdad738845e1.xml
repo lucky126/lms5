@@ -217,7 +217,7 @@
       <DataType>varchar(36)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="66" parent="13" name="beifenshijian">
+    <column id="66" parent="13" name="backupdate">
       <Position>8</Position>
       <Comment>备份时间</Comment>
       <DataType>datetime|0</DataType>

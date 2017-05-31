@@ -942,7 +942,6 @@ CREATE TABLE lms_activatecode
 /*==============================================================*/
 /* Table: lms_activatecodehistory                               */
 /*==============================================================*/
-
 DROP TABLE IF EXISTS lms_activatecodehistory;
 CREATE TABLE lms_activatecodehistory
 (
@@ -959,14 +958,13 @@ CREATE TABLE lms_activatecodehistory
   COMMENT '系统ID',
   studentid     VARCHAR(36) NOT NULL
   COMMENT '学生UUID',
-  beifenshijian DATETIME    NOT NULL
+  backupdate DATETIME    NOT NULL
   COMMENT '备份时间',
   PRIMARY KEY (id)
 )
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8
   COMMENT = '激活码历史';
-
 
 /*==============================================================*/
 /* Table: lms_activatecodelog                                   */
