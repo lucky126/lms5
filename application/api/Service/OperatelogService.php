@@ -9,7 +9,6 @@
 namespace app\api\Service;
 
 use app\api\model\Operatelog;
-use think\Cookie;
 
 /**
  * 操作日志服务类
@@ -25,19 +24,12 @@ class OperatelogService extends BaseService
      */
     public function insert($memo, $desc)
     {
-        $token = Cookie::get('admin');
-        $usertype = 0;
-        if ($token == '') {
-            $token = Cookie::get('student');
-            $usertype = 1;
-        }
-
-        $uid = getTokenInfo($token, 'uid');
+        $userInfo = getLoginUserInfo();
         $url = getUrl();
 
         $log = new Operatelog();
-        $log->userid = $uid;
-        $log->usertype = $usertype;
+        $log->userid = $userInfo['uid'];
+        $log->usertype = $userInfo['usertype'];
         $log->operatorip = request()->ip();
         $log->operateurl = $url;
         $log->operatememo = $memo;

@@ -27,16 +27,22 @@ class Activatecode extends Authority
             $data = input('post.');
             $data['batchcode'] = date('YmdHis');
             //validate
+
             $result = $this->validate($data, 'Activatecode');
             if (true !== $result) {
                 // 验证失败 输出错误信息
                 return json(Base::setResult(-101, $result, null));
             }
 
-            $service = controller('ActivationcodeService', 'Service');
+            //获取默认系统信息
+            $sysService = controller('api/SystemService', 'Service');
+            $system = $sysService->GetDefault();
+            $data['systemid'] = $system['id'];
+
+            $service = controller('ActivatecodeService', 'Service');
             $result = $service->insert($data);
 
-            return json(Base::setResult(0, "", null));
+            return json($result);
         }
     }
 }

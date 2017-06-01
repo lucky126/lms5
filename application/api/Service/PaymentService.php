@@ -26,32 +26,39 @@ class PaymentService extends BaseService
     {
         //添加交费信息记录
         $payment = new Payment();
-        $payment->userid = '';
-        $payment->payobjectid = '';
-        $payment->payobjecttype = '';
-        $payment->paymoney = '';
-        $payment->account = '';
-        $payment->paytype = '';
-        $payment->systemid = '';
-        $payment->orderno = '';
-        $payment->memo = '';
+        $payment->userid = $data['userid'];
+        $payment->payobjectid = $data['payobjectid'];
+        $payment->payobjecttype = $data['payobjecttype'];
+        $payment->paymoney = $data['paymoney'];
+        $payment->account = $data['account'];
+        $payment->paytype = $data['paytype'];
+        $payment->systemid = $data['systemid'];
+        $payment->orderno = $data['orderno'];
+        $payment->memo = $data['memo'];
 
         if ($payment->save()) {
+            $payid = $payment->getLastInsID();
             //添加交费日志记录
             $paymentlog = new Paymentlog();
-            $paymentlog->paymentid = '';
-            $paymentlog->userid = '';
-            $paymentlog->paymentobjectid = '';
-            $paymentlog->paymentobjecttype = '';
-            $paymentlog->paymoney = '';
-            $paymentlog->paytype = '';
-            $paymentlog->operatoruserid = '';
-            $paymentlog->operatorip = '';
-            $paymentlog->systemid = '';
+            $paymentlog->paymentid = $payid;
+            $paymentlog->userid = $data['userid'];
+            $paymentlog->paymentobjectid = $data['payobjectid'];
+            $paymentlog->paymentobjecttype = $data['payobjecttype'];
+            $paymentlog->paymoney = $data['paymoney'];
+            $paymentlog->paytype = $data['paytype'];
+            $paymentlog->operatoruserid = $data['uid'];
+            $paymentlog->operatorip = $data['uip'];
+            $paymentlog->systemid = $data['systemid'];
 
             if ($paymentlog->save()) {
-
+                return BaseService::setResult(0, '', $payid);
+            } else {
+                $paymentDelete = Payment::get($payid);
+                $paymentDelete->delete();
+                return BaseService::setResult(-301, '', $payid);
             }
         }
+
+        return BaseService::setResult(-100, '', '');
     }
 }

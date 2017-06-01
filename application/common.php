@@ -13,6 +13,7 @@ use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\ValidationData;
 use think\Request;
+use think\Cookie;
 
 // 应用公共文件
 /**
@@ -217,4 +218,25 @@ function getUrl()
     $rule_name = $m . '/' . $c . '/' . $a;
 
     return $rule_name;
+}
+
+/**
+ * 得到登录用户信息
+ * @return array
+ */
+function getLoginUserInfo()
+{
+    $token = Cookie::get('admin');
+    $usertype = 0;
+    if ($token == '') {
+        $token = Cookie::get('student');
+        $usertype = 1;
+    }
+
+    $uid = getTokenInfo($token, 'uid');
+
+    return array(
+        'uid' => $uid,
+        'usertype' => $usertype
+    );
 }

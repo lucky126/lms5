@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: lucky
- * Date: 2017/5/31
- * Time: 16:04
+ * User: sl982
+ * Date: 2017-06-01
+ * Time: 15:23
  */
 
 namespace app\api\model;
@@ -11,12 +11,11 @@ namespace app\api\model;
 use think\Model;
 
 /**
- * Class Activatecode
- * @package api\model
+ * Class Activatecodelog
+ * @package app\api\model
  */
-class Activatecode extends Model
+class Activatecodelog extends Model
 {
-    //protected $resultSetType = 'collection';
     protected $autoWriteTimestamp = true;
     protected $createTime = 'adddate';
     protected $updateTime = false;
@@ -26,7 +25,11 @@ class Activatecode extends Model
 
     protected $type = [
         'adddate' => 'datetime',
-        'activatedate' => 'datetime',
+        'generatenum' => 'integer',
+        'objectid' => 'integer',
         'systemid' => 'integer',
+        'objecttype' => 'integer',
+        'paymentmoney' => 'integer',
+        'paymentid' => 'integer',
     ];
 }

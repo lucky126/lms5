@@ -8,7 +8,9 @@
 
 namespace app\api\service;
 
-use api\model\Activatecode;
+use app\api\model\Activatecode;
+use app\api\model\Activatecodelog;
+use think\db;
 
 /**
  * 激活码服务类
@@ -23,36 +25,89 @@ class ActivatecodeService extends BaseService
      */
     public function insert($data)
     {
+        //设置交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）
+        $objecttype = 1;
+        //获得日志保存用的数据json
         $loginfo = '';
+        //记录生成激活码成功数量
+        $createCnt = 0;
+
         //1、根据数量生成指定数量的激活码
         for ($i = 0; $i < $data['account']; $i++) {
+            //create mode
             $code = new Activatecode();
             $code->activatecode = str_replace('-', '', getGuid());
             $code->batchcode = $data['batchcode'];
-            $code->systemid = 1;
+            $code->systemid = $data['systemid'];
             $code->studentid = '';
             $code->objectid = $data['trainingclass'];
-            $code->objecttype = 1;
+            $code->objecttype = $objecttype;
 
-            $loginfo += json_encode($code) . '|';
-            //$code->save();
+            //make json
+            $loginfo .= json_encode($code) . '|';
+
+            //save
+            if ($code->save()) {
+                $createCnt++;
+            }
         }
 
+        //如果生成数量不符合指定数量则回滚
+        if ($createCnt != $data['account']) {
+            $codeDelete = User::get(['batchcode' => $data['batchcode']]);
+            $codeDelete->delete();
+            return BaseService::setResult('-204', '生成激活码数量没达到要求数量', '');
+        }
+
+        //get login user info
+        $userInfo = getLoginUserInfo();
+
+        $paydata['userid'] = '';
+        $paydata['payobjectid'] = $data['trainingclass'];
+        $paydata['payobjecttype'] = $objecttype;
+        $paydata['paymoney'] = $data['paymentmoney'];
+        $paydata['account'] = $data['account'];
+        $paydata['paytype'] = 3;
+        $paydata['systemid'] = $data['systemid'];
+        $paydata['orderno'] = '';
+        $paydata['memo'] = '';
+        $paydata['uid'] = $userInfo['uid'];
+        $paydata['uip'] = request()->ip();
+        //make json
+        $loginfo .= json_encode($paydata) . '|';
         //保存财务信息
         $paymentService = controller('PaymentService', 'Service');
-        $paymentService->insert($data);
+        $payresult = $paymentService->insert($paydata);
+        //财务信息保存失败
+        if ($payresult['code'] != 0) {
+            $codeDelete = User::get(['batchcode' => $data['batchcode']]);
+            $codeDelete->delete();
+            return BaseService::setResult('-203', '保存交费信息和交费日志失败', '');
+        }
 
         //保存激活码日志
+        $codelog = new Activatecodelog();
+        $codelog->generatenum = $data['account'];
+        $codelog->batchcode = $data['batchcode'];
+        $codelog->systemid = $data['systemid'];
+        $codelog->objectid = $data['trainingclass'];
+        $codelog->objecttype = $objecttype;
+        $codelog->paymentmoney = $data['paymentmoney'];
+        $codelog->userid = $userInfo['uid'];
+        $codelog->operatorip = request()->ip();;
+        $codelog->paymentid = $payresult['data'];
+        //make json
+        $loginfo .= json_encode($codelog);
 
-        if (false) {
+        if ($codelog->save()) {
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            //$logService->insert('生成激活码： ' . json_encode($code), '生成激活码');
+            $logService->insert('生成激活码： ' . $loginfo, '生成激活码');
 
-            return 0;
+            return BaseService::setResult(0, '', '');
         } else {
-            return $code->getError();
+            return BaseService::setResult('-202', '保存激活码日志失败', '');
         }
     }
 }

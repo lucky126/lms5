@@ -55,6 +55,7 @@ Route::resource('api/group', 'api/Group', [], ['id' => '\d+']);
 Route::resource('api/system', 'api/System', [], ['id' => '\d+']);
 Route::resource('api/course', 'api/Course', [], ['id' => '\d+']);
 Route::resource('api/training', 'api/Training', [], ['id' => '\d+']);
+Route::resource('api/activatecode', 'api/Activatecode', [], ['id' => '\d+']);
 Route::resource('api/register', 'api/Register');
 Route::resource('api/reguser', 'api/Reguser');
 
