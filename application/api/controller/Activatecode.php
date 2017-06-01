@@ -15,6 +15,20 @@ namespace app\api\controller;
 class Activatecode extends Authority
 {
     /**
+     * 显示激活码资源列表
+     *
+     * @return \think\Response
+     */
+    public function index()
+    {
+        //
+        $service = controller('ActivatecodeService', 'Service');
+        $data = $service->getList();
+
+        return json($data);
+    }
+
+    /**
      * 保存新建的激活码资源
      *
      * @param  \think\Request $request

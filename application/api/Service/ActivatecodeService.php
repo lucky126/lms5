@@ -10,6 +10,7 @@ namespace app\api\service;
 
 use app\api\model\Activatecode;
 use app\api\model\Activatecodelog;
+use think\Db;
 
 /**
  * 激活码服务类
@@ -17,6 +18,21 @@ use app\api\model\Activatecodelog;
  */
 class ActivatecodeService extends BaseService
 {
+    /**
+     * 获取激活码列表
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getList()
+    {
+        //get data
+        $data = Db::view('Activatecode', 'activatecode,activatedate,adddate,batchcode,systemid,studentid,objectid,objecttype')
+            ->view('Studentbasicinfo', 'name', 'Activatecode.studentid=Studentbasicinfo.studentid', 'LEFT')
+            ->view('Training', 'trainingname', 'Training.id=Activatecode.objectid', 'LEFT')
+            ->select();
+
+        return $data;
+    }
+
     /**
      * 新增激活码数据
      * @param $data
