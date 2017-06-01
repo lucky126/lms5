@@ -10,7 +10,6 @@ namespace app\api\service;
 
 use app\api\model\Activatecode;
 use app\api\model\Activatecodelog;
-use think\db;
 
 /**
  * 激活码服务类

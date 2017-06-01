@@ -916,6 +916,87 @@ CREATE TABLE lms_scoinfo
 
 
 /*==============================================================*/
+/* Table: lms_operatelog                               */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_operatelog;
+CREATE TABLE lms_operatelog
+(
+  id                 INT                    NOT NULL AUTO_INCREMENT,
+  userid             VARCHAR(36)            NOT NULL
+  COMMENT '操作用户uuid',
+  usertype           INT                    NOT NULL
+  COMMENT '用户类型：0，admin；1，student',
+  operatorip         VARCHAR(50)            NOT NULL
+  COMMENT '操作IP',
+  operatordate       DATETIME               NOT NULL
+  COMMENT '操作日期',
+  operateurl         NATIONAL VARCHAR(500)  NOT NULL
+  COMMENT '操作url',
+  operatememo        NATIONAL VARCHAR(5000) NOT NULL
+  COMMENT '操作内容',
+  operatedescription NATIONAL VARCHAR(500)  NOT NULL
+  COMMENT '操作描述',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '操作日志';
+
+
+/*==============================================================*/
+/* Table: lms_loginlog                                          */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_loginlog;
+CREATE TABLE lms_loginlog
+(
+  id            INT                   NOT NULL AUTO_INCREMENT,
+  usertype      INT                   NOT NULL
+  COMMENT '用户类型',
+  loginname     NATIONAL VARCHAR(50)  NOT NULL
+  COMMENT '用户名',
+  pwd           VARCHAR(50)           NOT NULL
+  COMMENT '密码',
+  operatorip    VARCHAR(50)           NOT NULL
+  COMMENT '操作IP',
+  operatordate  DATETIME              NOT NULL
+  COMMENT '操作日期',
+  operateresult NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '操作结果',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '登录日志';
+
+/*==============================================================*/
+/* Table: lms_systemmessage                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS lms_systemmessage;
+CREATE TABLE lms_systemmessage
+(
+  id       INT                   NOT NULL AUTO_INCREMENT,
+  userid   VARCHAR(36)           NOT NULL
+  COMMENT '用户uuid',
+  readflag INT                   NOT NULL DEFAULT 0
+  COMMENT '是否阅读：0，未阅读；1，已阅读',
+  addtime  DATETIME              NOT NULL
+  COMMENT '添加日期',
+  title    NATIONAL VARCHAR(100) NOT NULL
+  COMMENT '消息标题',
+  content  NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '消息',
+  url      NATIONAL VARCHAR(500) NOT NULL
+  COMMENT '消息url',
+  PRIMARY KEY (id)
+)
+  ENGINE = MyISAM
+  DEFAULT CHARSET = utf8
+  COMMENT = '系统消息';
+
+
+
+
+/*==============================================================*/
 /* Table: lms_activatecode                                      */
 /*==============================================================*/
 DROP TABLE IF EXISTS lms_activatecode;
@@ -1041,84 +1122,6 @@ CREATE TABLE lms_removelactivatecode
   COMMENT = '取消激活码日志';
 
 /*==============================================================*/
-/* Table: lms_operatelog                               */
-/*==============================================================*/
-DROP TABLE IF EXISTS lms_operatelog;
-CREATE TABLE lms_operatelog
-(
-  id                 INT                    NOT NULL AUTO_INCREMENT,
-  userid             VARCHAR(36)            NOT NULL
-  COMMENT '操作用户uuid',
-  usertype           INT                    NOT NULL
-  COMMENT '用户类型：0，admin；1，student',
-  operatorip         VARCHAR(50)            NOT NULL
-  COMMENT '操作IP',
-  operatordate       DATETIME               NOT NULL
-  COMMENT '操作日期',
-  operateurl         NATIONAL VARCHAR(500)  NOT NULL
-  COMMENT '操作url',
-  operatememo        NATIONAL VARCHAR(5000) NOT NULL
-  COMMENT '操作内容',
-  operatedescription NATIONAL VARCHAR(500)  NOT NULL
-  COMMENT '操作描述',
-  PRIMARY KEY (id)
-)
-  ENGINE = MyISAM
-  DEFAULT CHARSET = utf8
-  COMMENT = '操作日志';
-
-
-/*==============================================================*/
-/* Table: lms_loginlog                                          */
-/*==============================================================*/
-DROP TABLE IF EXISTS lms_loginlog;
-CREATE TABLE lms_loginlog
-(
-  id            INT                   NOT NULL AUTO_INCREMENT,
-  usertype      INT                   NOT NULL
-  COMMENT '用户类型',
-  loginname     NATIONAL VARCHAR(50)  NOT NULL
-  COMMENT '用户名',
-  pwd           VARCHAR(50)           NOT NULL
-  COMMENT '密码',
-  operatorip    VARCHAR(50)           NOT NULL
-  COMMENT '操作IP',
-  operatordate  DATETIME              NOT NULL
-  COMMENT '操作日期',
-  operateresult NATIONAL VARCHAR(500) NOT NULL
-  COMMENT '操作结果',
-  PRIMARY KEY (id)
-)
-  ENGINE = MyISAM
-  DEFAULT CHARSET = utf8
-  COMMENT = '登录日志';
-
-/*==============================================================*/
-/* Table: lms_systemmessage                              */
-/*==============================================================*/
-DROP TABLE IF EXISTS lms_systemmessage;
-CREATE TABLE lms_systemmessage
-(
-  id       INT                   NOT NULL AUTO_INCREMENT,
-  userid   VARCHAR(36)           NOT NULL
-  COMMENT '用户uuid',
-  readflag INT                   NOT NULL DEFAULT 0
-  COMMENT '是否阅读：0，未阅读；1，已阅读',
-  addtime  DATETIME              NOT NULL
-  COMMENT '添加日期',
-  title    NATIONAL VARCHAR(100) NOT NULL
-  COMMENT '消息标题',
-  content  NATIONAL VARCHAR(500) NOT NULL
-  COMMENT '消息',
-  url      NATIONAL VARCHAR(500) NOT NULL
-  COMMENT '消息url',
-  PRIMARY KEY (id)
-)
-  ENGINE = MyISAM
-  DEFAULT CHARSET = utf8
-  COMMENT = '系统消息';
-
-/*==============================================================*/
 /* Table: lms_onlinepayinfo                                     */
 /*==============================================================*/
 DROP TABLE IF EXISTS lms_onlinepayinfo;
@@ -1212,7 +1215,7 @@ CREATE TABLE lms_payment
   payobjectid   INT           NOT NULL
   COMMENT '交费对象ID（培训班ID或课程ID，非用户交费则为0）',
   payobjecttype INT           NOT NULL
-  COMMENT '交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）',
+  COMMENT '',
   paymoney      DECIMAL(9, 1) NOT NULL
   COMMENT '交费金额',
   account       INT           NOT NULL

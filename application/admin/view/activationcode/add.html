@@ -114,8 +114,7 @@
     });
 
     //save activation code
-    function saveInfo()
-    {
+    function saveInfo() {
         $.ajax({
             cache: true,
             type: "POST",
@@ -128,6 +127,7 @@
             success: function (info) {
                 if (data.code == 0) {
                     completeMsg("保存成功");
+                    location.href = '/admin/activationcode/index';
 
                 } else {
                     errorMsg(data.msg);
@@ -178,7 +178,7 @@
                         message: '交费金额只能由数字组成'
                     },
                     greaterThan: {
-                        inclusive:true,
+                        inclusive: true,
                         //If true, the input value must be greater than or equal to the comparison one.
                         //If false, the input value must be greater than the comparison one
                         value: 1,
@@ -197,7 +197,7 @@
                         message: '生成数量只能由数字组成'
                     },
                     greaterThan: {
-                        inclusive:true,
+                        inclusive: true,
                         //If true, the input value must be greater than or equal to the comparison one.
                         //If false, the input value must be greater than the comparison one
                         value: 1,

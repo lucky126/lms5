@@ -8,7 +8,7 @@
 
 namespace app\api\Service;
 
-use api\model\Paymentlog;
+use app\api\model\Paymentlog;
 use app\api\model\Payment;
 
 /**
