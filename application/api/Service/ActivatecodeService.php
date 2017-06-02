@@ -22,12 +22,24 @@ class ActivatecodeService extends BaseService
      * 获取激活码列表
      * @return false|\PDOStatement|string|\think\Collection
      */
-    public function getList()
+    public function getList($systemId)
     {
         //get data
-        $data = Db::view('Activatecode', 'activatecode,activatedate,adddate,batchcode,systemid,studentid,objectid,objecttype')
-            ->view('Studentbasicinfo', 'name', 'Activatecode.studentid=Studentbasicinfo.studentid', 'LEFT')
-            ->view('Training', 'trainingname', 'Training.id=Activatecode.objectid', 'LEFT')
+        $map['ac.systemid'] = ['=',$systemId];
+
+        if (input('?get.activatecode')) {
+            $map['activatecode'] = ['LIKE', '%' . input('get.activatecode'). '%'];
+        }
+        if (input('?get.batchcode')) {
+            $map['batchcode'] = ['LIKE', '%' . input('get.batchcode') . '%'];
+        }
+
+        $data = Db::name('Activatecode')
+            ->alias('ac')
+            ->field('activatecode,activatedate,adddate,batchcode,ac.systemid,ac.studentid,objectid,objecttype,name,trainingname')
+            ->join('Studentbasicinfo stu', 'ac.studentid = stu.studentid', 'LEFT')
+            ->join('Training t', 'ac.objectid = t.id', 'LEFT')
+            ->where($map)
             ->select();
 
         return $data;

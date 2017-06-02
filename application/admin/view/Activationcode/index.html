@@ -28,10 +28,38 @@
                 <!--===================================================-->
                 <div class="panel-body">
 
+                    <form class="form-inline">
+                        <div class="row">
+                            <div class="form-group">
+                                <input type="text" placeholder="激活码" class="form-control input-sm"
+                                       id="txtActivateCode">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" placeholder="激活序号" class="form-control input-sm"
+                                       id="txtBatchCode">
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" id="selectTraining" name="selectTraining">
+                                    <option value=''>全部培训班</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" id="selectActivateStatus" name="selectActivateStatus">
+                                    <option value=''>全部激活状态</option>
+                                    <option value='1'>已激活</option>
+                                    <option value='2'>未激活</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="button" class="btn btn-primary" id="search" name="search" value="搜索"/>
+                                <input type="button" class="btn btn-default" id="reset" name="reset" value="重置"/>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="table-responsive">
                         <table data-toggle="table"
                                data-url="/api/activatecode"
-                               data-search="true"
                                data-sort-name="activatecode"
                                data-page-list="[10, 20, 50]"
                                data-page-size="10"
@@ -39,8 +67,8 @@
                             <thead>
                             <tr>
                                 <th data-field="activatecode" data-sortable="true">激活码</th>
-                                <th data-field="activatecode" data-sortable="true">学生姓名</th>
-                                <th data-field="classname" data-sortable="true">培训班</th>
+                                <th data-field="name" data-sortable="true" data-formatter="studentFormatter">学生姓名</th>
+                                <th data-field="trainingname" data-sortable="true">培训班</th>
                                 <th data-field="adddate" data-sortable="true">生成时间</th>
                                 <th data-field="batchcode" data-sortable="true">激活序号</th>
                                 <th data-align="center" data-field="action" data-formatter="actionFormatter"
@@ -65,14 +93,34 @@
 <script type="text/javascript">
 
     $(function () {
-
+        $('#search').click(function () {
+            var activatecode = $('#txtActivateCode').val();
+            var batchcode = $('#txtBatchCode').val();
+            $('#table').bootstrapTable('refresh', {'url': '/api/activatecode?activatecode=' + activatecode + '&batchcode=' + batchcode});
+        });
+        $('#reset').click(function () {
+            $('#txtActivateCode').val('')
+            $('#txtBatchCode').val('')
+            $('#table').bootstrapTable('refresh', {'url': '/api/activatecode'});
+        });
     });
+
+    function studentFormatter(value, row, index) {
+        if (row.name == null) {
+            return '未激活';
+        } else {
+            return '<a href="#" onclick="showStudent(' + row.studentid + ')">' + row.name + '</a>';
+        }
+    }
 
     //bootstrap table操作
     function actionFormatter(value, row, index) {
         var revoke = '<a class="revoke btn-link" href="javascript:void(0)" title="编辑">撤销激活码</a>';
-
-        return revoke;
+        if (row.name != null) {
+            return revoke;
+        } else {
+            return '';
+        }
     }
 
     //操作事件

@@ -22,8 +22,12 @@ class Activatecode extends Authority
     public function index()
     {
         //
+        //获取默认系统信息
+        $sysService = controller('api/SystemService', 'Service');
+        $system = $sysService->GetDefault();
+
         $service = controller('ActivatecodeService', 'Service');
-        $data = $service->getList();
+        $data = $service->getList($system['id']);
 
         return json($data);
     }
