@@ -25,15 +25,26 @@ class ActivatecodeService extends BaseService
     public function getList($systemId)
     {
         //get data
-        $map['ac.systemid'] = ['=',$systemId];
+        $map['ac.systemid'] = ['=', $systemId];
 
-        if (input('?get.activatecode')) {
-            $map['activatecode'] = ['LIKE', '%' . input('get.activatecode'). '%'];
+        //搜索筛选
+        if (input('?get.activatecode') && input('get.activatecode') != '') {
+            $map['activatecode'] = ['LIKE', '%' . input('get.activatecode') . '%'];
         }
-        if (input('?get.batchcode')) {
+        if (input('?get.batchcode') && input('get.batchcode') != '') {
             $map['batchcode'] = ['LIKE', '%' . input('get.batchcode') . '%'];
         }
+        if (input('?get.training') && input('get.training') != '') {
+            $map['objectid'] = ['=', input('get.training')];
+        }
+        if (input('?get.status') && input('get.status') == '1') {
+            $map['ac.studentid'] = ['<>', ''];
+        }
+        if (input('?get.status') && input('get.status') == '2') {
+            $map['ac.studentid'] = ['=', ''];
+        }
 
+        //查询数据
         $data = Db::name('Activatecode')
             ->alias('ac')
             ->field('activatecode,activatedate,adddate,batchcode,ac.systemid,ac.studentid,objectid,objecttype,name,trainingname')

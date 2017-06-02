@@ -39,12 +39,12 @@
                                        id="txtBatchCode">
                             </div>
                             <div class="form-group">
-                                <select class="form-control" id="selectTraining" name="selectTraining">
+                                <select class="form-control" id="trainingclass" name="trainingclass">
                                     <option value=''>全部培训班</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <select class="form-control" id="selectActivateStatus" name="selectActivateStatus">
+                                <select class="form-control" id="activateStatus" name="activateStatus">
                                     <option value=''>全部激活状态</option>
                                     <option value='1'>已激活</option>
                                     <option value='2'>未激活</option>
@@ -93,17 +93,41 @@
 <script type="text/javascript">
 
     $(function () {
+        getTrainingList();
         $('#search').click(function () {
             var activatecode = $('#txtActivateCode').val();
             var batchcode = $('#txtBatchCode').val();
-            $('#table').bootstrapTable('refresh', {'url': '/api/activatecode?activatecode=' + activatecode + '&batchcode=' + batchcode});
+            var training = $('#trainingclass').val();
+            var status = $('#activateStatus').val();
+            $('#table').bootstrapTable('refresh',
+                {'url': '/api/activatecode?activatecode=' + activatecode + '&batchcode=' + batchcode + '&training=' + training + '&status=' + status});
         });
         $('#reset').click(function () {
-            $('#txtActivateCode').val('')
-            $('#txtBatchCode').val('')
+            $('#txtActivateCode').val('');
+            $('#txtBatchCode').val('');
+            $('#trainingclass').val('');
+            $('#activateStatus').val('');
             $('#table').bootstrapTable('refresh', {'url': '/api/activatecode'});
         });
     });
+
+    //get training list
+    function getTrainingList() {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/Training/open",
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                info.forEach(function (value, index, array) {
+                    $("#trainingclass").append("<option value='" + value.id + "'>" + value.trainingname + "</option>");
+                });
+            }
+        });
+    }
 
     function studentFormatter(value, row, index) {
         if (row.name == null) {
