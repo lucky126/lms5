@@ -43,11 +43,14 @@ class ActivatecodeService extends BaseService
         if (input('?get.status') && input('get.status') == '2') {
             $map['ac.studentid'] = ['=', ''];
         }
+        if (input('?get.end') && input('get.start') != '' && input('get.end') != '') {
+            $map['ac.adddate'] = ['between time', [input('get.start'),input('get.end')]];
+        }
 
         //查询数据
         $data = Db::name('Activatecode')
             ->alias('ac')
-            ->field('activatecode,activatedate,adddate,batchcode,ac.systemid,ac.studentid,objectid,objecttype,name,trainingname')
+            ->field('activatecode,activatedate,ac.adddate,batchcode,ac.systemid,ac.studentid,objectid,objecttype,name,trainingname')
             ->join('Studentbasicinfo stu', 'ac.studentid = stu.studentid', 'LEFT')
             ->join('Training t', 'ac.objectid = t.id', 'LEFT')
             ->where($map)
