@@ -44,7 +44,6 @@ class Activatecode extends Authority
         if (request()->isPost()) {
             $data = input('post.');
             $data['batchcode'] = date('YmdHis');
-            //validate
 
             $result = $this->validate($data, 'Activatecode');
             if (true !== $result) {

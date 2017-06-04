@@ -138,10 +138,13 @@ class UserService extends BaseService
     public function get($uid)
     {
         //get user info
-        $data = User::get(['uid' => $uid], 'group')->getData();
+        $data = User::get(['uid' => $uid], 'group');
 
-        //return data
-        return $data;
+        if ($data != null) {
+            return $data->getData();
+        } else {
+            return null;
+        }
     }
 
     /**

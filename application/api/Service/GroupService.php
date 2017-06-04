@@ -58,9 +58,13 @@ class GroupService extends BaseService
      */
     public function get($id)
     {
-        $data = AuthGroup::get($id)->getData();
+        $data = AuthGroup::get($id);
 
-        return $data;
+        if ($data != null) {
+            return $data->getData();
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -44,7 +44,7 @@ class ActivatecodeService extends BaseService
             $map['ac.studentid'] = ['=', ''];
         }
         if (input('?get.end') && input('get.start') != '' && input('get.end') != '') {
-            $map['ac.adddate'] = ['between time', [input('get.start'),input('get.end')]];
+            $map['ac.adddate'] = ['between time', [input('get.start'), input('get.end')]];
         }
 
         //查询数据
@@ -72,6 +72,17 @@ class ActivatecodeService extends BaseService
         $loginfo = '';
         //记录生成激活码成功数量
         $createCnt = 0;
+
+        //验证培训计划信息
+        $trainingService = controller('TrainingService', 'Service');
+        $training = $trainingService->get($data['trainingclass']);
+
+        if($training == null){
+            return BaseService::setResult('-205', '培训班不存在', '');
+        }
+        if($training['isopen'] == 0){
+            return BaseService::setResult('-206', '培训班未开放', '');
+        }
 
         //1、根据数量生成指定数量的激活码
         for ($i = 0; $i < $data['account']; $i++) {

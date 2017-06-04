@@ -60,9 +60,13 @@ class TrainingService extends BaseService
      */
     public function get($id)
     {
-        $data = Training::get($id, 'courses')->getData();
+        $data = Training::get($id, 'courses');
 
-        return $data;
+        if ($data != null) {
+            return $data->getData();
+        } else {
+            return null;
+        }
     }
 
     /**

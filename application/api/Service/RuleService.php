@@ -41,9 +41,13 @@ class RuleService extends BaseService
      */
     public function get($id)
     {
-        $data = AuthRule::get($id)->getData();
+        $data = AuthRule::get($id);
 
-        return $data;
+        if ($data != null) {
+            return $data->getData();
+        } else {
+            return null;
+        }
     }
 
     /**

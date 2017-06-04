@@ -125,7 +125,7 @@
                 alert("连接错误");
             },
             success: function (info) {
-                if (data.code == 0) {
+                if (info.code == 0) {
                     completeMsg("保存成功");
                     location.href = '/admin/activationcode/index';
 

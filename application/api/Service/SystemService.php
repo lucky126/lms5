@@ -39,9 +39,13 @@ class SystemService extends BaseService
      */
     public function get($id)
     {
-        $data = System::get($id)->getData();
+        $data = System::get($id);
 
-        return $data;
+        if ($data != null) {
+            return $data->getData();
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -42,8 +42,13 @@ class CourseService extends BaseService
     public function get($id)
     {
         //get info
-        $data = Course::get($id, 'setting')->getData();
-        return $data;
+        $data = Course::get($id, 'setting');
+
+        if ($data != null) {
+            return $data->getData();
+        } else {
+            return null;
+        }
     }
 
     /**
