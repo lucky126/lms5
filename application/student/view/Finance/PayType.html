@@ -24,16 +24,14 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-2 control-label">缴费类型：</label>
+        <label class="col-sm-2 control-label">支付模式：</label>
         <div class="col-sm-6">
-            <div class="radio ">
-                <input id="paytype-1" class="magic-radio" type="radio"
-                       name="paytype" value='0'>
-                <label for="paytype-1">离线缴费，获取激活码</label>
-                <input id="paytype-2" class="magic-radio" type="radio"
-                       name="paytype" value='1'>
-                <label for="paytype-2">在线支付</label>
-            </div>
+            <input id="paytype-1" type="radio"
+                   name="paytype" value='0'>
+            离线缴费，获取激活码
+            <input id="paytype-2" type="radio"
+                   name="paytype" value='1'>
+            在线支付
         </div>
     </div>
 </form>
@@ -63,4 +61,20 @@
             }
         });
     }
+
+    $("#addform").bootstrapValidator({
+        message: 'This value is not valid',
+        //反馈图标
+        feedbackIcons: faIcon,
+        fields: {
+            paytype: {
+                message: '支付模式无效',
+                validators: {
+                    notEmpty: {
+                        message: '请选择支付模式'
+                    },
+                }
+            }
+        }
+    });
 </script>

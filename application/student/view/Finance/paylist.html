@@ -136,6 +136,10 @@
                             label: "确定",
                             className: "btn-primary",
                             callback: function () {
+                                var validResult = ValidateAddInfo();
+                                if (validResult == false)
+                                    return false;
+
                                 func(id);
                             }
                         },
@@ -157,6 +161,11 @@
      */
     function saveSigninInfo(id) {
         var type = $("input[name='paytype']:checked").val();
+        if(type==undefined){
+            errorMsg('请选择支付模式！');
+            return false;
+        }
+
         if (type == 0) {
             location.href='/student/Finance/activationcode?id=' + id;
         } else {

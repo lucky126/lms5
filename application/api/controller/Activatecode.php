@@ -62,4 +62,23 @@ class Activatecode extends Authority
             return json($result);
         }
     }
+
+    /**
+     * 更新激活码资源给指定用户
+     *
+     * @param $id 课程id
+     * @return \think\Response
+     */
+    public function update($id)
+    {
+        if (request()->isPut()) {
+            $data = input('put.');
+            $data['id'] = $id;
+
+            $service = controller('ActivatecodeService', 'Service');
+            $result = $service->update($data);
+
+            return json($result);
+        }
+    }
 }

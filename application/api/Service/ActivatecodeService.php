@@ -54,6 +54,7 @@ class ActivatecodeService extends BaseService
             ->join('Studentbasicinfo stu', 'ac.studentid = stu.studentid', 'LEFT')
             ->join('Training t', 'ac.objectid = t.id', 'LEFT')
             ->where($map)
+            ->order('adddate','desc')
             ->select();
 
         return $data;
@@ -161,5 +162,15 @@ class ActivatecodeService extends BaseService
         } else {
             return BaseService::setResult('-202', '保存激活码日志失败', '');
         }
+    }
+
+    /**
+     * 更新激活码资源给指定用户
+     * @param $data
+     * @return int|string
+     */
+    public function update($data)
+    {
+
     }
 }
