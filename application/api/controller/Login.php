@@ -54,6 +54,7 @@ class Login extends Base
             $userInfo = $result['data'];
 
             Cookie::set('student', $userInfo['token']);
+            //所有学生所用studentid均是userid
         }
 
         return json(Base::setResult($result['code'], $result['msg'], null));

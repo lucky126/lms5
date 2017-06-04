@@ -75,6 +75,10 @@ class Activatecode extends Authority
             $data = input('put.');
             $data['id'] = $id;
 
+            $sysService = controller('api/SystemService', 'Service');
+            $system = $sysService->GetDefault();
+            $data['systemid'] = $system['id'];
+
             $service = controller('ActivatecodeService', 'Service');
             $result = $service->update($data);
 

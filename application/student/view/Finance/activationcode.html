@@ -25,6 +25,7 @@
                                 <input type="text" id="ActivateCode" name="ActivateCode" class="form-control"
                                        placeholder="请输入激活码">
                                 <input id="id" name="id" type="hidden" value="{$id}">
+                                <input id="stuid" name="stuid" type="hidden" value="{$uid}">
                             </div>
                             <div class="col-md-4">
                                 <input type="button" id="btnActivete" name="btnActivete" class="btn btn-primary"
@@ -60,7 +61,7 @@
         $.ajax({
             cache: true,
             type: "PUT",
-            url: "/api/activatecode",
+            url: "/api/activatecode/" + $('#ActivateCode').val(),
             data: $('#addform').serialize(),
             async: false,
             error: function () {

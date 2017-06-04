@@ -18,8 +18,10 @@ use think\Db;
 class SelectcourseService extends BaseService
 {
     /**
-     * 获取学生培训计划列表
-     * @return false|\PDOStatement|string|\think\Collection
+     * 获取学生可以学习和需要交费的培训计划数量
+     * @param $uid
+     * @param $sysid
+     * @return array
      */
     public function getTrainingInfo($uid, $sysid)
     {
@@ -28,7 +30,7 @@ class SelectcourseService extends BaseService
         $needPay = 0;
 
         //get data
-        $data = Db::view('studenttraining', 'trainingid,ispayment,isallowlearning')
+        $data = Db::view('studenttraining', 'trainingid,ispayment')
             ->view('training', 'isopen,starttime,endtime', 'studenttraining.trainingid=training.id and studenttraining.systemid=training.systemid', 'LEFT')
             ->where('studentid', '=', $uid)
             ->where('studenttraining.systemid', '=', $sysid)
@@ -94,7 +96,7 @@ class SelectcourseService extends BaseService
         if ($studenttraining->save()) {
 
             Db::execute("INSERT INTO lms_studentcourse (trainingid,systemid,studentid,courseid,selecttime,type) SELECT trainingid,:systemid,:studentid,scormid,now(),2 FROM lms_trainingcourse WHERE trainingid=:trainingid",
-                ['trainingid' => $data['id'],'systemid' => $data['sysid'],'studentid' => $data['uid']]);
+                ['trainingid' => $data['id'], 'systemid' => $data['sysid'], 'studentid' => $data['uid']]);
 
             return 0;
         } else {
@@ -127,6 +129,30 @@ class SelectcourseService extends BaseService
 
         $data = Db::name('training')
             ->where($map)
+            ->select();
+
+        return $data;
+    }
+
+    /**
+     * 获取学生可以学习的培训计划列表，仅返回培训计划id
+     * @param $uid
+     * @param $sysid
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getTrainingList($uid, $sysid)
+    {
+        //get data
+        $data = Db::name('studenttraining', '')
+            ->alias('st')
+            ->field('t.id')
+            ->join('training t', 'st.trainingid = t.id and st.systemid=t.systemid', 'LEFT')
+            ->where('studentid', '=', $uid)
+            ->where('st.systemid', '=', $sysid)
+            ->where('t.isopen', '=', config('globalConst.STATUS_ON'))
+            ->where('st.isallowlearning', '=', config('globalConst.STATUS_ON'))
+            ->whereTime('starttime', '<=', datetime())
+            ->whereTime('endtime', '>=', datetime())
             ->select();
 
         return $data;

@@ -54,7 +54,7 @@ class ActivatecodeService extends BaseService
             ->join('Studentbasicinfo stu', 'ac.studentid = stu.studentid', 'LEFT')
             ->join('Training t', 'ac.objectid = t.id', 'LEFT')
             ->where($map)
-            ->order('adddate','desc')
+            ->order('adddate', 'desc')
             ->select();
 
         return $data;
@@ -78,10 +78,10 @@ class ActivatecodeService extends BaseService
         $trainingService = controller('TrainingService', 'Service');
         $training = $trainingService->get($data['trainingclass']);
 
-        if($training == null){
+        if ($training == null) {
             return BaseService::setResult('-205', '培训班不存在', '');
         }
-        if($training['isopen'] == 0){
+        if ($training['isopen'] == 0) {
             return BaseService::setResult('-206', '培训班未开放', '');
         }
 
@@ -171,6 +171,27 @@ class ActivatecodeService extends BaseService
      */
     public function update($data)
     {
+        //检查该生以前是否有过合格的成绩，如果有，则不允许再次激活
+        $pass_score_data = Db::name('studenttraining')
+            ->alias('st')
+            ->field('t.id')
+            ->join('training t', 'st.trainingid = t.id and st.systemid=t.systemid', 'LEFT')
+            ->where('st.totalscore', '>=', 't.minpassresult')
+            ->where('st.trainingid', '=', $data['id'])
+            ->where('st.trainingid', '=', $data['id'])
+            ->where('st.systemid', '=', $data['systemid'])
+            ->count();
 
+        if ($pass_score_data > 0) {
+            return BaseService::setResult('-201', '已经有合格的成绩', '');
+        }
+
+        //增加限制，如果已经存在开放的培训班则不允许再激活其他培训班
+        $selectcourseService = controller('SelectcourseService', 'Service');
+        $class_list = $selectcourseService->getTrainingList($data['id'], $data['systemid']);
+
+        if (count($class_list) > 0) {
+            return BaseService::setResult('-202', '您当前的培训班还没有结束，不能再激活其它培训班', '');
+        }
     }
 }
