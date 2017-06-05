@@ -194,6 +194,14 @@ class ActivatecodeService extends BaseService
         }
 
         //获取激活码信息
+        $codeData = $this::get($data['id']);
+
+        if ($codeData == null) {
+            return BaseService::setResult('-204', '该激活码不存在', '');
+        }
+        if ($codeData['name'] != null) {
+            return BaseService::setResult('-205', '此激活码已被 '.$codeData['name'].' 使用', '');
+        }
     }
 
     /**
@@ -203,15 +211,15 @@ class ActivatecodeService extends BaseService
      */
     public function get($id)
     {
-        $data = Db::name('ActivateCode')
+        $data = Db::name('activatecode')
             ->alias('ac')
             ->field('ac.*,stu.name')
             ->join('studentbasicinfo stu', 'ac.studentid=stu.studentid', 'LEFT')
-            ->where('st.ActivateCode', '=', $id)
+            ->where('activatecode', '=', $id)
             ->find();
 
         if ($data != null) {
-            return $data->getData();
+            return $data;
         } else {
             return null;
         }

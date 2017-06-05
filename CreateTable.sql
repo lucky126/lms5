@@ -19,6 +19,9 @@ CREATE TABLE `lms_system` (
   DEFAULT CHARSET = utf8
   COMMENT = '系统信息';
 
+INSERT INTO `lms_system` (`id`, `systemname`, `memo`, `addtime`, `status`)
+VALUES ('1', '11', '', '2017-1-1 00:00:00' ,1);
+
 -- ----------------------------
 -- Table structure for lms_auth_group
 -- ----------------------------

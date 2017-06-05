@@ -35,7 +35,7 @@ class StudentService extends BaseService
 
         //make student data
         $student = new Studentbasicinfo;
-        $student->studentid = $uid;
+        $student->studentid = $uid['data'];
         $student->name = $data['realname'];
         $student->gender = $data['gender'];
         $student->photo = '';
