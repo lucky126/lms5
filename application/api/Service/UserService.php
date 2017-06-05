@@ -150,9 +150,10 @@ class UserService extends BaseService
     /**
      * 新增用户数据
      * @param $data
-     * @return int|string
+     * @param $isAdmin
+     * @return array
      */
-    public function insert($data)
+    public function insert($data, $isAdmin)
     {
         $user = new User;
         $user->uid = getGuid();
@@ -161,21 +162,27 @@ class UserService extends BaseService
         $user->pwd = getEncPassword($data['Password']);
         $user->usertype = $data['UserType'];
         $user->registiontime = datetime();
-        $user->systemid = 1;
+        $user->systemid = $data['systemid'];
+
+        $loginfo = json_encode($user);
 
         if ($user->save()) {
-            $userGroup = new AuthGroupAccess;
-            $userGroup->group_id = $data['UserGroup'];
+            if ($isAdmin) {
+                $userGroup = new AuthGroupAccess;
+                $userGroup->group_id = $data['UserGroup'];
 
-            $user->group()->save($userGroup);
+                $user->group()->save($userGroup);
+
+                $loginfo = $loginfo . ' & ' . json_encode($userGroup);
+            }
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            $logService->insert('新增用户： ' . json_encode($user) . ' & ' . json_encode($userGroup), '新增用户');
+            $logService->insert('新增用户： ' . $loginfo, '新增用户');
 
-            return 0;
+            return BaseService::setResult('0', '', $user->uid);
         } else {
-            return $user->getError();
+            return BaseService::setResult('-100', $user->getError(), '');
         }
     }
 

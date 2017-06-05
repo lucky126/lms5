@@ -685,8 +685,6 @@ CREATE TABLE lms_studentbasicinfo
   id        INT                  NOT NULL AUTO_INCREMENT
   COMMENT '学生ID',
   studentid CHAR(36)             NOT NULL
-  COMMENT '学生UUID',
-  userid    CHAR(36)             NOT NULL
   COMMENT '用户ID',
   systemid  INT                  NOT NULL
   COMMENT '系统ID',

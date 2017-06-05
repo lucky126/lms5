@@ -71,7 +71,7 @@ class Training extends Authority
                 return json(Base::setResult(-100, $result, null));
             }
 
-            return json(Base::getresult(0, "", null));
+            return json(Base::setResult(0, "", null));
         } else
             return json(Base::setResult(-100, "", null));
     }

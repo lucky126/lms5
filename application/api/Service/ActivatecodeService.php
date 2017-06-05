@@ -178,7 +178,6 @@ class ActivatecodeService extends BaseService
             ->join('training t', 'st.trainingid = t.id and st.systemid=t.systemid', 'LEFT')
             ->where('st.totalscore', '>=', 't.minpassresult')
             ->where('st.trainingid', '=', $data['id'])
-            ->where('st.trainingid', '=', $data['id'])
             ->where('st.systemid', '=', $data['systemid'])
             ->count();
 
@@ -192,6 +191,29 @@ class ActivatecodeService extends BaseService
 
         if (count($class_list) > 0) {
             return BaseService::setResult('-202', '您当前的培训班还没有结束，不能再激活其它培训班', '');
+        }
+
+        //获取激活码信息
+    }
+
+    /**
+     * 获取指定激活码数据
+     * @param $id
+     * @return array|false|\PDOStatement|string|\think\Model
+     */
+    public function get($id)
+    {
+        $data = Db::name('ActivateCode')
+            ->alias('ac')
+            ->field('ac.*,stu.name')
+            ->join('studentbasicinfo stu', 'ac.studentid=stu.studentid', 'LEFT')
+            ->where('st.ActivateCode', '=', $id)
+            ->find();
+
+        if ($data != null) {
+            return $data->getData();
+        } else {
+            return null;
         }
     }
 }

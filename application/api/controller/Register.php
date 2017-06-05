@@ -35,41 +35,14 @@ class Register extends Base
                 return json(Base::setResult(-101, $result, null));
             }
 
-            //make user data
-            $uid = getGuid();
-            $userdata = [
-                'uid' => $uid,
-                'loginname' => $data['loginname'],
-                'realname' => $data['realname'],
-                'pwd' => getEncPassword($data['pwd']),
-                'usertype' => 3,
-                'registiontime' => datetime(),
-                'addtime' => datetime(),
-                'systemid' => 1,
-                'status' => 1,
-            ];
+            //获取默认系统信息
+            $sysService = controller('api/SystemService', 'Service');
+            $system = $sysService->GetDefault();
+            $data['systemid'] = $system['id'];
+
             //insert data
-            $result = Db::name('user')->insert($userdata);
-            //get user id
-            $userId = Db::name('user')->getLastInsID();
-
-            //make student data
-            $student = [
-                'studentid' => getGuid(),
-                'userid' => $uid,
-                'name' => $data['realname'],
-                'gender' => $data['gender'],
-                'photo' => '',
-                'tel' => $data['tel'],
-                'email' => $data['email'],
-                'idtype' => $data['idtype'],
-                'idcode' => $data['idcode'],
-                'addtime' => datetime(),
-                'systemid' => 1,
-                'status' => 1,
-            ];
-
-            $result = Db::name("studentbasicinfo")->insert($student);
+            $userService = controller('StudentService', 'Service');
+            $userService->insert($data);
 
             return json(Base::setResult(0, "", null));
         }

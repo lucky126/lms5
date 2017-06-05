@@ -41,12 +41,17 @@ class User extends Authority
                 return json(Base::setResult(-101, $result, null));
             }
 
+            //获取默认系统信息
+            $sysService = controller('api/SystemService', 'Service');
+            $system = $sysService->GetDefault();
+            $data['systemid'] = $system['id'];
+
             //call user service
             $service = controller('UserService', 'Service');
-            $result = $service->insert($data);
+            $result = $service->insert($data, true);
 
-            if ($result != 0) {
-                return json(Base::setResult(-100, $result, null));
+            if ($result['code'] != 0) {
+                return json(Base::setResult($result['code'], $result['msg'], null));
             }
 
             return json(Base::setResult(0, "", null));

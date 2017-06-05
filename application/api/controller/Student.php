@@ -8,7 +8,6 @@
 
 namespace app\api\controller;
 
-
 class Student
 {
 
