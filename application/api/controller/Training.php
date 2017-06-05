@@ -39,8 +39,12 @@ class Training extends Authority
     public function open()
     {
         //
+        //获取默认系统信息
+        $sysService = controller('api/SystemService', 'Service');
+        $system = $sysService->GetDefault();
+
         $service = controller('TrainingService', 'Service');
-        $data = $service->getOpenList(1, '');
+        $data = $service->getOpenList($system['id'], '');
 
         return json($data);
     }

@@ -73,7 +73,7 @@ class Activatecode extends Authority
     {
         if (request()->isPut()) {
             $data = input('put.');
-            $data['id'] = $id;
+            $data['acid'] = $id;
 
             $sysService = controller('api/SystemService', 'Service');
             $system = $sysService->GetDefault();

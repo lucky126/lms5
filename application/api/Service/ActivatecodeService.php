@@ -171,13 +171,25 @@ class ActivatecodeService extends BaseService
      */
     public function update($data)
     {
+        //检查需要报名的培训班是否存在
+        $trainingService = controller('TrainingService', 'Service');
+        $training = $trainingService->get($data['tid']);
+
+        if ($training == null) {
+            return BaseService::setResult('-206', '该培训班还没有生成,不能报名', '');
+        }
+
+        if ($training['courses'] == null) {
+            return BaseService::setResult('-207', '该培训班下没有课程,不能报名', '');
+        }
+
         //检查该生以前是否有过合格的成绩，如果有，则不允许再次激活
         $pass_score_data = Db::name('studenttraining')
             ->alias('st')
             ->field('t.id')
             ->join('training t', 'st.trainingid = t.id and st.systemid=t.systemid', 'LEFT')
             ->where('st.totalscore', '>=', 't.minpassresult')
-            ->where('st.trainingid', '=', $data['id'])
+            ->where('st.trainingid', '=', $data['tid'])
             ->where('st.systemid', '=', $data['systemid'])
             ->count();
 
@@ -187,20 +199,20 @@ class ActivatecodeService extends BaseService
 
         //增加限制，如果已经存在开放的培训班则不允许再激活其他培训班
         $selectcourseService = controller('SelectcourseService', 'Service');
-        $class_list = $selectcourseService->getTrainingList($data['id'], $data['systemid']);
+        $class_list = $selectcourseService->getTrainingList($data['uid'], $data['systemid']);
 
         if (count($class_list) > 0) {
             return BaseService::setResult('-202', '您当前的培训班还没有结束，不能再激活其它培训班', '');
         }
 
         //获取激活码信息
-        $codeData = $this::get($data['id']);
+        $codeData = $this::get($data['acid']);
 
         if ($codeData == null) {
             return BaseService::setResult('-204', '该激活码不存在', '');
         }
         if ($codeData['name'] != null) {
-            return BaseService::setResult('-205', '此激活码已被 '.$codeData['name'].' 使用', '');
+            return BaseService::setResult('-205', '此激活码已被 ' . $codeData['name'] . ' 使用', '');
         }
     }
 

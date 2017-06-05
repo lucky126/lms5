@@ -110,7 +110,7 @@
      */
     function showPayInfo(id) {
         var title = "培训班报名确认";
-        var url = "/student/Finance/paytype?id=" + id;
+        var url = "/student/Finance/paytype?tid=" + id;
 
         showPayinfoPage(url, title, saveSigninInfo, id);
     }
@@ -167,9 +167,9 @@
         }
 
         if (type == 0) {
-            location.href='/student/Finance/activationcode?id=' + id;
+            location.href='/student/Finance/activationcode?tid=' + id;
         } else {
-            location.href='/student/Finance/onlinepay?id=' + id;
+            location.href='/student/Finance/onlinepay?tid=' + id;
         }
     }
 

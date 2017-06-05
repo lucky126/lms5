@@ -67,7 +67,7 @@ class SelectcourseService extends BaseService
             ->buildSql();
 
         $service = controller('TrainingService', 'Service');
-        $data = $service->getOpenList($sysid, $subQuery);
+        $data = $service->getOpenSignupList($sysid, $subQuery);
 
         return $data;
     }

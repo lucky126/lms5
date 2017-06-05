@@ -41,9 +41,28 @@ class TrainingService extends BaseService
     {
         //
         $map['systemid'] = ['=', $systemid];
-        $map['isopen'] = ['=', 1];
-        $map['starttime'] = ['<=', datetime()];
+        $map['isopen'] = ['=', config('globalConst.STATUS_ON')];
         $map['endtime'] = ['>=', datetime()];
+
+        if ($id_map != '')
+            $map['id'] = ['not in', $id_map];
+
+        $data = Db::name('training')->where($map)->select();
+
+        return $data;
+    }
+
+    /**
+     * 获取在报名开放期内的培训班列表
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getOpenSignupList($systemid, $id_map)
+    {
+        //
+        $map['systemid'] = ['=', $systemid];
+        $map['isopen'] = ['=', config('globalConst.STATUS_ON')];
+        $map['registrationstarttime'] = ['<=', datetime()];
+        $map['registrationendtime'] = ['>=', datetime()];
 
         if ($id_map != '')
             $map['id'] = ['not in', $id_map];

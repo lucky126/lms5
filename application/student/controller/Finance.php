@@ -25,34 +25,34 @@ class Finance extends Basic
 
     /**
      * 缴费类型选择
-     * @param $id
+     * @param $tid
      * @return mixed
      */
-    public function paytype($id)
+    public function paytype($tid)
     {
-        $this->assign("id", $id);
+        $this->assign("tid", $tid);
         return $this->fetch();
     }
 
     /**
      * 激活码页面
-     * @param $id
+     * @param $tid
      * @return mixed
      */
-    public function activationcode($id)
+    public function activationcode($tid)
     {
-        $this->assign("id", $id);
+        $this->assign("tid", $tid);
         return $this->fetch();
     }
 
     /**
      * 在线支付页面
-     * @param $id
+     * @param $tid
      * @return mixed
      */
-    public function onlinepay($id)
+    public function onlinepay($tid)
     {
-        $this->assign("id", $id);
+        $this->assign("tid", $tid);
         return $this->fetch();
     }
 }

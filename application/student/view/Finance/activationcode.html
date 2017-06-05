@@ -24,8 +24,8 @@
                             <div class="col-md-8">
                                 <input type="text" id="ActivateCode" name="ActivateCode" class="form-control"
                                        placeholder="请输入激活码">
-                                <input id="id" name="id" type="hidden" value="{$id}">
-                                <input id="stuid" name="stuid" type="hidden" value="{$uid}">
+                                <input id="tid" name="tid" type="hidden" value="{$tid}">
+                                <input id="uid" name="uid" type="hidden" value="{$uid}">
                             </div>
                             <div class="col-md-4">
                                 <input type="button" id="btnActivete" name="btnActivete" class="btn btn-primary"
@@ -72,7 +72,7 @@
                     completeMsg("保存成功");
 
                 } else {
-                    errorMsg(data.msg);
+                    errorMsg(info.msg);
                 }
             }
         });
