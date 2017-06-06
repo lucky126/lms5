@@ -81,6 +81,12 @@
 <!-- END OF CONTAINER -->
 <script type="text/javascript">
     $(function () {
+        $("body").keydown(function () {
+            if (event.keyCode == "13") {
+                $("#btnLogin").click();
+            }
+        });
+
         $("#btnLogin").click(function () {
             $.ajax({
                 cache: true,

@@ -1,3 +1,107 @@
 {extend name="base" /}
 {block name="title"}main{/block}
-{block name="main"}{/block}
+{block name="main"}
+<div id="page-content">
+    <!--系统公告-->
+    <div>
+        <h4 class="text-main pad-btm bord-btm">系统公告</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel">
+                <div id="demo-carousel" class="carousel slide" data-ride="carousel">
+
+                    <!--Indicators-->
+                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                    <ol class="carousel-indicators out">
+                        <li class="active" data-slide-to="0" data-target="#demo-carousel"></li>
+                        <li data-slide-to="1" data-target="#demo-carousel"></li>
+                        <li data-slide-to="2" data-target="#demo-carousel"></li>
+                    </ol>
+                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+                    <div class="carousel-inner text-center">
+
+                        <!--Item 1-->
+                        <div class="item active">
+                            <h4 class="text-main">First slide label</h4>
+                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                        </div>
+
+                        <!--Item 2-->
+                        <div class="item">
+                            <h4 class="text-main">Second slide label</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+
+                        <!--Item 3-->
+                        <div class="item">
+                            <h4 class="text-main">Third slide label</h4>
+                            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                        </div>
+                    </div>
+
+                    <!--carousel-control-->
+                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                    <a class="carousel-control left" data-slide="prev" href="#demo-carousel"><i
+                            class="demo-pli-arrow-left icon-2x"></i></a>
+                    <a class="carousel-control right" data-slide="next" href="#demo-carousel"><i
+                            class="demo-pli-arrow-right icon-2x"></i></a>
+                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--系统公告 end-->
+
+    <!--课程列表-->
+    <div>
+        <h4 class="text-main pad-btm bord-btm">课程列表</h4>
+    </div>
+    <div class="row">
+        <!--course Widget-->
+        <!--===================================================-->
+        <div class="col-md-3">
+            <div class="panel">
+                <div class="panel-body text-center">
+                    <img alt="course name" class="mar-btm" src="">
+                    <p class="text-lg text-semibold mar-no text-main">Course Name 1</p>
+                    <p class="text-sm">[1 学时]</p>
+
+                    <div class="bord-top">
+                        <div class="row text-left mar-top">浏览次数：0次</div>
+                        <div class="row text-left mar-top">累计学习：0分钟</div>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-primary mar-top">开始学习</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--===================================================-->
+        <!--course Widget-->
+        <!--===================================================-->
+        <div class="col-md-3">
+            <div class="panel">
+                <div class="panel-body text-center">
+                    <img alt="course name" class="mar-btm" src="">
+                    <p class="text-lg text-semibold mar-no text-main">Course Name 1</p>
+                    <p class="text-sm">[1 学时]</p>
+
+                    <div class="bord-top">
+                        <div class="row text-left mar-top">浏览次数：0次</div>
+                        <div class="row text-left mar-top">累计学习：0分钟</div>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-primary mar-top">开始学习</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--===================================================-->
+    </div>
+    <!--课程列表 end-->
+</div>
+{/block}
