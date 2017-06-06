@@ -112,7 +112,7 @@ class TrainingService extends BaseService
     {
         //make user data
         $training = new Training;
-        $training->systemid = 1;
+        $training->systemid = $data['systemid'];
         $training->trainingname = $data['trainingname'];
         $training->trainingcode = $data['trainingcode'];
         $training->traingtype = 1;
@@ -120,7 +120,7 @@ class TrainingService extends BaseService
         $training->registrationendtime = $data['registrationendtime'];
         $training->starttime = $data['starttime'];
         $training->endtime = $data['endtime'];
-        $training->isopen = 1;
+        $training->isopen = config('globalConst.STATUS_ON');
         $training->trainingcost = $data['trainingcost'];
         $training->allownumberofcourses = $data['allownumberofcourses'];
         $training->description = $data['description'];
@@ -136,11 +136,11 @@ class TrainingService extends BaseService
                 $c_info = explode("_", $c);
                 $isrequired = 0;
                 if (count($c_info) > 1) {
-                    $isrequired = 1;
+                    $isrequired = config('globalConst.STATUS_ON');
                 }
 
                 $trainingcourse = new Trainingcourse;
-                $trainingcourse->systemid = 1;
+                $trainingcourse->systemid = $data['systemid'];
                 $trainingcourse->scormid = $c_info[0];
                 $trainingcourse->isrequired = $isrequired;
                 $trainingcourse->addtime = datetime();
@@ -173,7 +173,7 @@ class TrainingService extends BaseService
         $training->registrationendtime = $data['registrationendtime'];
         $training->starttime = $data['starttime'];
         $training->endtime = $data['endtime'];
-        $training->isopen = 1;
+        $training->isopen = config('globalConst.STATUS_ON');
         $training->trainingcost = $data['trainingcost'];
         $training->allownumberofcourses = $data['allownumberofcourses'];
         $training->description = $data['description'];
@@ -192,10 +192,10 @@ class TrainingService extends BaseService
                 $c_info = explode("_", $c);
                 $isrequired = 0;
                 if (count($c_info) > 1) {
-                    $isrequired = 1;
+                    $isrequired = config('globalConst.STATUS_ON');
                 }
                 $course = [
-                    'systemid' => 1,
+                    'systemid' => $data['systemid'],
                     'trainingid' => $data['id'],
                     'scormid' => $c_info[0],
                     'isrequired' => $isrequired,

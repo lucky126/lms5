@@ -175,12 +175,23 @@ class ActivatecodeService extends BaseService
         $trainingService = controller('TrainingService', 'Service');
         $training = $trainingService->get($data['tid']);
 
+        //培训班不存在
         if ($training == null) {
             return BaseService::setResult('-206', '该培训班还没有生成,不能报名', '');
         }
 
+        //培训班没有课程
         if ($training['courses'] == null) {
             return BaseService::setResult('-207', '该培训班下没有课程,不能报名', '');
+        }
+
+        //判断是否是测试用户
+        $userService = controller('UserService', 'Service');
+        $isTestUser = $userService->isTestUser($data['uid']);
+
+        //非测试用户在培训班结束后无法报名(考虑激活码模式可能会由企业批量提前购买，所以从报名许可期间延长至培训班截至时间)
+        if (!$isTestUser && $training['registrationendtime'] >= datetime()) {
+            return BaseService::setResult('-208', '该培训班已经结束,不能报名', '');
         }
 
         //检查该生以前是否有过合格的成绩，如果有，则不允许再次激活
@@ -198,7 +209,7 @@ class ActivatecodeService extends BaseService
         }
 
         //增加限制，如果已经存在开放的培训班则不允许再激活其他培训班
-        $selectcourseService = controller('SelectcourseService', 'Service');
+        $selectcourseService = controller('StudenttrainingService', 'Service');
         $class_list = $selectcourseService->getTrainingList($data['uid'], $data['systemid']);
 
         if (count($class_list) > 0) {
@@ -214,6 +225,10 @@ class ActivatecodeService extends BaseService
         if ($codeData['name'] != null) {
             return BaseService::setResult('-205', '此激活码已被 ' . $codeData['name'] . ' 使用', '');
         }
+
+        /*****TODO:目前默认只有培训班学习模式，不存在选课学习模式*****/
+
+
     }
 
     /**

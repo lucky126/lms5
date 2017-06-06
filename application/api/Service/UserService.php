@@ -265,4 +265,20 @@ class UserService extends BaseService
             return $user->getError();
         }
     }
+
+    /**
+     * 判断是否是测试用户
+     * @param $id
+     * @return bool
+     */
+    public function isTestUser($id)
+    {
+        $user = $this->get($id);
+
+        if($user != null && $user['istestuser'] == config('globalConst.STATUS_ON')){
+            return true;
+        }
+
+        return false;
+    }
 }

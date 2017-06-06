@@ -68,6 +68,11 @@ class Training extends Authority
                 return json(Base::getresult(-101, $result, null));
             }
 
+            //获取默认系统信息
+            $sysService = controller('api/SystemService', 'Service');
+            $system = $sysService->GetDefault();
+            $data['systemid'] = $system['id'];
+
             $service = controller('TrainingService', 'Service');
             $result = $service->insert($data);
 
@@ -136,6 +141,11 @@ class Training extends Authority
                 // 验证失败 输出错误信息
                 return json(Base::getresult(-101, $result, null));
             }
+
+            //获取默认系统信息
+            $sysService = controller('api/SystemService', 'Service');
+            $system = $sysService->GetDefault();
+            $data['systemid'] = $system['id'];
 
             $service = controller('TrainingService', 'Service');
             $result = $service->update($data);
