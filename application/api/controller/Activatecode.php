@@ -66,14 +66,12 @@ class Activatecode extends Authority
     /**
      * 更新激活码资源给指定用户
      *
-     * @param $id 课程id
      * @return \think\Response
      */
-    public function update($id)
+    public function update()
     {
         if (request()->isPut()) {
             $data = input('put.');
-            $data['acid'] = $id;
 
             $sysService = controller('api/SystemService', 'Service');
             $system = $sysService->GetDefault();

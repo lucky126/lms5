@@ -171,18 +171,37 @@ class ActivatecodeService extends BaseService
      */
     public function update($data)
     {
+        //设置交费对象类型（0-非用户交费，1-选培训班交费，2-选课交费）
+        $objecttype = 1;
+
+        //获取激活码信息
+        $codeData = $this::get($data['ActivateCode']);
+
+        if ($codeData == null) {
+            return BaseService::setResult('-201', '该激活码不存在', '');
+        }
+        if ($codeData['name'] != null) {
+            return BaseService::setResult('-202', '此激活码已被 ' . $codeData['name'] . ' 使用', '');
+        }
+
+        /*****TODO:目前默认只有培训班学习模式，不存在选课学习模式*****/
+        //当前培训班和激活码培训班必须一致
+        if ($codeData['objectid'] != $data['tid']) {
+            return BaseService::setResult('-203', '此激活码不能用于此培训班', '');
+        }
+
         //检查需要报名的培训班是否存在
         $trainingService = controller('TrainingService', 'Service');
         $training = $trainingService->get($data['tid']);
 
         //培训班不存在
         if ($training == null) {
-            return BaseService::setResult('-206', '该培训班还没有生成,不能报名', '');
+            return BaseService::setResult('-204', '该培训班还没有生成,不能报名', '');
         }
 
         //培训班没有课程
         if ($training['courses'] == null) {
-            return BaseService::setResult('-207', '该培训班下没有课程,不能报名', '');
+            return BaseService::setResult('-205', '该培训班下没有课程,不能报名', '');
         }
 
         //判断是否是测试用户
@@ -190,45 +209,73 @@ class ActivatecodeService extends BaseService
         $isTestUser = $userService->isTestUser($data['uid']);
 
         //非测试用户在培训班结束后无法报名(考虑激活码模式可能会由企业批量提前购买，所以从报名许可期间延长至培训班截至时间)
-        if (!$isTestUser && $training['registrationendtime'] >= datetime()) {
-            return BaseService::setResult('-208', '该培训班已经结束,不能报名', '');
+        if (!$isTestUser && datetime() >= $training['endtime']) {
+            return BaseService::setResult('-206', '该培训班已经结束,不能报名', '');
         }
 
         //检查该生以前是否有过合格的成绩，如果有，则不允许再次激活
-        $pass_score_data = Db::name('studenttraining')
-            ->alias('st')
-            ->field('t.id')
-            ->join('training t', 'st.trainingid = t.id and st.systemid=t.systemid', 'LEFT')
-            ->where('st.totalscore', '>=', 't.minpassresult')
-            ->where('st.trainingid', '=', $data['tid'])
-            ->where('st.systemid', '=', $data['systemid'])
-            ->count();
+        $studenttrainingService = controller('StudenttrainingService', 'Service');
 
-        if ($pass_score_data > 0) {
-            return BaseService::setResult('-201', '已经有合格的成绩', '');
+        if ($studenttrainingService->isPassedTraining($data['tid'], $data['uid'], $data['systemid'])) {
+            return BaseService::setResult('-207', '已经有合格的成绩', '');
         }
 
         //增加限制，如果已经存在开放的培训班则不允许再激活其他培训班
-        $selectcourseService = controller('StudenttrainingService', 'Service');
-        $class_list = $selectcourseService->getTrainingList($data['uid'], $data['systemid']);
-
-        if (count($class_list) > 0) {
-            return BaseService::setResult('-202', '您当前的培训班还没有结束，不能再激活其它培训班', '');
+        if (count($studenttrainingService->getTrainingList($data['uid'], $data['systemid'])) > 0) {
+            return BaseService::setResult('-208', '您当前的培训班还没有结束，不能再激活其它培训班', '');
         }
 
-        //获取激活码信息
-        $codeData = $this::get($data['acid']);
-
-        if ($codeData == null) {
-            return BaseService::setResult('-204', '该激活码不存在', '');
-        }
-        if ($codeData['name'] != null) {
-            return BaseService::setResult('-205', '此激活码已被 ' . $codeData['name'] . ' 使用', '');
+        //学员培训班记录不能是已经通过或者已经支付
+        $studentTraining = $studenttrainingService->get($data['tid'], $data['uid'], $data['systemid']);
+        if ($studentTraining['isallowlearning'] == config('globalConst.STATUS_ON') || $studentTraining['ispayment'] == config('globalConst.STATUS_ON')) {
+            return BaseService::setResult('-209', '正在学习该培训班/课程', '');
         }
 
-        /*****TODO:目前默认只有培训班学习模式，不存在选课学习模式*****/
+        //学员培训班课程记录不能是已经通过或者已经支付
+        foreach ($studentTraining['courses'] as $course) {
+            if ($course['isallowlearning'] == config('globalConst.STATUS_ON') || $course['ispayment'] == config('globalConst.STATUS_ON')) {
+                return BaseService::setResult('-210', '正在学习该课程', '');
+            }
+        }
 
+        //更新激活码信息
+        $result = $this::updateData($data['ActivateCode'], $data['uid'], $data['systemid']);
 
+        //更新学员培训班记录
+        if ($result == 0) {
+            $result = $studenttrainingService->update($data['tid'], $data['uid'], $data['systemid']);
+
+            if ($result == 0) {
+                return BaseService::setResult('-0', '', '');
+            }
+        }
+
+        return BaseService::setResult('-211', '报名失败！', '');
+    }
+
+    /**
+     * 更新激活码使用状况
+     * @param $acid
+     * @param $uid
+     * @param $sysid
+     * @return int|string
+     */
+    public function updateData($acid, $uid, $sysid)
+    {
+        $code = Activatecode::get(['activatecode' => $acid, 'systemid' => $sysid]);
+        $code->studentid = $uid;
+        $code->activatedate = datetime();
+
+        if ($code->save()) {
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('更新激活码： ' . json_encode($code), '更新激活码');
+
+            return 0;
+        } else {
+            return $code->getError();
+        }
     }
 
     /**

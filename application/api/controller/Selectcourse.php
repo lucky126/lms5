@@ -22,7 +22,7 @@ class Selectcourse extends Authority
     public function checkStudentAuth($uid)
     {
         //获取默认系统信息
-        $sysService = controller('SystemService', 'Service');
+        $sysService = controller('api/SystemService', 'Service');
         $system = $sysService->GetDefault();
 
         $returnPage = '';
@@ -30,7 +30,7 @@ class Selectcourse extends Authority
         if ($system != null) {
             //培训班逻辑：报名（插入记录），缴费（ispayment=1），学习（isallowlearning=1），终止（超出培训班起止时间）
             //获取学生培训计划列表
-            $service = controller('StudenttrainingService', 'Service');
+            $service = controller('api/StudenttrainingService', 'Service');
             $stuTraining = $service->getTrainingInfo($uid, $system['id']);
 
             //没有报名任何培训班或者没有可以学习的培训班
@@ -59,10 +59,10 @@ class Selectcourse extends Authority
     public function getAllowRegTrainingList($uid)
     {
         //获取默认系统信息
-        $sysService = controller('SystemService', 'Service');
+        $sysService = controller('api/SystemService', 'Service');
         $system = $sysService->GetDefault();
 
-        $service = controller('StudenttrainingService', 'Service');
+        $service = controller('api/StudenttrainingService', 'Service');
         $list = $service->getAllowRegTrainingList($uid, $system['id']);
 
         return $list;
@@ -83,11 +83,11 @@ class Selectcourse extends Authority
             }
 
             //获取默认系统信息
-            $sysService = controller('SystemService', 'Service');
+            $sysService = controller('api/SystemService', 'Service');
             $system = $sysService->GetDefault();
             $data['sysid'] = $system['id'];
 
-            $service = controller('StudenttrainingService', 'Service');
+            $service = controller('api/StudenttrainingService', 'Service');
             $result = $service->signIn($data);
 
             if ($result == -201) {
@@ -109,10 +109,10 @@ class Selectcourse extends Authority
     public function getNeedPayTrainingList($uid)
     {
         //获取默认系统信息
-        $sysService = controller('SystemService', 'Service');
+        $sysService = controller('api/SystemService', 'Service');
         $system = $sysService->GetDefault();
 
-        $service = controller('StudenttrainingService', 'Service');
+        $service = controller('api/StudenttrainingService', 'Service');
         $list = $service->getNeedPayTrainingList($uid, $system['id']);
 
         return $list;

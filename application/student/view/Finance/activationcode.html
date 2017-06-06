@@ -69,8 +69,8 @@
             },
             success: function (info) {
                 if (info.code == 0) {
-                    completeMsg("保存成功");
-
+                    completeMsg("报名成功");
+                    location.href = '/student/main';
                 } else {
                     errorMsg(info.msg);
                 }

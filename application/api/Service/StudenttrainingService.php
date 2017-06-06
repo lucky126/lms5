@@ -8,6 +8,7 @@
 
 namespace app\api\service;
 
+use app\api\model\Studentcourse;
 use app\api\model\Studenttraining;
 use think\Db;
 
@@ -42,7 +43,7 @@ class StudenttrainingService extends BaseService
             }
             if ($row['ispayment'] == config('globalConst.STATUS_ON') &&
                 $row['isopen'] == config('globalConst.STATUS_ON') &&
-                $row['starttime'] <= datetime() && $data['endtime'] >= datetime()
+                $row['starttime'] <= datetime() && $row['endtime'] >= datetime()
             ) {
                 $studying++;
             }
@@ -156,5 +157,82 @@ class StudenttrainingService extends BaseService
             ->select();
 
         return $data;
+    }
+
+    /**
+     * 判断学生是否通过了指定培训班的学习
+     * @param $tid
+     * @param $uid
+     * @param $sysid
+     * @return bool
+     */
+    public function isPassedTraining($tid, $uid, $sysid)
+    {
+        $pass_score_data = Db::name('studenttraining')
+            ->alias('st')
+            ->field('t.id')
+            ->join('training t', 'st.trainingid = t.id and st.systemid=t.systemid', 'LEFT')
+            ->where('st.totalscore', '>=', 't.minpassresult')
+            ->where('st.trainingid', '=', $tid)
+            ->where('st.systemid', '=', $sysid)
+            ->where('st.studentid', '=', $uid)
+            ->count();
+
+        if ($pass_score_data > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * 获取学生指定培训班信息
+     * @param $tid
+     * @param $uid
+     * @param $sysid
+     * @return mixed|null
+     */
+    public function get($tid, $uid, $sysid)
+    {
+        //get info
+        $trainingData = Studenttraining::get(['trainingid' => $tid, 'systemid' => $sysid, 'studentid' => $uid]);
+        $trainingCourseData = Studentcourse::get(['trainingid' => $tid, 'systemid' => $sysid, 'studentid' => $uid]);
+
+        if ($trainingData != null && $trainingCourseData != null) {
+            $trainingData['courses'] = $trainingCourseData;
+            return $trainingData->getData();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 更新学生培训班
+     * @param $tid
+     * @param $uid
+     * @param $sysid
+     * @return int|string
+     */
+    public function update($tid, $uid, $sysid)
+    {
+        $trainingData = Studenttraining::get(['trainingid' => $tid, 'systemid' => $sysid, 'studentid' => $uid]);
+
+        $trainingData->isallowlearning = config('globalConst.STATUS_ON');
+        $trainingData->ispayment = config('globalConst.STATUS_ON');
+
+        if ($trainingData->save()) {
+
+            Db::execute("UPDATE lms_studentcourse SET isallowlearning=:isallowlearning,ispayment=:ispayment WHERE trainingid=:trainingid AND systemid=:systemid AND studentid=:studentid",
+                ['trainingid' => $tid, 'systemid' => $sysid, 'studentid' => $uid, 'isallowlearning' => config('globalConst.STATUS_ON'), 'ispayment' => config('globalConst.STATUS_ON')]);
+
+            //保存操作日志
+            $logService = controller('OperatelogService', 'Service');
+            $logService->insert('更新学生培训班： ' . json_encode($trainingData), '更新学生培训班');
+
+            return 0;
+        } else {
+            return $trainingData->getError();
+        }
     }
 }
