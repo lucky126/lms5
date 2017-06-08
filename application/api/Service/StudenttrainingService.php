@@ -235,4 +235,23 @@ class StudenttrainingService extends BaseService
             return $trainingData->getError();
         }
     }
+
+    /**
+     * 获取学生课程列表
+     * @param $uid
+     * @param $sysid
+     */
+    public function getCousreList($uid, $sysid)
+    {
+        $data = Db::name('studentcourse')
+            ->alias('sc')
+            ->field(' c.CourseName,c.coursehours, sc.courseid,ifnull(sc.loginnum,0) AS loginnum,ifnull(sc.totalstudytime,0) AS totalstudytime,ifnull(sc.isallowlearning,0) AS isallowlearning')
+            ->join('course c', 'sc.courseid = c.id  AND sc.systemid = c.systemid', 'LEFT')
+            ->join('trainingcourse tc', 'tc.scormid = sc.courseid AND tc.systemid = sc.systemid AND tc.trainingid=sc.trainingid', 'LEFT')
+            ->where('sc.systemid', '=', $sysid)
+            ->where('sc.studentid', '=', $uid)
+            ->select();
+
+        return $data;
+    }
 }

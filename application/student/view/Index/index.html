@@ -151,3 +151,27 @@
     </div>
 </div>
 {/block}
+
+{block name="modal"}
+<script type="text/javascript">
+    $(function () {
+        getCourseList();
+    });
+
+    //get student select course
+    function getCourseList() {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/student/{$uid}/courses",
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+            }
+        });
+    }
+
+</script>
+{/block}

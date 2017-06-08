@@ -48,6 +48,7 @@ Route::put('api/training/:id/activate', 'api/Training/changeStatus?status=1', []
 Route::put('api/training/:id/deactivate', 'api/Training/changeStatus?status=0', [], ['id' => '\d+']);
 //other
 Route::get('api/training/:id/courses', 'api/Training/courses', [], ['id' => '\d+']);
+Route::get('api/student/:uid/courses', 'api/Student/getCourseList');
 //resource
 Route::resource('api/user', 'api/User');
 Route::resource('api/rule', 'api/Rule', [], ['id' => '\d+']);
