@@ -68,7 +68,7 @@ class Basic extends Controller
             '11' => Array('id' => '12', 'pid' => '0', 'name' => '', 'title' => '成绩查询', 'icon' => 'fa fa-reorder'),
             '12' => Array('id' => '13', 'pid' => '12', 'name' => 'student/studyrecord/current', 'title' => '当前记录', 'icon' => ''),
             '13' => Array('id' => '14', 'pid' => '12', 'name' => 'student/studyrecord/history', 'title' => '历史记录', 'icon' => ''),
-            '14' => Array('id' => '15', 'pid' => '0', 'name' => 'student/notic/index', 'title' => '系统公告', 'icon' => 'fa fa-info-circle'),
+            '14' => Array('id' => '15', 'pid' => '0', 'name' => 'student/notice/index', 'title' => '系统公告', 'icon' => 'fa fa-info-circle'),
             '15' => Array('id' => '16', 'pid' => '0', 'name' => 'student/alert/index', 'title' => '重要提醒', 'icon' => 'fa fa-bell'),
         );
 
