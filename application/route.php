@@ -11,8 +11,8 @@ use think\Route;
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-Route::rule('student/login', 'Student/Common/Login');
-Route::rule('student/register', 'Student/Common/Register');
+Route::rule('student/login', 'Student/Common/login');
+Route::rule('student/register', 'Student/Common/register');
 Route::rule('admin/login', 'admin/Common/login');
 
 Route::rule('student/main', 'Student/Index/index');
