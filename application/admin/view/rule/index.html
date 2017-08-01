@@ -1,0 +1,271 @@
+{extend name="base" /}
+{block name="css"}
+{load href="/static/plugins/bootstrap-table/bootstrap-table.min.css,/static/plugins/x-editable/css/bootstrap-editable.css" /}
+{load href="/static/plugins/animate-css/animate.min.css,/static/plugins/bootstrap-validator/bootstrapValidator.min.css" /}
+{/block}
+
+{block name="js"}
+{load href="/static/plugins/x-editable/js/bootstrap-editable.min.js,/static/plugins/bootstrap-table/bootstrap-table.min.js,/static/plugins/bootstrap-table/extensions/editable/bootstrap-table-editable.js,/static/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js" /}
+{load href="/static/plugins/bootbox/bootbox.min.js,/static/plugins/bootstrap-validator/bootstrapValidator.min.js,/static/plugins/bootstrap-treeview/js/bootstrap-treeview.js" /}
+<script type="text/javascript">
+    //设置bootstrap table为中文
+    $('#table').bootstrapTable({locale: 'zh-CN'});
+</script>
+{/block}
+
+
+{block name="title"}权限列表{/block}
+{block name="main"}
+<div id="page-content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">权限列表<span></span></h3>
+                </div>
+
+                <!--Data Table-->
+                <!--===================================================-->
+                <div class="panel-body">
+                    <div class="pad-btm form-inline">
+                        <div class="row">
+                            <div class="col-sm-6 table-toolbar-left">
+                                <button class="btn btn-primary" id="add"><i
+                                        class="demo-pli-add icon-fw"></i>新增
+                                </button>
+                                <button class="btn btn-info" id="back"><i
+                                        class="ion-arrow-left-c"></i>返回上级
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table data-toggle="table"
+                               data-url="/api/rule"
+                               data-search="true"
+                               data-striped ="true"
+                               data-sort-name="id"
+                               data-page-list="[10, 20, 50]"
+                               data-page-size="10"
+                               data-pagination="true" data-show-pagination-switch="true" id="table">
+                            <thead>
+                            <tr>
+                                <th data-field="title" data-sortable="true">规则名称</th>
+                                <th data-field="name" data-sortable="true">规则标识</th>
+                                <th data-field="isshow" data-sortable="true" data-formatter="yesnoFormatter">是否显示
+                                </th>
+                                <th data-field="status" data-sortable="true" data-formatter="statusFormatter">状态</th>
+                                <th data-align="center" data-field="action" data-formatter="actionFormatter"
+                                    data-events="actionEvents">操作
+                                </th>
+
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!--===================================================-->
+                <!--End Data Table-->
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{/block}
+
+{block name="modal"}
+<script type="text/javascript">
+    var pidList = new Array();
+    var newPid = 0;
+
+    $(function () {
+        $("#add").click(function () {
+            showAddInfo(newPid);
+        });
+
+        $("#back").click(function () {
+            var backpid = pidList.pop();
+            newPid = backpid;
+            $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + backpid});
+            setButtonShow();
+
+            setTitle(backpid);
+        });
+
+        setButtonShow();
+    });
+
+    //get info
+    function getInfo(id, func) {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/Rule/" + id,
+            async: false,
+            error: function (request) {
+                alert("连接错误");
+            },
+            success: function (data) {
+                func(data);
+            }
+        });
+    }
+
+    function setTitle(id) {
+        if (id > 0)
+            getInfo(id, setPidInfo);
+        else
+            $(".panel-title span").text('');
+    }
+
+    function setPidInfo(data) {
+        $(".panel-title span").text('--' + data.title);
+    }
+
+    /**
+     * 设置新增和返回按钮显示状态
+     */
+    function setButtonShow() {
+        if (newPid == 0) {
+            $("#add").hide();
+            $("#back").hide();
+        } else {
+            $("#add").show();
+            $("#back").show();
+        }
+    }
+
+    /**
+     * 显示新增权限
+     */
+    function showAddInfo(id) {
+        var title = "新增权限";
+        var url = "/admin/Rule/add?pid=" + id;
+        showEditPage(url, title, saveAddInfo, id);
+    }
+
+    /**
+     * 显示编辑权限
+     * @param id
+     */
+    function showEditInfo(id) {
+        var title = "修改权限";
+        var url = "/admin/Rule/edit?id=" + id;
+        showEditPage(url, title, saveEditInfo, id);
+    }
+
+    /**
+     * 保存新增权限
+     * @param id
+     */
+    function saveAddInfo(id) {
+        //如果是新增
+        var method = "POST";
+        var url = "/api/Rule";
+
+        saveInfo(method, url, $('#addform').serialize());
+    }
+
+    /**
+     * 保存编辑权限
+     * @param id
+     */
+    function saveEditInfo(id) {
+        //如果是新增
+        var method = "PUT";
+        var url = "/api/Rule/" + id;
+
+        saveInfo(method, url, $('#addform').serialize());
+    }
+
+    //bootstrap table操作
+    function actionFormatter(value, row, index) {
+        var start = '<a class="start btn-link" href="javascript:void(0)" title="启用">启用</a>';
+        var stop = '<a class="stop btn-link" href="javascript:void(0)" title="停用">停用</a>';
+
+        var sub = '<a class="sub btn-link" href="javascript:void(0)" title="查看子权限">查看子权限</a> ';
+        var edit = '<a class="edit btn-link" href="javascript:void(0)" title="编辑">编辑</a>';
+        var del = '<a class="remove btn-link" href="javascript:void(0)" title="删除">删除</a>';
+
+
+        if (row.pid == 0) {
+            return sub;
+        } else {
+            if (row.status == '停用')
+                return start + " | " + sub + " | " + edit + " | " + del;
+            else
+                return stop + " | " + sub + " | " + edit + " | " + del;
+        }
+    }
+
+    /**
+     * 状态文字格式化
+     * @param value
+     * @param row
+     * @returns {string}
+     */
+    function statusFormatter(value, row) {
+        var labelColor;
+        if (value == "正常") {
+            labelColor = "success";
+        } else if (value == "停用") {
+            labelColor = "danger";
+        }
+
+        return '<div class="label label-table label-' + labelColor + '"> ' + value + '</div>';
+    }
+
+    /**
+     * 是否文字格式化
+     * @param value
+     * @param row
+     * @returns {string}
+     */
+    function yesnoFormatter(value, row) {
+        var labelColor;
+        if (value == "是") {
+            labelColor = "success";
+        } else if (value == "否") {
+            labelColor = "danger";
+        }
+
+        return '<div class="label label-table label-' + labelColor + '"> ' + value + '</div>';
+    }
+
+    //操作事件
+    window.actionEvents = {
+        'click .start': function (e, value, row, index) {
+            showStartInfo("/api/Rule/", row.id);
+        },
+        'click .stop': function (e, value, row, index) {
+            showStopInfo("确认停用所选权限？", "/api/Rule/", row.id);
+        },
+        'click .sub': function (e, value, row, index) {
+            showSubList(row.id, row.pid);
+        },
+        'click .edit': function (e, value, row, index) {
+            showEditInfo(row.id);
+        },
+        'click .remove': function (e, value, row, index) {
+            showDeleteInfo("确认删除该权限么", "/api/Rule/", row.id);
+        }
+    };
+
+    /**
+     * 显示子权限列表
+     * @param id
+     * @param pid
+     */
+    function showSubList(id, pid) {
+        $("#table").bootstrapTable('refresh', {'url': '/api/rule?pid=' + id});
+        newPid = id;
+        pidList.push(pid);
+        setButtonShow();
+
+        setTitle(id);
+    }
+
+</script>
+{/block}
