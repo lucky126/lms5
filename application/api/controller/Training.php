@@ -96,6 +96,7 @@ class Training extends Authority
         //find data
         $service = controller('TrainingService', 'Service');
         $data = $service->get($id);
+
         if ($data == null || $data['courses'] == null)
             return Authority::resourceNotFound();
 

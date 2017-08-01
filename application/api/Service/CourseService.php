@@ -43,7 +43,7 @@ class CourseService extends BaseService
     {
         //get info
         $data = Course::get($id, 'setting');
-
+        $data['setting'] = $data->getData('setting');
         if ($data != null) {
             return $data->getData();
         } else {
@@ -89,7 +89,7 @@ class CourseService extends BaseService
 
             //保存操作日志
             $logService = controller('OperatelogService', 'Service');
-            $logService->insert('新增课程： ' . json_encode($course) .' & '. json_encode($coursesetting), '新增课程');
+            $logService->insert('新增课程： ' . json_encode($course) . ' & ' . json_encode($coursesetting), '新增课程');
 
             return 0;
         } else {

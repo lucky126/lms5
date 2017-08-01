@@ -80,7 +80,7 @@ class TrainingService extends BaseService
     public function get($id)
     {
         $data = Training::get($id, 'courses');
-
+        $data['courses'] = $data->getData("courses");
         if ($data != null) {
             return $data->getData();
         } else {
