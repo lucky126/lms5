@@ -1,0 +1,80 @@
+<form method="post" action="" class="form-horizontal" id="addform">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">培训班：</label>
+        <div class="col-sm-6">
+            <span id="trainingname" name="trainingname"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">学习时间：</label>
+        <div class="col-sm-6">
+            <span id="studyTime" name="studyTime"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">简介：</label>
+        <div class="col-sm-6">
+            <span id="description" name="description"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">培训费用：</label>
+        <div class="col-sm-6">
+            <span id="trainingcost" name="trainingcost"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">支付模式：</label>
+        <div class="col-sm-6">
+            <input id="paytype-1" type="radio"
+                   name="paytype" value='0'>
+            离线缴费，获取激活码
+            <input id="paytype-2" type="radio"
+                   name="paytype" value='1'>
+            在线支付
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        getInfo('{$tid}');
+    });
+
+    //get info
+    function getInfo(id) {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/training/" + id,
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                var data = info;
+
+                $("#trainingname").text(data.trainingname);
+                $("#studyTime").text(data.starttime + ' 至 ' + data.endtime);
+                $("#description").text(data.description);
+                $('#trainingcost').text('￥ ' + data.trainingcost + ' 元')
+            }
+        });
+    }
+
+    $("#addform").bootstrapValidator({
+        message: 'This value is not valid',
+        //反馈图标
+        feedbackIcons: faIcon,
+        fields: {
+            paytype: {
+                message: '支付模式无效',
+                validators: {
+                    notEmpty: {
+                        message: '请选择支付模式'
+                    },
+                }
+            }
+        }
+    });
+</script>

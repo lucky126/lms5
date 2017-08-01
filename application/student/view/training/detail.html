@@ -1,0 +1,84 @@
+<p>
+<div class="row">
+    <label class="col-sm-2 control-label">报名时间：</label>
+    <div class="col-sm-6">
+        <span id="regTime" name="regTime"></span>
+    </div>
+</div>
+</p><p>
+<div class="row">
+    <label class="col-sm-2 control-label">学习时间：</label>
+    <div class="col-sm-6">
+        <span id="studyTime" name="studyTime"></span>
+    </div>
+</div>
+</p><p>
+<div class="row">
+    <label class="col-sm-2 control-label">简介：</label>
+    <div class="col-sm-6">
+        <span id="description" name="description"></span>
+    </div>
+</div>
+</p>
+<div>
+    <table class="table table-striped" id="courseTable">
+        <thead>
+        <tr>
+            <th>课程代码</th>
+            <th>课程名称</th>
+            <th>学时</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getInfo('{$id}');
+        getCourseInfo('{$id}');
+    });
+
+    //get info
+    function getInfo(id) {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/training/" + id,
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                var data = info;
+
+                $("#regTime").text(data.registrationstarttime + ' 至 ' + data.registrationendtime);
+                $("#studyTime").text(data.starttime + ' 至 ' + data.endtime);
+                $("#description").text(data.description);
+            }
+        });
+    }
+
+    //get course info
+    function getCourseInfo(id) {
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: "/api/training/" + id + "/courses",
+            async: false,
+            error: function () {
+                alert("连接错误");
+            },
+            success: function (info) {
+                var courses = info;
+
+                courses.forEach(function (value, index, array) {
+                    var ccode = "<td>" + value.coursecode + "</td>";
+                    var name = "<td>" + value.coursename + "</td>";
+                    var coursefee = "<td>" + value.coursefee + "</td>";
+                    $("#courseTable").children("tbody").append("<tr>" + ccode + name + coursefee + "</tr>");
+                });
+            }
+        });
+    }
+</script>

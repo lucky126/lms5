@@ -1,0 +1,35 @@
+<ul id="mainnav-menu" class="list-group">
+    <!--Category name-->
+    <li class="list-header">学习平台</li>
+
+    <!--Menu list item-->
+    {volist name="menu" id="parent"}
+        {eq name="parent.name" value=""}
+            <li {eq name="parent._selected" value="1"} class="active-sub" {/eq}>
+                <a href="#">
+                <i class="{$parent.icon}"></i>
+                <span class="menu-title">{$parent.title}</span>
+                <i class="arrow"></i>
+                </a>
+
+                <!--Submenu-->
+                <ul class="collapse {eq name="parent._selected" value="1"} in {/eq}">
+                    {volist name="parent._data" id="sub"}
+                    <li {eq name="sub._selected" value="1"} class="active-link" {/eq}><a href="/{$sub.name}">{$sub.title}</a></li>
+                    {/volist}
+                </ul>
+            </li>
+        {else/}
+        <li {eq name="parent._selected" value="1"} class="active-link" {/eq}>
+            <a href="/{$parent.name} ">
+                <i class="{$parent.icon}"></i>
+                <span class="menu-title">
+                    {$parent.title}
+                </span>
+            </a>
+        </li>
+        {/eq}
+
+    {/volist}
+
+</ul>
