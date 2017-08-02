@@ -15,7 +15,7 @@ use think\Db;
  * 权限服务类
  * @package app\api\service
  */
-class RuleService extends BaseService
+class RuleService
 {
     /**
      * 获取指定父节点下的权限

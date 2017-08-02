@@ -16,7 +16,7 @@ use think\Db;
  * 学生培训计划服务类
  * @package app\api\service
  */
-class StudenttrainingService extends BaseService
+class StudenttrainingService
 {
     /**
      * 获取学生可以学习和需要交费的培训计划数量

@@ -17,7 +17,7 @@ use think\Db;
  * 课程服务类
  * @package app\api\service
  */
-class CourseService extends BaseService
+class CourseService
 {
     /**
      * 获取课程列表

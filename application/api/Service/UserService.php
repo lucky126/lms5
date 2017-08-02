@@ -10,7 +10,7 @@ use think\Db;
  * 用户服务类
  * @package app\api\service
  */
-class UserService extends BaseService
+class UserService
 {
     /**
      * 统一登录逻辑
@@ -30,7 +30,7 @@ class UserService extends BaseService
         }
 
         $login_success = true;
-        $result = BaseService::setResult(0, "登录成功", null);
+        $result = setResult(0, "登录成功", null);
 
         //check loginname
         $map['loginname'] = ['=', $username];
@@ -181,9 +181,9 @@ class UserService extends BaseService
             $logService = controller('OperatelogService', 'Service');
             $logService->insert('新增用户： ' . $loginfo, '新增用户');
 
-            return BaseService::setResult('0', '', $user->uid);
+            return setResult('0', '', $user->uid);
         } else {
-            return BaseService::setResult('-100', $user->getError(), '');
+            return setResult('-100', $user->getError(), '');
         }
     }
 

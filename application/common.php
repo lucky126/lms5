@@ -240,3 +240,21 @@ function getLoginUserInfo()
         'usertype' => $usertype
     );
 }
+
+/**
+ *  定义返回值结构体
+ * @param $code
+ * @param $msg
+ * @param $data
+ * @return array
+ */
+function setResult($code, $msg, $data)
+{
+    $result = array(
+        'code' => $code,
+        'msg' => $msg,
+        'data' => $data
+    );
+
+    return $result;
+}

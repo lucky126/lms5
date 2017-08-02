@@ -16,7 +16,7 @@ use think\Db;
  * 角色服务类
  * @package app\api\service
  */
-class GroupService extends BaseService
+class GroupService
 {
     /**
      * 获取角色列表
