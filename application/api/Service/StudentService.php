@@ -14,7 +14,7 @@ use app\api\model\Studentbasicinfo;
  * 学生服务类
  * @package app\api\service
  */
-class StudentService extends BaseService
+class StudentService
 {
     /**
      * 新增学生数据
@@ -51,9 +51,9 @@ class StudentService extends BaseService
             $logService = controller('OperatelogService', 'Service');
             $logService->insert('新增学生： ' . json_encode($student), '新增学生');
 
-            return BaseService::setResult('0', '', '');
+            return setResult('0', '', '');
         } else {
-            return BaseService::setResult('-100', $student->getError(), '');
+            return setResult('-100', $student->getError(), '');
         }
     }
 }

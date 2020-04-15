@@ -15,7 +15,7 @@ use app\api\model\Payment;
  * 交费服务类
  * @package app\api\service
  */
-class PaymentService extends BaseService
+class PaymentService
 {
     /**
      * 新增交费数据
@@ -51,14 +51,14 @@ class PaymentService extends BaseService
             $paymentlog->systemid = $data['systemid'];
 
             if ($paymentlog->save()) {
-                return BaseService::setResult(0, '', $payid);
+                return setResult(0, '', $payid);
             } else {
                 $paymentDelete = Payment::get($payid);
                 $paymentDelete->delete();
-                return BaseService::setResult(-301, '', $payid);
+                return setResult(-301, '', $payid);
             }
         }
 
-        return BaseService::setResult(-100, '', '');
+        return setResult(-100, '', '');
     }
 }

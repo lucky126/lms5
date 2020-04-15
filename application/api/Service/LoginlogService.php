@@ -14,7 +14,7 @@ use app\api\model\Loginlog;
  * 登录日志服务类
  * @package app\api\Service
  */
-class LoginlogService extends BaseService
+class LoginlogService
 {
     /**
      * 新增登录日志数据

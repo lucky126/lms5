@@ -16,7 +16,7 @@ use think\Db;
  * 激活码服务类
  * @package app\api\service
  */
-class ActivatecodeService extends BaseService
+class ActivatecodeService
 {
     /**
      * 获取激活码列表
@@ -79,10 +79,10 @@ class ActivatecodeService extends BaseService
         $training = $trainingService->get($data['trainingclass']);
 
         if ($training == null) {
-            return BaseService::setResult('-205', '培训班不存在', '');
+            return setResult('-205', '培训班不存在', '');
         }
         if ($training['isopen'] == 0) {
-            return BaseService::setResult('-206', '培训班未开放', '');
+            return setResult('-206', '培训班未开放', '');
         }
 
         //1、根据数量生成指定数量的激活码
@@ -109,7 +109,7 @@ class ActivatecodeService extends BaseService
         if ($createCnt != $data['account']) {
             $codeDelete = User::get(['batchcode' => $data['batchcode']]);
             $codeDelete->delete();
-            return BaseService::setResult('-204', '生成激活码数量没达到要求数量', '');
+            return setResult('-204', '生成激活码数量没达到要求数量', '');
         }
 
         //get login user info
@@ -135,7 +135,7 @@ class ActivatecodeService extends BaseService
         if ($payresult['code'] != 0) {
             $codeDelete = User::get(['batchcode' => $data['batchcode']]);
             $codeDelete->delete();
-            return BaseService::setResult('-203', '保存交费信息和交费日志失败', '');
+            return setResult('-203', '保存交费信息和交费日志失败', '');
         }
 
         //保存激活码日志
@@ -158,9 +158,9 @@ class ActivatecodeService extends BaseService
             $logService = controller('OperatelogService', 'Service');
             $logService->insert('生成激活码： ' . $loginfo, '生成激活码');
 
-            return BaseService::setResult(0, '', '');
+            return setResult(0, '', '');
         } else {
-            return BaseService::setResult('-202', '保存激活码日志失败', '');
+            return setResult('-202', '保存激活码日志失败', '');
         }
     }
 
@@ -178,16 +178,16 @@ class ActivatecodeService extends BaseService
         $codeData = $this::get($data['ActivateCode']);
 
         if ($codeData == null) {
-            return BaseService::setResult('-201', '该激活码不存在', '');
+            return setResult('-201', '该激活码不存在', '');
         }
         if ($codeData['name'] != null) {
-            return BaseService::setResult('-202', '此激活码已被 ' . $codeData['name'] . ' 使用', '');
+            return setResult('-202', '此激活码已被 ' . $codeData['name'] . ' 使用', '');
         }
 
         /*****TODO:目前默认只有培训班学习模式，不存在选课学习模式*****/
         //当前培训班和激活码培训班必须一致
         if ($codeData['objectid'] != $data['tid']) {
-            return BaseService::setResult('-203', '此激活码不能用于此培训班', '');
+            return setResult('-203', '此激活码不能用于此培训班', '');
         }
 
         //检查需要报名的培训班是否存在
@@ -196,12 +196,12 @@ class ActivatecodeService extends BaseService
 
         //培训班不存在
         if ($training == null) {
-            return BaseService::setResult('-204', '该培训班还没有生成,不能报名', '');
+            return setResult('-204', '该培训班还没有生成,不能报名', '');
         }
 
         //培训班没有课程
         if ($training['courses'] == null) {
-            return BaseService::setResult('-205', '该培训班下没有课程,不能报名', '');
+            return setResult('-205', '该培训班下没有课程,不能报名', '');
         }
 
         //判断是否是测试用户
@@ -210,31 +210,31 @@ class ActivatecodeService extends BaseService
 
         //非测试用户在培训班结束后无法报名(考虑激活码模式可能会由企业批量提前购买，所以从报名许可期间延长至培训班截至时间)
         if (!$isTestUser && datetime() >= $training['endtime']) {
-            return BaseService::setResult('-206', '该培训班已经结束,不能报名', '');
+            return setResult('-206', '该培训班已经结束,不能报名', '');
         }
 
         //检查该生以前是否有过合格的成绩，如果有，则不允许再次激活
         $studenttrainingService = controller('StudenttrainingService', 'Service');
 
         if ($studenttrainingService->isPassedTraining($data['tid'], $data['uid'], $data['systemid'])) {
-            return BaseService::setResult('-207', '已经有合格的成绩', '');
+            return setResult('-207', '已经有合格的成绩', '');
         }
 
         //增加限制，如果已经存在开放的培训班则不允许再激活其他培训班
         if (count($studenttrainingService->getTrainingList($data['uid'], $data['systemid'])) > 0) {
-            return BaseService::setResult('-208', '您当前的培训班还没有结束，不能再激活其它培训班', '');
+            return setResult('-208', '您当前的培训班还没有结束，不能再激活其它培训班', '');
         }
 
         //学员培训班记录不能是已经通过或者已经支付
         $studentTraining = $studenttrainingService->get($data['tid'], $data['uid'], $data['systemid']);
         if ($studentTraining['isallowlearning'] == config('globalConst.STATUS_ON') || $studentTraining['ispayment'] == config('globalConst.STATUS_ON')) {
-            return BaseService::setResult('-209', '正在学习该培训班/课程', '');
+            return setResult('-209', '正在学习该培训班/课程', '');
         }
 
         //学员培训班课程记录不能是已经通过或者已经支付
         foreach ($studentTraining['courses'] as $course) {
             if ($course['isallowlearning'] == config('globalConst.STATUS_ON') || $course['ispayment'] == config('globalConst.STATUS_ON')) {
-                return BaseService::setResult('-210', '正在学习该课程', '');
+                return setResult('-210', '正在学习该课程', '');
             }
         }
 
@@ -246,11 +246,11 @@ class ActivatecodeService extends BaseService
             $result = $studenttrainingService->update($data['tid'], $data['uid'], $data['systemid']);
 
             if ($result == 0) {
-                return BaseService::setResult('-0', '', '');
+                return setResult('-0', '', '');
             }
         }
 
-        return BaseService::setResult('-211', '报名失败！', '');
+        return setResult('-211', '报名失败！', '');
     }
 
     /**

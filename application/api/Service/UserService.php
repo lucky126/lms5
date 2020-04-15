@@ -10,7 +10,7 @@ use think\Db;
  * 用户服务类
  * @package app\api\service
  */
-class UserService extends BaseService
+class UserService
 {
     /**
      * 统一登录逻辑
@@ -30,7 +30,7 @@ class UserService extends BaseService
         }
 
         $login_success = true;
-        $result = BaseService::setResult(0, "登录成功", null);
+        $result = setResult(0, "登录成功", null);
 
         //check loginname
         $map['loginname'] = ['=', $username];
@@ -139,7 +139,8 @@ class UserService extends BaseService
     {
         //get user info
         $data = User::get(['uid' => $uid], 'group');
-
+        //5.0.10修改后，所有hasone hasmany的model层方法均需要手工调用一次getData方法后赋值到数组方可使用
+        $data['group'] = $data->getData('group');
         if ($data != null) {
             return $data->getData();
         } else {
@@ -180,9 +181,9 @@ class UserService extends BaseService
             $logService = controller('OperatelogService', 'Service');
             $logService->insert('新增用户： ' . $loginfo, '新增用户');
 
-            return BaseService::setResult('0', '', $user->uid);
+            return setResult('0', '', $user->uid);
         } else {
-            return BaseService::setResult('-100', $user->getError(), '');
+            return setResult('-100', $user->getError(), '');
         }
     }
 
@@ -275,7 +276,7 @@ class UserService extends BaseService
     {
         $user = $this->get($id);
 
-        if($user != null && $user['istestuser'] == config('globalConst.STATUS_ON')){
+        if ($user != null && $user['istestuser'] == config('globalConst.STATUS_ON')) {
             return true;
         }
 

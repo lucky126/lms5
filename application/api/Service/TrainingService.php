@@ -16,7 +16,7 @@ use think\Db;
  * 培训班服务类
  * @package app\api\service
  */
-class TrainingService extends BaseService
+class TrainingService
 {
     /**
      * 获取培训班列表
@@ -80,7 +80,7 @@ class TrainingService extends BaseService
     public function get($id)
     {
         $data = Training::get($id, 'courses');
-
+        $data['courses'] = $data->getData("courses");
         if ($data != null) {
             return $data->getData();
         } else {

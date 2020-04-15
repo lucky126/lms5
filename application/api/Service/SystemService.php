@@ -15,7 +15,7 @@ use think\Db;
  * 系统服务类
  * @package app\api\service
  */
-class SystemService extends BaseService
+class SystemService
 {
     /**
      * 获取系统列表

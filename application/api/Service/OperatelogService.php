@@ -14,7 +14,7 @@ use app\api\model\Operatelog;
  * 操作日志服务类
  * @package api\Service
  */
-class OperatelogService extends BaseService
+class OperatelogService
 {
     /**
      * 新增操作日志数据
